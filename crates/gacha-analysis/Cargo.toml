@@ -7,6 +7,8 @@ license.workspace = true
 
 [dependencies]
 gacha-core = { path = "../gacha-core" }
+serde.workspace = true
 
 [dev-dependencies]
 gacha-pack = { path = "../gacha-pack" }
+serde_json.workspace = true
