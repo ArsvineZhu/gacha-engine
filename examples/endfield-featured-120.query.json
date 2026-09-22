@@ -1,0 +1,10 @@
+{
+  "banner": "endfield.banner.reference",
+  "action": "single_pull",
+  "target": {
+    "kind": "item",
+    "id": "endfield.operator.current_featured"
+  },
+  "draws": 120,
+  "quantiles": [0.5, 0.75, 0.9, 0.95, 0.99, 1.0]
+}

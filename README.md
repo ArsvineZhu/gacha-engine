@@ -6,12 +6,13 @@ The engine does **not** contain game-specific branches. Games are described by u
 
 ## Status
 
-This is a V0.1 core prototype created without a Rust toolchain in the build sandbox. JSON/TOML/data invariants were checked locally with Python, but the Rust source could **not** be compiled in the sandbox. Run `cargo test --workspace` first on a machine with stable Rust and report any compiler diagnostics before treating the package as production-ready.
+The V0.1 baseline on `main` has been built successfully by the maintainer on a local Rust toolchain. The current V0.2 development work adds the analysis query API and explicit ephemeral-scope lifecycle handling. The ChatGPT build sandbox still has no Rust toolchain, so changes on the V0.2 branch must be verified with `cargo test --workspace` before merge.
 
 Implemented:
 
 - typed state (`counter`, `boolean`)
 - state scopes: account, game, pity group, progress group, banner, session, batch, pull
+- scope-aware high-level step APIs that prune stale session/batch/pull slots
 - exact rational one-step probabilities (`u128` numerator/denominator)
 - constant, table and linear-after probability curves
 - `remainder` and proportional `share_of_remainder`
@@ -22,9 +23,12 @@ Implemented:
 - generic emitted events
 - Rule Pack reference validation and selector-cycle rejection
 - reproducible SplitMix64 RNG
-- `enumerate_transitions()` as the canonical semantic path
+- transition enumeration as the canonical semantic path
 - sampling implemented on top of transition enumeration to prevent semantic drift
-- approximate multi-draw target probability DP (f64 mass, exact one-step rules)
+- query-driven finite-horizon first-hit analysis using the same transition graph
+- first-hit PMF/CDF, survival probability, quantiles and finite-horizon expectations
+- analysis targets by item, item set, minimum rarity, or item tag
+- serializable analysis query/report DTOs suitable for future bindings
 - developer CLI
 - two Endfield reference packs using different assumptions for unpublished probability details
 
@@ -32,6 +36,8 @@ Not implemented yet:
 
 - optimized direct-sampling hot path
 - arbitrary-precision rational multi-draw DP
+- state projection / dependency reduction for large exact-analysis state spaces
+- copy-count and multi-objective probability queries
 - batch actions such as an isolated free ten-pull with its own batch guarantee
 - dynamic roster queries / automatic previous-banner rotation
 - WASM/Python/HTTP bindings
@@ -95,7 +101,15 @@ cargo run -p gacha-cli -- transitions \
   --state examples/state-120.json
 ```
 
-Approximate probability of the example featured item within 120 pulls:
+Run the query-driven first-hit analysis API:
+
+```bash
+cargo run -p gacha-cli -- analyze \
+  packs/endfield/chartered-proportional.json \
+  examples/endfield-featured-120.query.json
+```
+
+The legacy convenience command remains available:
 
 ```bash
 cargo run -p gacha-cli -- probability \
@@ -113,6 +127,8 @@ The engine follows this conceptual contract:
     -> [(Probability, Outcome, NextState, Events)]
 ```
 
-`sample_transition()` first calls `enumerate_transitions()` and samples from the returned branches. This is intentionally slower than a specialized simulator, but it guarantees that the simulator and analyzer do not implement different gacha semantics.
+For normal sequential use, call `sample_step()` / `enumerate_step()`. They apply the lifecycle rules for ephemeral scopes and then delegate to the canonical transition engine. The lower-level `sample_transition()` / `enumerate_transitions()` remain available when a caller intentionally wants to manage scope lifecycle itself.
 
-See `docs/DESIGN.md` and `docs/PACK_FORMAT.md`.
+Sampling still derives from exact transition enumeration. This is intentionally slower than a specialized simulator, but it prevents the simulator and analyzer from implementing different gacha semantics.
+
+See `docs/DESIGN.md`, `docs/API.md`, and `docs/PACK_FORMAT.md`.
