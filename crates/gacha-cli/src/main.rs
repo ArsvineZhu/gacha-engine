@@ -1,5 +1,5 @@
-use gacha_analysis::probability_of_item_within;
-use gacha_core::{ScopeContext, SplitMix64, StateStore, enumerate_transitions, sample_transition};
+use gacha_analysis::{FirstHitQuery, analyze_first_hit, probability_of_item_within};
+use gacha_core::{ScopeContext, SplitMix64, StateStore, enumerate_step, sample_step};
 use gacha_pack::{compile_pack, load_pack};
 use serde_json::{Value, json};
 use std::env;
@@ -29,6 +29,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         "inspect" => command_inspect(&args[1..]),
         "pull" => command_pull(&args[1..]),
         "transitions" => command_transitions(&args[1..]),
+        "analyze" => command_analyze(&args[1..]),
         "probability" => command_probability(&args[1..]),
         other => Err(format!("unknown command: {other}").into()),
     }
@@ -103,8 +104,8 @@ fn command_pull(args: &[String]) -> Result<(), Box<dyn std::error::Error>> {
     let mut context = ScopeContext::default();
 
     for index in 0..count {
-        context.pull = index.to_string();
-        let branch = sample_transition(&game, banner, action, &mut state, &context, &mut rng)?;
+        context.pull = (index + 1).to_string();
+        let branch = sample_step(&game, banner, action, &mut state, &context, &mut rng)?;
         let item = game.item(branch.outcome.item);
         results.push(json!({
             "item": item.id.clone(),
@@ -135,7 +136,7 @@ fn command_transitions(args: &[String]) -> Result<(), Box<dyn std::error::Error>
     let pack = load_pack(pack_path)?;
     let game = compile_pack(&pack)?;
     let context = ScopeContext::default();
-    let branches = enumerate_transitions(&game, banner, action, &state, &context)?;
+    let branches = enumerate_step(&game, banner, action, &state, &context)?;
 
     let output = branches
         .iter()
@@ -154,6 +155,28 @@ fn command_transitions(args: &[String]) -> Result<(), Box<dyn std::error::Error>
         })
         .collect::<Vec<_>>();
     println!("{}", serde_json::to_string_pretty(&output)?);
+    Ok(())
+}
+
+fn command_analyze(args: &[String]) -> Result<(), Box<dyn std::error::Error>> {
+    let pack_path = required(args, 0, "analyze requires PACK QUERY.json")?;
+    let query_path = required(args, 1, "analyze requires PACK QUERY.json")?;
+    let state = load_optional_state(option_value(args, "--state"))?;
+
+    let query_text = fs::read_to_string(query_path)?;
+    let query: FirstHitQuery = serde_json::from_str(&query_text)?;
+    let pack = load_pack(pack_path)?;
+    let game = compile_pack(&pack)?;
+    let result = analyze_first_hit(&game, &state, &ScopeContext::default(), &query)?;
+
+    println!(
+        "{}",
+        serde_json::to_string_pretty(&json!({
+            "query": query,
+            "result": result,
+            "note": "one-step transitions are exact rationals; multi-draw state mass is accumulated in f64"
+        }))?
+    );
     Ok(())
 }
 
@@ -252,7 +275,12 @@ USAGE:
   gacha inspect PACK.json
   gacha pull PACK.json BANNER ACTION [--count N] [--seed N] [--state state.json]
   gacha transitions PACK.json BANNER ACTION [--state state.json]
+  gacha analyze PACK.json QUERY.json [--state state.json]
   gacha probability PACK.json BANNER ACTION TARGET_ITEM DRAWS [--state state.json]
+
+The `analyze` command accepts a serializable FirstHitQuery JSON document and emits a
+stable JSON report containing PMF/CDF points, quantiles, finite-horizon expectations,
+and state-space diagnostics.
 
 The CLI intentionally has no network or database behavior. Rule packs are untrusted data,
 not executable scripts."#
