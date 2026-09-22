@@ -1,0 +1,547 @@
+{
+  "schema_version": 1,
+  "id": "endfield.reference.chartered.fixed-five",
+  "version": "0.1.0",
+  "description": "Reference Endfield chartered-search pack. Unknown probability redistribution details are explicit assumptions.",
+  "sources": [
+    {
+      "id": "endfield.official.base_rates",
+      "kind": "official",
+      "title": "Official in-game/announcement base rarity and pity rules",
+      "url": "",
+      "verified_at": "2026-09-21"
+    },
+    {
+      "id": "endfield.official.rewards",
+      "kind": "official",
+      "title": "Official cumulative reward rules",
+      "url": "",
+      "verified_at": "2026-09-21"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "assumption.soft_pity.fixed_five",
+      "status": "inferred",
+      "description": "When 6-star probability rises, 5-star remains exactly 8% and 4-star receives the remainder."
+    },
+    {
+      "id": "assumption.five_plus.preserve_six",
+      "status": "inferred",
+      "description": "When the 5-star+ guarantee triggers, 6-star probability is preserved and all lower-rarity mass is moved to 5-star."
+    }
+  ],
+  "state": [
+    {
+      "id": "six_star_pity",
+      "kind": "counter",
+      "scope": "pity_group",
+      "initial": 0,
+      "max": 79,
+      "description": "Consecutive counted pulls without a 6-star."
+    },
+    {
+      "id": "five_plus_pity",
+      "kind": "counter",
+      "scope": "pity_group",
+      "initial": 0,
+      "max": 9,
+      "description": "Consecutive counted pulls without a 5-star or 6-star."
+    },
+    {
+      "id": "banner_pulls",
+      "kind": "counter",
+      "scope": "progress_group",
+      "initial": 0,
+      "description": "Counted pulls for banner-local/series-local progress."
+    },
+    {
+      "id": "featured_guarantee_available",
+      "kind": "boolean",
+      "scope": "progress_group",
+      "initial": true,
+      "description": "Whether the one-time 120-pull featured guarantee is still available."
+    }
+  ],
+  "items": [
+    {
+      "id": "endfield.operator.current_featured",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "featured"
+      ],
+      "display_name": "示例当期UP"
+    },
+    {
+      "id": "endfield.operator.previous_a",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "previous_featured"
+      ],
+      "display_name": "示例前一期限定"
+    },
+    {
+      "id": "endfield.operator.previous_b",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "previous_featured"
+      ],
+      "display_name": "示例前二期限定"
+    },
+    {
+      "id": "endfield.operator.standard_1",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "standard"
+      ],
+      "display_name": "余烬"
+    },
+    {
+      "id": "endfield.operator.standard_2",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "standard"
+      ],
+      "display_name": "黎风"
+    },
+    {
+      "id": "endfield.operator.standard_3",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "standard"
+      ],
+      "display_name": "艾尔黛拉"
+    },
+    {
+      "id": "endfield.operator.standard_4",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "standard"
+      ],
+      "display_name": "别礼"
+    },
+    {
+      "id": "endfield.operator.standard_5",
+      "rarity": 6,
+      "tags": [
+        "operator",
+        "standard"
+      ],
+      "display_name": "骏卫"
+    },
+    {
+      "id": "endfield.operator.five_1",
+      "rarity": 5,
+      "tags": [
+        "operator"
+      ],
+      "display_name": "佩丽卡"
+    },
+    {
+      "id": "endfield.operator.five_2",
+      "rarity": 5,
+      "tags": [
+        "operator"
+      ],
+      "display_name": "弧光"
+    },
+    {
+      "id": "endfield.operator.five_3",
+      "rarity": 5,
+      "tags": [
+        "operator"
+      ],
+      "display_name": "陈千语"
+    },
+    {
+      "id": "endfield.operator.four_1",
+      "rarity": 4,
+      "tags": [
+        "operator"
+      ],
+      "display_name": "秋栗"
+    },
+    {
+      "id": "endfield.operator.four_2",
+      "rarity": 4,
+      "tags": [
+        "operator"
+      ],
+      "display_name": "卡契尔"
+    },
+    {
+      "id": "endfield.operator.four_3",
+      "rarity": 4,
+      "tags": [
+        "operator"
+      ],
+      "display_name": "安塔尔"
+    }
+  ],
+  "pools": [
+    {
+      "id": "pool.current_featured",
+      "items": [
+        "endfield.operator.current_featured"
+      ]
+    },
+    {
+      "id": "pool.six_off_banner",
+      "items": [
+        "endfield.operator.previous_a",
+        "endfield.operator.previous_b",
+        "endfield.operator.standard_1",
+        "endfield.operator.standard_2",
+        "endfield.operator.standard_3",
+        "endfield.operator.standard_4",
+        "endfield.operator.standard_5"
+      ]
+    },
+    {
+      "id": "pool.five",
+      "items": [
+        "endfield.operator.five_1",
+        "endfield.operator.five_2",
+        "endfield.operator.five_3"
+      ]
+    },
+    {
+      "id": "pool.four",
+      "items": [
+        "endfield.operator.four_1",
+        "endfield.operator.four_2",
+        "endfield.operator.four_3"
+      ]
+    }
+  ],
+  "distributions": [
+    {
+      "id": "chartered_rarity",
+      "evidence": [
+        "endfield.official.base_rates"
+      ],
+      "assumptions": [
+        "assumption.soft_pity.fixed_five"
+      ],
+      "entries": [
+        {
+          "rarity": 6,
+          "type": "linear_after",
+          "state": "six_star_pity",
+          "base": "0.008",
+          "after": 65,
+          "increment": "0.05",
+          "cap": "1"
+        },
+        {
+          "rarity": 5,
+          "type": "constant",
+          "value": "0.08"
+        },
+        {
+          "rarity": 4,
+          "type": "remainder"
+        }
+      ]
+    }
+  ],
+  "selectors": [
+    {
+      "id": "selector.current_featured",
+      "type": "pool",
+      "pool": "pool.current_featured"
+    },
+    {
+      "id": "selector.six_off_banner",
+      "type": "pool",
+      "pool": "pool.six_off_banner"
+    },
+    {
+      "id": "selector.six",
+      "type": "weighted",
+      "branches": [
+        {
+          "weight": "1",
+          "selector": "selector.current_featured"
+        },
+        {
+          "weight": "1",
+          "selector": "selector.six_off_banner"
+        }
+      ]
+    },
+    {
+      "id": "selector.five",
+      "type": "pool",
+      "pool": "pool.five"
+    },
+    {
+      "id": "selector.four",
+      "type": "pool",
+      "pool": "pool.four"
+    }
+  ],
+  "banners": [
+    {
+      "id": "endfield.banner.reference",
+      "pity_group": "endfield.chartered",
+      "progress_group": "endfield.banner.reference",
+      "actions": [
+        {
+          "id": "single_pull",
+          "distribution": "chartered_rarity",
+          "selectors": {
+            "6": "selector.six",
+            "5": "selector.five",
+            "4": "selector.four"
+          },
+          "guarantees": [
+            {
+              "id": "featured_120",
+              "priority": 300,
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_gte",
+                    "state": "banner_pulls",
+                    "value": 119
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "featured_guarantee_available",
+                    "value": true
+                  }
+                ]
+              },
+              "effect": {
+                "type": "force_item",
+                "item": "endfield.operator.current_featured"
+              },
+              "evidence": [
+                "endfield.official.base_rates"
+              ]
+            },
+            {
+              "id": "six_star_80",
+              "priority": 200,
+              "when": {
+                "op": "state_counter_gte",
+                "state": "six_star_pity",
+                "value": 79
+              },
+              "effect": {
+                "type": "force_rarity",
+                "rarity": 6
+              },
+              "evidence": [
+                "endfield.official.base_rates"
+              ]
+            },
+            {
+              "id": "five_plus_10",
+              "priority": 100,
+              "when": {
+                "op": "state_counter_gte",
+                "state": "five_plus_pity",
+                "value": 9
+              },
+              "effect": {
+                "type": "min_rarity",
+                "rarity": 5,
+                "strategy": "preserve_higher_fill_floor"
+              },
+              "evidence": [
+                "endfield.official.base_rates"
+              ],
+              "assumptions": [
+                "assumption.five_plus.preserve_six"
+              ]
+            }
+          ],
+          "transitions": [
+            {
+              "id": "six_star_reset",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 6
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "six_star_pity"
+                }
+              ]
+            },
+            {
+              "id": "six_star_increment",
+              "when": {
+                "op": "not",
+                "condition": {
+                  "op": "outcome_rarity_eq",
+                  "rarity": 6
+                }
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "six_star_pity"
+                }
+              ]
+            },
+            {
+              "id": "five_plus_reset",
+              "when": {
+                "op": "outcome_rarity_gte",
+                "rarity": 5
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "five_plus_pity"
+                }
+              ]
+            },
+            {
+              "id": "five_plus_increment",
+              "when": {
+                "op": "not",
+                "condition": {
+                  "op": "outcome_rarity_gte",
+                  "rarity": 5
+                }
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "five_plus_pity"
+                }
+              ]
+            },
+            {
+              "id": "banner_progress",
+              "when": {
+                "op": "always"
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "banner_pulls"
+                }
+              ]
+            },
+            {
+              "id": "consume_featured_guarantee",
+              "when": {
+                "op": "outcome_item_in_pool",
+                "pool": "pool.current_featured"
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "featured_guarantee_available",
+                  "value": false
+                }
+              ]
+            },
+            {
+              "id": "quota_6",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 6
+              },
+              "events": [
+                {
+                  "kind": "grant_currency",
+                  "key": "arsenal_quota",
+                  "amount": 2000
+                }
+              ]
+            },
+            {
+              "id": "quota_5",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 5
+              },
+              "events": [
+                {
+                  "kind": "grant_currency",
+                  "key": "arsenal_quota",
+                  "amount": 200
+                }
+              ]
+            },
+            {
+              "id": "quota_4",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 4
+              },
+              "events": [
+                {
+                  "kind": "grant_currency",
+                  "key": "arsenal_quota",
+                  "amount": 20
+                }
+              ]
+            },
+            {
+              "id": "reward_30",
+              "when": {
+                "op": "state_counter_eq",
+                "state": "banner_pulls",
+                "value": 29
+              },
+              "events": [
+                {
+                  "kind": "grant_item",
+                  "key": "urgent_recruitment_10",
+                  "amount": 1
+                }
+              ]
+            },
+            {
+              "id": "reward_60",
+              "when": {
+                "op": "state_counter_eq",
+                "state": "banner_pulls",
+                "value": 59
+              },
+              "events": [
+                {
+                  "kind": "grant_item",
+                  "key": "next_banner_ticket_10",
+                  "amount": 1
+                }
+              ]
+            },
+            {
+              "id": "reward_240",
+              "when": {
+                "op": "state_modulo_eq",
+                "state": "banner_pulls",
+                "modulus": 240,
+                "value": 239
+              },
+              "events": [
+                {
+                  "kind": "grant_item",
+                  "key": "current_featured_token",
+                  "amount": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

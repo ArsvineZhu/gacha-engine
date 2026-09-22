@@ -1,0 +1,12 @@
+[package]
+name = "gacha-analysis"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+gacha-core = { path = "../gacha-core" }
+
+[dev-dependencies]
+gacha-pack = { path = "../gacha-pack" }

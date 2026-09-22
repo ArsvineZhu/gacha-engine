@@ -1,0 +1,16 @@
+[package]
+name = "gacha-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "gacha"
+path = "src/main.rs"
+
+[dependencies]
+gacha-analysis = { path = "../gacha-analysis" }
+gacha-core = { path = "../gacha-core" }
+gacha-pack = { path = "../gacha-pack" }
+serde_json.workspace = true

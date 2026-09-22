@@ -1,0 +1,8 @@
+{
+  "slots": {
+    "six_star_pity::pity:endfield.chartered": 65,
+    "five_plus_pity::pity:endfield.chartered": 0,
+    "banner_pulls::progress:endfield.banner.reference": 0,
+    "featured_guarantee_available::progress:endfield.banner.reference": true
+  }
+}
