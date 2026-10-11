@@ -1,0 +1,130 @@
+{
+ "schema_version": 1,
+ "id": "wuthering-waves.reference.weapon",
+ "version": "0.1.0",
+ "description": "用于验证规则机制与数学结果的独立合成名单。",
+ "sources": [],
+ "assumptions": [
+  {
+   "id": "soft.omitted",
+   "status": "experimental",
+   "description": "基础概率加硬保底模型，未加入未公开软保底；预测概率和期望取决于此简化。"
+  },
+  {
+   "id": "lower.redistribution",
+   "status": "inferred",
+   "description": "剩余质量按基础比例分配，四星最低保底保留高等级概率；具体名单来自清单，四星目标保底尚未建模。"
+  },
+  {
+   "id": "reference.parameters",
+   "status": "experimental",
+   "description": "武器参考模型采用常见参数，完整当前游戏内规则仍待独立核对。"
+  }
+ ],
+ "state": [
+  {"id": "pity", "kind": "counter", "scope": "pity_group", "initial": 0, "max": 79},
+  {"id": "four_pity", "kind": "counter", "scope": "pity_group", "initial": 0, "max": 9},
+  {"id": "featured_due", "kind": "boolean", "scope": "pity_group", "initial": false}
+ ],
+ "items": [
+  {"id": "wuthering-waves.featured", "rarity": 5, "tags": ["featured"], "display_name": "featured"},
+  {"id": "wuthering-waves.standard", "rarity": 5, "tags": ["standard"], "display_name": "standard"},
+  {"id": "wuthering-waves.four", "rarity": 4, "tags": ["four"], "display_name": "four"},
+  {"id": "wuthering-waves.three", "rarity": 3, "tags": ["three"], "display_name": "three"}
+ ],
+ "pools": [
+  {"id": "featured", "items": ["wuthering-waves.featured"]},
+  {"id": "standard", "items": ["wuthering-waves.standard"]},
+  {"id": "four", "items": ["wuthering-waves.four"]},
+  {"id": "three", "items": ["wuthering-waves.three"]}
+ ],
+ "distributions": [
+  {
+   "id": "rarity",
+   "entries": [
+    {"rarity": 5, "type": "constant", "value": "0.008"},
+    {"rarity": 4, "type": "share_of_remainder", "weight": 60},
+    {"rarity": 3, "type": "share_of_remainder", "weight": 932}
+   ],
+   "assumptions": ["soft.omitted", "lower.redistribution"]
+  }
+ ],
+ "selectors": [
+  {"id": "featured", "type": "pool", "pool": "featured"},
+  {"id": "standard", "type": "pool", "pool": "standard"},
+  {"id": "four", "type": "pool", "pool": "four"},
+  {"id": "three", "type": "pool", "pool": "three"},
+  {
+   "id": "coin",
+   "type": "weighted",
+   "branches": [{"weight": "1", "selector": "featured"}, {"weight": "1", "selector": "standard"}]
+  },
+  {"id": "top", "type": "pool", "pool": "featured"}
+ ],
+ "banners": [
+  {
+   "id": "wuthering-waves.weapon",
+   "pity_group": "wuthering-waves.weapon",
+   "progress_group": "wuthering-waves.character.reference",
+   "actions": [
+    {
+     "id": "single_pull",
+     "distribution": "rarity",
+     "selectors": {"5": "top", "4": "four", "3": "three"},
+     "guarantees": [
+      {
+       "id": "hard_pity",
+       "when": {"op": "state_counter_gte", "state": "pity", "value": 79},
+       "effect": {"type": "force_rarity", "rarity": 5},
+       "priority": 200
+      },
+      {
+       "id": "four_floor",
+       "when": {"op": "state_counter_gte", "state": "four_pity", "value": 9},
+       "effect": {"type": "min_rarity", "rarity": 4, "strategy": "preserve_higher_fill_floor"},
+       "priority": 100
+      }
+     ],
+     "transitions": [
+      {
+       "id": "pity.reset",
+       "when": {"op": "outcome_rarity_eq", "rarity": 5},
+       "updates": [{"type": "reset", "state": "pity"}],
+       "events": []
+      },
+      {
+       "id": "pity.miss",
+       "when": {"op": "not", "condition": {"op": "outcome_rarity_eq", "rarity": 5}},
+       "updates": [{"type": "increment", "state": "pity"}],
+       "events": []
+      },
+      {
+       "id": "four_pity.reset",
+       "when": {"op": "outcome_rarity_gte", "rarity": 4},
+       "updates": [{"type": "reset", "state": "four_pity"}],
+       "events": []
+      },
+      {
+       "id": "four_pity.miss",
+       "when": {"op": "not", "condition": {"op": "outcome_rarity_gte", "rarity": 4}},
+       "updates": [{"type": "increment", "state": "four_pity"}],
+       "events": []
+      },
+      {
+       "id": "lose",
+       "when": {"op": "outcome_item_in_pool", "pool": "standard"},
+       "updates": [{"type": "set_bool", "state": "featured_due", "value": true}],
+       "events": []
+      },
+      {
+       "id": "win",
+       "when": {"op": "outcome_item_in_pool", "pool": "featured"},
+       "updates": [{"type": "set_bool", "state": "featured_due", "value": false}],
+       "events": []
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

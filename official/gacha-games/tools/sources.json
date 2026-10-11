@@ -1,0 +1,64 @@
+{
+  "genshin": {
+    "adapter": "genshin",
+    "files": {
+      "characters": "content.genshin.characters",
+      "weapons": "content.genshin.weapons"
+    }
+  },
+  "star-rail": {
+    "adapter": "star_rail",
+    "files": {
+      "characters": "content.star-rail.characters",
+      "light_cones": "content.star-rail.light_cones"
+    }
+  },
+  "arknights": {
+    "adapter": "arknights",
+    "files": {
+      "characters": "content.arknights.characters"
+    }
+  },
+  "wuthering-waves": {
+    "adapter": "wuthering",
+    "files": {
+      "characters": "content.wuthering-waves.characters",
+      "weapons": "content.wuthering-waves.weapons",
+      "text_zh": "content.wuthering-waves.text_zh",
+      "text_en": "content.wuthering-waves.text_en"
+    }
+  },
+  "zzz": {
+    "adapter": "zenless",
+    "files": {
+      "characters": "content.zzz.characters",
+      "weapons": "content.zzz.weapons",
+      "items": "content.zzz.items",
+      "text": "content.zzz.text"
+    }
+  },
+  "nte": {
+    "adapter": "nte",
+    "files": {
+      "characters": "content.nte.characters",
+      "arcs": "content.nte.arcs"
+    }
+  },
+  "endfield": {
+    "adapter": "endfield",
+    "files": {
+      "characters": "content.endfield.characters",
+      "character_names": "content.endfield.character_names",
+      "weapons": "content.endfield.weapons",
+      "weapon_names": "content.endfield.weapon_names",
+      "items": "content.endfield.items",
+      "weapon_english": "content.endfield.weapon_english",
+      "official_roster": "content.endfield.official_roster",
+      "enka_characters": "content.endfield.enka_characters",
+      "enka_weapons": "content.endfield.enka_weapons",
+      "enka_names": "content.endfield.enka_names",
+      "official_new": "content.endfield.official_new"
+    },
+    "manual": true
+  }
+}

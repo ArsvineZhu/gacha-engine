@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "nte.resources",
+  "game": "nte",
+  "version": "0.1.0",
+  "description": "资源保留真实身份；引擎等级 1 表示无游戏稀有度的奖励类别。",
+  "source_documents": ["sources.json"],
+  "items": [
+    {"id": "nte.resource.fons", "kind": "resource", "display_name": "方斯", "names": {"zh-CN": "方斯"}, "rarity": 1, "native_rarity": "unranked", "upstream_id": "", "tags": ["resource"], "source_ids": ["content.nte.resource"]}
+  ]
+}

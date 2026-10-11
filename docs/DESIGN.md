@@ -1,76 +1,55 @@
-# Design
+# 设计决策
 
-## 1. Rules are data
+## 规则由数据表达
 
-`gacha-core` has no Endfield, Arknights, Genshin, Wuthering Waves, character, operator, or weapon logic. It only knows items, pools, selectors, states, probabilities, guarantees, transitions, and events.
+核心仅处理条目、池、选择器、状态、概率、保底、转移和事件。`RulePack` 定义机制，`ContentCatalog` 保存内容身份，`PackManifest` 指定具体卡池及绑定。编译器把组装后的规则解析为索引结构；游戏名称和武器类型不会产生核心分支。目录和依赖归属见[架构](ARCHITECTURE.md)。
 
-A game-specific Rule Pack is parsed by `gacha-schema`, validated/compiled by `gacha-pack`, and then represented with numeric IDs in `gacha-core`.
+## 状态有明确生命周期
 
-## 2. State scope is explicit
-
-Every state variable declares a lifecycle scope. A state slot key is resolved from the current banner and execution context.
-
-Examples:
+保底跨池继承和当期奖励进度由作用域表达，核心无需增加游戏专用分支。槽位键由状态定义、卡池和执行上下文共同决定，例如：
 
 ```text
 six_star_pity::pity:endfield.chartered
 banner_pulls::progress:endfield.banner.reference
 ```
 
-This deliberately separates "what the state means" from "how long it survives". Cross-banner pity and banner-local reward progress therefore do not need special engine code.
+持久作用域保存切换卡池后可恢复的进度；会话、批次和单抽作用域在高层接口中清理。重构武器的六星保底按单期卡池保存，同名定向进度按系列保存。
 
-## 3. Non-Turing-complete Rule Packs
+## 规则表达有界
 
-The JSON format supports a closed set of conditions, probability expressions, selector nodes, and state updates. It does not execute JavaScript, Python, Rust, shell commands, network calls, filesystem calls, loops, recursion, or arbitrary expressions.
+规则格式仅支持固定的条件、概率表达式、选择器和状态更新，不执行任意脚本。编译器拒绝选择器循环，限制文档大小、主要节点数量、图深度和动作抽数。
 
-Selector recursion is data recursion only and cycles are rejected by the compiler.
+条件选择器读取抽前状态；状态更新条件读取同一个抽前状态及最终结果，匹配更新按声明顺序作用于下一状态。同一状态的多条更新需要由规则作者明确协调。
 
-## 4. Probability semantics
+`sample_action` 每次启动新的批次和单抽状态，所有抽取成功后才一并提交状态与随机数进度。
 
-One-step probabilities use an exact reduced `u128/u128` rational type. Decimal strings such as `"0.008"` are parsed exactly as rational values.
+## 数值与抽样
 
-This is sufficient for rule evaluation and one-step enumeration. It is intentionally **not** claimed to be an arbitrary-precision exact long-horizon solver: denominator growth can exceed `u128` in repeated symbolic arithmetic. `gacha-analysis` therefore accumulates long-horizon state mass in `f64` in V0.1 while obtaining every one-step branch from the exact rule engine.
+单步概率使用约分后的 `u128/u128` 表示，十进制字符串精确解析。乘积溢出时，有理数比较改用连分数次序；加减先约去公分母；抽样使用无模偏差的整数拒绝采样。
 
-A later exact analyzer should replace this with an arbitrary-precision rational or a specialized probability representation without changing Rule Pack semantics.
+有限区间分析从同一个精确转移图取得每一步分支，但使用 `f64` 汇总多步质量，避免分母增长。未来的任意精度分析可替换汇总表示，保持规则语义。
 
-## 5. Guarantee priority
+SplitMix64 用于可复现模拟。重放需要相同引擎版本、数据包、初始状态和种子；抽样实现的改动可能改变旧种子的结果序列。
 
-Matching guarantees are ordered by descending `priority`.
+## 保底优先级
 
-The highest-priority matching guarantee is the effective guarantee. Its effect is applied exactly once (`force_item`, `force_rarity`, or `min_rarity`). All matching guarantee IDs are still returned for diagnostics. Packs should avoid equal-priority contradictory guarantees.
+匹配保底按 `priority` 降序排列，最高优先级的保底生效，仅施加一次效果。全部匹配标识仍随结果返回。规则应避免相同优先级的冲突效果。
 
-## 6. Unknown rules are models, not facts
+## 未公开机制单独建模
 
-The two Endfield reference packs intentionally disagree about unpublished probability redistribution details:
+终末地提供两种特许模型，分别表达不同的低稀有度分配和十抽最低稀有度策略：
 
-- `chartered-proportional.json`: increased 6-star probability takes mass from 5/4 proportionally; the 5+ guarantee conditions the current distribution on rarity >= 5.
-- `chartered-fixed-five.json`: 5-star remains 8% while 4-star receives the remainder; the 5+ guarantee preserves 6-star probability and fills 5-star with the excluded mass.
+- `chartered-proportional.json` 按五/四星原始权重分配六星增长后的剩余概率，十抽条件化当前分布。
+- `chartered-fixed-five.json` 保持五星 8%，四星取剩余；十抽保留六星概率，再补足五星质量。
 
-Both packs use the exact same Rust engine.
+这些模型使用相同核心。实测证据更新时，只需修改规则数据及依据。其他游戏的示例曲线及异环投影也在[规则依据](RULE_SOURCES.md)中说明。
 
-This is the intended mechanism for empirical revisions: replace model data, not engine code.
+## 输入校验
 
-## 7. Transition semantics
+规则包作为外部输入处理，校验范围包括字段、标识、引用、状态类型、选择器循环、空池、重复条目、稀有度、概率范围、分支总质量和算术溢出。明确不可抽取条目不得成为抽取结果。
 
-Conditions in post-draw transition rules are evaluated against the same pre-draw state plus the resolved outcome. Matching rule updates are then applied in declaration order to the next state.
+未来接入远程规则与社区数据时，接入层还需增加计算预算及分发完整性约束。
 
-Packs should use mutually exclusive rules where multiple writes to the same state would be ambiguous.
+## 接入与执行准备
 
-## 8. Security model
-
-Treat Rule Packs as untrusted input.
-
-Current defenses:
-
-- strict typed deserialization;
-- explicit ID resolution;
-- unknown reference rejection;
-- state-kind checks;
-- selector cycle detection;
-- empty pool rejection;
-- duplicate ID rejection;
-- probability range checks;
-- transition probability sum validation;
-- checked integer/rational arithmetic in the engine.
-
-Future remote/community pack support should additionally impose document size, node count, graph depth, state-space, and runtime budgets, plus canonical hashing/signatures where appropriate.
+SDK 统一报告、完整动作单位、会话续跑和 trace，外部接入无需实现分析算法。准备执行器预展开静态选择器、缓存精确概率计划、只更新抽样命中的结果，并在分析中合并行为等价的候选。解释器作为差分基线保留。算法条件与实测见[性能说明](PERFORMANCE.md)。

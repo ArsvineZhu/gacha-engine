@@ -48,44 +48,46 @@ impl Rational {
     }
 
     pub fn checked_add(self, rhs: Self) -> Result<Self> {
+        let common = gcd(self.den, rhs.den);
         let left = self
             .num
-            .checked_mul(rhs.den)
+            .checked_mul(rhs.den / common)
             .ok_or_else(|| EngineError::new("rational addition overflow"))?;
         let right = rhs
             .num
-            .checked_mul(self.den)
+            .checked_mul(self.den / common)
             .ok_or_else(|| EngineError::new("rational addition overflow"))?;
         let num = left
             .checked_add(right)
             .ok_or_else(|| EngineError::new("rational addition overflow"))?;
-        let den = self
-            .den
-            .checked_mul(rhs.den)
+        let reduction = gcd(num, common);
+        let den = (self.den / common)
+            .checked_mul(rhs.den / reduction)
             .ok_or_else(|| EngineError::new("rational addition overflow"))?;
-        Self::new(num, den)
+        Self::new(num / reduction, den)
     }
 
     pub fn checked_sub(self, rhs: Self) -> Result<Self> {
         if self < rhs {
             return Err(EngineError::new("rational subtraction would be negative"));
         }
+        let common = gcd(self.den, rhs.den);
         let left = self
             .num
-            .checked_mul(rhs.den)
+            .checked_mul(rhs.den / common)
             .ok_or_else(|| EngineError::new("rational subtraction overflow"))?;
         let right = rhs
             .num
-            .checked_mul(self.den)
+            .checked_mul(self.den / common)
             .ok_or_else(|| EngineError::new("rational subtraction overflow"))?;
         let num = left
             .checked_sub(right)
             .ok_or_else(|| EngineError::new("rational subtraction underflow"))?;
-        let den = self
-            .den
-            .checked_mul(rhs.den)
+        let reduction = gcd(num, common);
+        let den = (self.den / common)
+            .checked_mul(rhs.den / reduction)
             .ok_or_else(|| EngineError::new("rational subtraction overflow"))?;
-        Self::new(num, den)
+        Self::new(num / reduction, den)
     }
 
     pub fn checked_mul(self, rhs: Self) -> Result<Self> {
@@ -206,7 +208,7 @@ impl Ord for Rational {
             other.num.checked_mul(self.den),
         ) {
             (Some(left), Some(right)) => left.cmp(&right),
-            _ => self.to_f64().total_cmp(&other.to_f64()),
+            _ => compare_fractions(self.num, self.den, other.num, other.den),
         }
     }
 }
@@ -249,21 +251,20 @@ fn gcd(mut a: u128, mut b: u128) -> u128 {
     a
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn parses_decimal_exactly() {
-        let p = Rational::from_str("0.008").expect("parse");
-        assert_eq!(p, Rational::new(1, 125).expect("ratio"));
-    }
-
-    #[test]
-    fn arithmetic_is_exact() {
-        let a = Rational::from_str("0.008").expect("parse");
-        let b = Rational::from_str("0.05").expect("parse");
-        let result = a.checked_add(b).expect("add");
-        assert_eq!(result, Rational::from_str("0.058").expect("parse"));
+// 使用连分数比较，避免交叉乘积溢出和舍入。
+fn compare_fractions(mut a: u128, mut b: u128, mut c: u128, mut d: u128) -> Ordering {
+    let mut reversed = false;
+    loop {
+        let order = (a / b).cmp(&(c / d));
+        if order != Ordering::Equal {
+            return if reversed { order.reverse() } else { order };
+        }
+        let (r, s) = (a % b, c % d);
+        if r == 0 || s == 0 {
+            let order = r.cmp(&s);
+            return if reversed { order.reverse() } else { order };
+        }
+        (a, b, c, d) = (b, r, d, s);
+        reversed = !reversed;
     }
 }

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "endfield.preview.danqingdu.si",
+  "version": "0.1.0",
+  "game": "endfield",
+  "description": "丹青渡目标概率测试场景：目标身份来自官方前瞻；非目标池沿用九月参考名单，并非新版本完整可抽名单。仅用于当期目标的首次获得分布。",
+  "rules": "rule.chartered-fixed-five.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.weapon-01.json",
+    "catalog.announced-1.6.json"
+  ],
+  "pools": [
+    {
+      "id": "pool.current_featured",
+      "items": [
+        "endfield.character.祀"
+      ]
+    },
+    {
+      "id": "pool.six_off_banner",
+      "items": [
+        "endfield.character.梨诺",
+        "endfield.character.诀",
+        "endfield.character.余烬",
+        "endfield.character.黎风",
+        "endfield.character.艾尔黛拉",
+        "endfield.character.别礼",
+        "endfield.character.骏卫"
+      ]
+    },
+    {
+      "id": "pool.five",
+      "items": [
+        "endfield.character.佩丽卡",
+        "endfield.character.弧光",
+        "endfield.character.艾维文娜",
+        "endfield.character.大潘",
+        "endfield.character.陈千语",
+        "endfield.character.狼卫",
+        "endfield.character.赛希",
+        "endfield.character.昼雪",
+        "endfield.character.阿列什"
+      ]
+    },
+    {
+      "id": "pool.four",
+      "items": [
+        "endfield.character.秋栗",
+        "endfield.character.卡契尔",
+        "endfield.character.埃特拉",
+        "endfield.character.萤石",
+        "endfield.character.安塔尔"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "endfield.character.祀"
+  },
+  "banner_bindings": {
+    "endfield.banner.reference": {
+      "id": "endfield.preview.danqingdu.si",
+      "pity_group": "endfield.chartered",
+      "progress_group": "endfield.preview.danqingdu.si"
+    }
+  }
+}

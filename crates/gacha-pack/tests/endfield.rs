@@ -2,17 +2,19 @@ use gacha_core::{
     Rational, ScopeContext, SplitMix64, StateStore, StateValue, enumerate_transitions,
     materialize_state, sample_transition, state_slot_key,
 };
-use gacha_pack::{compile_pack, load_pack};
+use gacha_pack::{compile_pack, parse_pack};
 use std::path::PathBuf;
 
 fn pack_path(name: &str) -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../packs/endfield")
+        .join("../../tests/fixtures/packs/endfield")
         .join(name)
 }
 
 fn load() -> gacha_core::CompiledGame {
-    let pack = load_pack(pack_path("chartered-proportional.json")).expect("load pack");
+    let pack =
+        parse_pack(&std::fs::read_to_string(pack_path("chartered-proportional.json")).unwrap())
+            .expect("load pack");
     compile_pack(&pack).expect("compile pack")
 }
 
@@ -194,7 +196,9 @@ fn seeded_sampling_is_reproducible() {
 
 #[test]
 fn pity_scope_is_shared_while_progress_scope_can_differ() {
-    let mut pack = load_pack(pack_path("chartered-proportional.json")).expect("load pack");
+    let mut pack =
+        parse_pack(&std::fs::read_to_string(pack_path("chartered-proportional.json")).unwrap())
+            .expect("load pack");
     let mut second = pack.banners[0].clone();
     second.id = "endfield.banner.reference.second".to_string();
     second.progress_group = "endfield.banner.reference.second".to_string();
@@ -254,7 +258,9 @@ fn obtaining_featured_disables_120_guarantee_state() {
 
 #[test]
 fn fixed_five_model_keeps_five_star_at_eight_percent_during_soft_pity() {
-    let pack = load_pack(pack_path("chartered-fixed-five.json")).expect("load pack");
+    let pack =
+        parse_pack(&std::fs::read_to_string(pack_path("chartered-fixed-five.json")).unwrap())
+            .expect("load pack");
     let game = compile_pack(&pack).expect("compile pack");
     let state = state_with_counter(&game, "six_star_pity", 65);
     let branches = enumerate_transitions(

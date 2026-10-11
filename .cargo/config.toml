@@ -1,0 +1,4 @@
+[alias]
+fmt-project = "fmt --all -- --config-path .config/rustfmt.toml"
+fmt-check = "fmt --all --check -- --config-path .config/rustfmt.toml"
+deny-project = "deny --locked --config .config/deny.toml check"

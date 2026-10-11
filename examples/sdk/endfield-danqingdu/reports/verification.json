@@ -1,0 +1,12 @@
+{
+  "consumer_outside_provider_workspace": true,
+  "public_sdk_and_official_library_only": true,
+  "canonical_official_data": true,
+  "temporary_cli_bundles": true,
+  "source_files_unchanged": true,
+  "cases": 6,
+  "trials_per_case": 10000,
+  "cli_matches_sdk": true,
+  "cli_trace_and_session_resume": true,
+  "golden_cdf_and_seeded_histograms_match": true
+}

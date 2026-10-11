@@ -1,0 +1,44 @@
+[
+  {
+    "analysis_prepared_ms": 1552.5627,
+    "analysis_reference_ms": 6277.1222,
+    "analysis_speedup": 4.043071626028373,
+    "case": "si",
+    "cdf_max_tolerance": 1e-12,
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 422097,
+      "cache_misses": 36,
+      "cached_plans": 36,
+      "numeric_tables": 1,
+      "static_selectors": 5
+    },
+    "repeats": 3,
+    "sampling_prepared_ms": 864.2732,
+    "sampling_reference_ms": 7795.2395,
+    "sampling_speedup": 9.01941596708078,
+    "seeded_histograms_identical": true,
+    "trials": 1000
+  },
+  {
+    "analysis_prepared_ms": 24.8162,
+    "analysis_reference_ms": 144.5501,
+    "analysis_speedup": 5.8248281364592485,
+    "case": "yuzhongshen",
+    "cdf_max_tolerance": 1e-12,
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 166696,
+      "cache_misses": 8,
+      "cached_plans": 8,
+      "numeric_tables": 0,
+      "static_selectors": 5
+    },
+    "repeats": 3,
+    "sampling_prepared_ms": 715.2339,
+    "sampling_reference_ms": 11004.9789,
+    "sampling_speedup": 15.386545436395004,
+    "seeded_histograms_identical": true,
+    "trials": 1000
+  }
+]

@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct SplitMix64 {
     state: u64,
 }
@@ -18,5 +18,19 @@ impl SplitMix64 {
 
     pub fn next_53_bits(&mut self) -> u64 {
         self.next_u64() >> 11
+    }
+
+    /// 在 [0, upper) 生成均匀整数，避免取模偏差。
+    pub fn below_u128(&mut self, upper: u128) -> crate::Result<u128> {
+        if upper == 0 {
+            return Err(crate::EngineError::new("random bound must be positive"));
+        }
+        let threshold = upper.wrapping_neg() % upper;
+        loop {
+            let value = (u128::from(self.next_u64()) << 64) | u128::from(self.next_u64());
+            if value >= threshold {
+                return Ok(value % upper);
+            }
+        }
     }
 }

@@ -1,0 +1,5 @@
+roots = ["README.md", "docs", "official/gacha-games", "examples", ".config/README.md"]
+check_local_targets = true
+check_anchors = true
+# 外部页面在资料更新阶段核对；此门禁检查仓库内链接。
+external_schemes = ["https", "http", "mailto"]

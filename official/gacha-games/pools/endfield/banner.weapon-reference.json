@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "endfield.reference.weapon",
+  "game": "endfield",
+  "version": "0.1.0",
+  "description": "历史或参考卡池名单使用真实身份；开放时间以对应公告为准，模型假设见规则包。",
+  "rules": "rule.weapon-reference.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.weapon-01.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "endfield.weapon.熔铸火焰"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "endfield.weapon.骑士精神",
+        "endfield.weapon.遗忘",
+        "endfield.weapon.楔子",
+        "endfield.weapon.热熔切割器",
+        "endfield.weapon.白夜新星",
+        "endfield.weapon.典范"
+      ]
+    },
+    {
+      "id": "five",
+      "items": [
+        "endfield.weapon.O.B.J.尖峰",
+        "endfield.weapon.O.B.J.术识",
+        "endfield.weapon.O.B.J.轻芒",
+        "endfield.weapon.O.B.J.迅极",
+        "endfield.weapon.O.B.J.重荷",
+        "endfield.weapon.仰止",
+        "endfield.weapon.作品：众生",
+        "endfield.weapon.十二问",
+        "endfield.weapon.古渠",
+        "endfield.weapon.向心之引",
+        "endfield.weapon.坚城铸造者",
+        "endfield.weapon.嵌合正义",
+        "endfield.weapon.布道自由",
+        "endfield.weapon.悼亡诗",
+        "endfield.weapon.探骊",
+        "endfield.weapon.理性告别",
+        "endfield.weapon.终点之声",
+        "endfield.weapon.莫奈何",
+        "endfield.weapon.迷失荒野",
+        "endfield.weapon.逐鳞3.0",
+        "endfield.weapon.钢铁余音"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "endfield.weapon.全自动骇新星",
+        "endfield.weapon.呼啸守卫",
+        "endfield.weapon.天使杀手",
+        "endfield.weapon.寻路者道标",
+        "endfield.weapon.工业零点一",
+        "endfield.weapon.显锋",
+        "endfield.weapon.浪潮",
+        "endfield.weapon.淬火者",
+        "endfield.weapon.荧光雷羽",
+        "endfield.weapon.长路"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "endfield.weapon.熔铸火焰"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "zzz.reference.character",
+  "game": "zzz",
+  "version": "0.1.0",
+  "description": "历史或参考卡池名单使用真实身份；开放时间以对应公告为准，模型假设见规则包。",
+  "rules": "rule.character-reference.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.w_engine-01.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "zzz.character.1191"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "zzz.character.1021",
+        "zzz.character.1041",
+        "zzz.character.1101",
+        "zzz.character.1141",
+        "zzz.character.1181",
+        "zzz.character.1211"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "zzz.character.1011",
+        "zzz.character.1031",
+        "zzz.character.1061",
+        "zzz.character.1081",
+        "zzz.character.1111",
+        "zzz.character.1121",
+        "zzz.character.1131",
+        "zzz.character.1151",
+        "zzz.character.1271",
+        "zzz.character.1281",
+        "zzz.character.1351",
+        "zzz.character.1421",
+        "zzz.character.1441"
+      ]
+    },
+    {
+      "id": "three",
+      "items": [
+        "zzz.w_engine.12001",
+        "zzz.w_engine.12002",
+        "zzz.w_engine.12003",
+        "zzz.w_engine.12004",
+        "zzz.w_engine.12005",
+        "zzz.w_engine.12006",
+        "zzz.w_engine.12007",
+        "zzz.w_engine.12008",
+        "zzz.w_engine.12009",
+        "zzz.w_engine.12010",
+        "zzz.w_engine.12011",
+        "zzz.w_engine.12012",
+        "zzz.w_engine.12013",
+        "zzz.w_engine.12014",
+        "zzz.w_engine.12015",
+        "zzz.w_engine.12016"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "zzz.character.1191"
+  }
+}

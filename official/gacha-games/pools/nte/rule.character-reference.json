@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "id": "nte.rules.limited-board",
+  "version": "0.1.0",
+  "description": "机制与符号槽位定义；具体可抽范围和身份由卡池清单组装。",
+  "assumptions": [
+    {
+      "id": "board.projection",
+      "status": "experimental",
+      "description": "单抽投影模型：S 级基础 0.99%、A 级 10%、剩余为资源，90 抽目标保底。棋盘位置、格子加成、额外骰子和提前外观尚未建模，完整概率表仍待核对。"
+    }
+  ],
+  "state": [
+    {
+      "id": "pity",
+      "kind": "counter",
+      "scope": "pity_group",
+      "initial": 0,
+      "max": 89
+    },
+    {
+      "id": "board_pulls",
+      "kind": "counter",
+      "scope": "progress_group",
+      "initial": 0
+    }
+  ],
+  "distributions": [
+    {
+      "id": "rarity",
+      "entries": [
+        {
+          "rarity": 5,
+          "type": "constant",
+          "value": "0.0099"
+        },
+        {
+          "rarity": 4,
+          "type": "constant",
+          "value": "0.1"
+        },
+        {
+          "rarity": 1,
+          "type": "remainder"
+        }
+      ],
+      "assumptions": [
+        "board.projection"
+      ]
+    }
+  ],
+  "selectors": [
+    {
+      "id": "featured",
+      "type": "pool",
+      "pool": "featured"
+    },
+    {
+      "id": "four",
+      "type": "pool",
+      "pool": "four"
+    },
+    {
+      "id": "currency",
+      "type": "pool",
+      "pool": "currency"
+    }
+  ],
+  "banners": [
+    {
+      "id": "nte.character",
+      "pity_group": "nte.limited",
+      "progress_group": "nte.board.heiyu",
+      "actions": [
+        {
+          "id": "single_pull",
+          "distribution": "rarity",
+          "selectors": {
+            "5": "featured",
+            "4": "four",
+            "1": "currency"
+          },
+          "guarantees": [
+            {
+              "id": "featured_90",
+              "priority": 200,
+              "when": {
+                "op": "state_counter_gte",
+                "state": "pity",
+                "value": 89
+              },
+              "effect": {
+                "type": "force_item",
+                "item": "featured"
+              },
+              "assumptions": [
+                "board.projection"
+              ]
+            }
+          ],
+          "transitions": [
+            {
+              "id": "pity.reset",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 5
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "pity"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "pity.miss",
+              "when": {
+                "op": "not",
+                "condition": {
+                  "op": "outcome_rarity_eq",
+                  "rarity": 5
+                }
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "pity"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "progress",
+              "when": {
+                "op": "always"
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "board_pulls"
+                }
+              ]
+            },
+            {
+              "id": "milestone.50",
+              "when": {
+                "op": "state_counter_eq",
+                "state": "board_pulls",
+                "value": 49
+              },
+              "events": [
+                {
+                  "kind": "grant_cosmetic",
+                  "key": "glider.预兆鸟",
+                  "amount": 1
+                }
+              ]
+            },
+            {
+              "id": "milestone.120",
+              "when": {
+                "op": "state_counter_eq",
+                "state": "board_pulls",
+                "value": 119
+              },
+              "events": [
+                {
+                  "kind": "grant_cosmetic",
+                  "key": "livery.夜色飞羽",
+                  "amount": 1
+                }
+              ]
+            },
+            {
+              "id": "milestone.200",
+              "when": {
+                "op": "state_counter_eq",
+                "state": "board_pulls",
+                "value": 199
+              },
+              "events": [
+                {
+                  "kind": "grant_cosmetic",
+                  "key": "costume.红与黑",
+                  "amount": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "source_documents": [
+    "sources.json"
+  ]
+}
