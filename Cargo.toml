@@ -1,19 +1,34 @@
 [workspace]
-resolver = "2"
+resolver = "3"
+exclude = ["examples/sdk/endfield-danqingdu", "examples/performance"]
 members = [
     "crates/gacha-schema",
     "crates/gacha-core",
     "crates/gacha-pack",
     "crates/gacha-analysis",
     "crates/gacha-cli",
+    "crates/gacha-sdk",
+    "official/gacha-games",
 ]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.99"
 license = "MIT"
 
 [workspace.dependencies]
+gacha-core = { path = "crates/gacha-core", version = "=0.1.0" }
+gacha-schema = { path = "crates/gacha-schema", version = "=0.1.0" }
+gacha-pack = { path = "crates/gacha-pack", version = "=0.1.0" }
+gacha-analysis = { path = "crates/gacha-analysis", version = "=0.1.0" }
+gacha-sdk = { path = "crates/gacha-sdk", version = "=0.1.0" }
+sha2 = "0.11"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"

@@ -1,0 +1,62 @@
+[
+  {
+    "case": "si-fixed-five",
+    "label": "祀",
+    "model": "fixed-five",
+    "target": "endfield.character.祀",
+    "action": "single_pull",
+    "actions": 120,
+    "banner": "endfield/banner.preview-si.json",
+    "profile": "endfield/rule.chartered-fixed-five.json"
+  },
+  {
+    "case": "si-proportional",
+    "label": "祀",
+    "model": "proportional",
+    "target": "endfield.character.祀",
+    "action": "single_pull",
+    "actions": 120,
+    "banner": "endfield/banner.preview-si.json",
+    "profile": "endfield/rule.chartered-proportional.json"
+  },
+  {
+    "case": "minghe-fixed-five",
+    "label": "明河",
+    "model": "fixed-five",
+    "target": "endfield.character.明河",
+    "action": "single_pull",
+    "actions": 120,
+    "banner": "endfield/banner.preview-minghe.json",
+    "profile": "endfield/rule.chartered-fixed-five.json"
+  },
+  {
+    "case": "minghe-proportional",
+    "label": "明河",
+    "model": "proportional",
+    "target": "endfield.character.明河",
+    "action": "single_pull",
+    "actions": 120,
+    "banner": "endfield/banner.preview-minghe.json",
+    "profile": "endfield/rule.chartered-proportional.json"
+  },
+  {
+    "case": "yuzhongshen-weapon",
+    "label": "玉中身",
+    "model": "weapon",
+    "target": "endfield.weapon.玉中身",
+    "action": "requisition",
+    "actions": 8,
+    "banner": "endfield/banner.preview-yuzhongshen.json",
+    "profile": null
+  },
+  {
+    "case": "huanyue-weapon",
+    "label": "唤月",
+    "model": "weapon",
+    "target": "endfield.weapon.唤月",
+    "action": "requisition",
+    "actions": 8,
+    "banner": "endfield/banner.preview-huanyue.json",
+    "profile": null
+  }
+]

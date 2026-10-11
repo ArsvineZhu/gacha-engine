@@ -1,0 +1,5 @@
+# 独立工具的固定版本；安装器和 CI 共用此清单。
+[cargo]
+cargo-deny = "0.20.2"
+cargo-machete = "0.9.2"
+jscpd = "5.4.1"

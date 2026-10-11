@@ -1,17 +1,15 @@
-use gacha_analysis::{
-    FirstHitQuery, TargetSpec, analyze_first_hit, probability_of_item_within,
-};
+use gacha_analysis::{FirstHitQuery, TargetSpec, analyze_first_hit, probability_of_item_within};
 use gacha_core::{
-    CompiledStateDef, ScopeContext, StateKind, StateScope, StateStore, StateValue,
-    enumerate_step, enumerate_transitions, prune_ephemeral_state,
+    CompiledStateDef, ScopeContext, StateKind, StateScope, StateStore, StateValue, enumerate_step,
+    enumerate_transitions, prune_ephemeral_state,
 };
-use gacha_pack::{compile_pack, load_pack};
+use gacha_pack::{compile_pack, parse_pack};
 use std::path::PathBuf;
 
 fn reference_game() -> gacha_core::CompiledGame {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../packs/endfield/chartered-proportional.json");
-    let pack = load_pack(path).expect("load");
+        .join("../../tests/fixtures/packs/endfield/chartered-proportional.json");
+    let pack = parse_pack(&std::fs::read_to_string(path).unwrap()).expect("load");
     compile_pack(&pack).expect("compile")
 }
 
@@ -146,13 +144,7 @@ fn pull_scoped_slots_do_not_accumulate_across_steps() {
         ..ScopeContext::default()
     };
 
-    prune_ephemeral_state(
-        &game,
-        "endfield.banner.reference",
-        &mut state,
-        &context,
-    )
-    .expect("prune");
+    prune_ephemeral_state(&game, "endfield.banner.reference", &mut state, &context).expect("prune");
     assert!(!state.slots.contains_key("scratch_pull_state::pull:old"));
 
     let branches = enumerate_step(
@@ -165,15 +157,14 @@ fn pull_scoped_slots_do_not_accumulate_across_steps() {
     .expect("enumerate scoped step");
     assert!(!branches.is_empty());
     for branch in branches {
-        assert!(!branch
-            .next_state
-            .slots
-            .contains_key("scratch_pull_state::pull:old"));
-        assert_eq!(
-            branch
+        assert!(
+            !branch
                 .next_state
                 .slots
-                .get("scratch_pull_state::pull:new"),
+                .contains_key("scratch_pull_state::pull:old")
+        );
+        assert_eq!(
+            branch.next_state.slots.get("scratch_pull_state::pull:new"),
             Some(&StateValue::Counter(0))
         );
     }

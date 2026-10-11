@@ -1,0 +1,17 @@
+[workspace]
+resolver = "3"
+
+[package]
+name = "gacha-performance-example"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+publish = false
+
+[dependencies]
+gacha-sdk = { path = "../../crates/gacha-sdk", version = "=0.1.0" }
+gacha-games = { path = "../../official/gacha-games", version = "=0.1.0" }
+gacha-core = { path = "../../crates/gacha-core", version = "=0.1.0" }
+gacha-analysis = { path = "../../crates/gacha-analysis", version = "=0.1.0" }
+gacha-pack = { path = "../../crates/gacha-pack", version = "=0.1.0" }
+serde_json = "1.0"

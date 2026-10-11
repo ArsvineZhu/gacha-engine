@@ -1,0 +1,17 @@
+{
+  "banner": "endfield.banner.reference",
+  "action": "single_pull",
+  "target": {
+    "kind": "item",
+    "id": "endfield.character.莱万汀"
+  },
+  "draws": 120,
+  "quantiles": [
+    0.5,
+    0.75,
+    0.9,
+    0.95,
+    0.99,
+    1.0
+  ]
+}

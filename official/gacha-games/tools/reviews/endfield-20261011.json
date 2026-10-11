@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-10-11",
+  "scope": "终末地身份、中文名、稀有度与新增内容的核对记录；卡池名单依据官方公告及客户端卡池表。",
+  "client_character_entries": 34,
+  "excluded_character_ids": [
+    "chr_9000_endmin"
+  ],
+  "official_character_forms": 33,
+  "logical_characters": 32,
+  "client_weapons": 80,
+  "enka_revision": "b8ac71c2fba62519c905551d741474e8cd6a267b",
+  "cross_checks": {
+    "characters": {
+      "matched": 32,
+      "official_supplement": [
+        "噗切娜"
+      ]
+    },
+    "weapons": {
+      "matched": 79,
+      "official_supplement": [
+        "点心时刻"
+      ]
+    }
+  },
+  "reference_urls": [
+    "https://endfield.hypergryph.com/operator",
+    "https://endfield.hypergryph.com/news/2653",
+    "https://endfield.hypergryph.com/news/9335",
+    "https://www.enfieldbuild.com/characters"
+  ]
+}

@@ -1,0 +1,144 @@
+{
+ "schema_version": 1,
+ "id": "star-rail.reference.character",
+ "version": "0.1.0",
+ "description": "用于验证规则机制与数学结果的独立合成名单。",
+ "sources": [],
+ "assumptions": [
+  {
+   "id": "soft.curve",
+   "status": "experimental",
+   "description": "示例软保底参数：73 次未出后的下一抽首次增长，每次增加 0.06。"
+  },
+  {
+   "id": "lower.redistribution",
+   "status": "inferred",
+   "description": "剩余质量按基础比例分配，四星最低保底保留高等级概率；具体名单来自清单，四星目标保底尚未建模。"
+  },
+  {
+   "id": "reference.parameters",
+   "status": "experimental",
+   "description": "参考模型采用常见基础概率和保底阈值；完整地区游戏内规则尚待独立核对。"
+  }
+ ],
+ "state": [
+  {"id": "pity", "kind": "counter", "scope": "pity_group", "initial": 0, "max": 89},
+  {"id": "four_pity", "kind": "counter", "scope": "pity_group", "initial": 0, "max": 9},
+  {"id": "featured_due", "kind": "boolean", "scope": "pity_group", "initial": false}
+ ],
+ "items": [
+  {"id": "star-rail.featured", "rarity": 5, "tags": ["featured"], "display_name": "featured"},
+  {"id": "star-rail.standard", "rarity": 5, "tags": ["standard"], "display_name": "standard"},
+  {"id": "star-rail.four", "rarity": 4, "tags": ["four"], "display_name": "four"},
+  {"id": "star-rail.three", "rarity": 3, "tags": ["three"], "display_name": "three"}
+ ],
+ "pools": [
+  {"id": "featured", "items": ["star-rail.featured"]},
+  {"id": "standard", "items": ["star-rail.standard"]},
+  {"id": "four", "items": ["star-rail.four"]},
+  {"id": "three", "items": ["star-rail.three"]}
+ ],
+ "distributions": [
+  {
+   "id": "rarity",
+   "entries": [
+    {
+     "rarity": 5,
+     "type": "linear_after",
+     "state": "pity",
+     "base": "0.006",
+     "after": 73,
+     "increment": "0.06",
+     "cap": "1"
+    },
+    {"rarity": 4, "type": "share_of_remainder", "weight": 51},
+    {"rarity": 3, "type": "share_of_remainder", "weight": 943}
+   ],
+   "assumptions": ["soft.curve", "lower.redistribution"]
+  }
+ ],
+ "selectors": [
+  {"id": "featured", "type": "pool", "pool": "featured"},
+  {"id": "standard", "type": "pool", "pool": "standard"},
+  {"id": "four", "type": "pool", "pool": "four"},
+  {"id": "three", "type": "pool", "pool": "three"},
+  {
+   "id": "coin",
+   "type": "weighted",
+   "branches": [{"weight": "1", "selector": "featured"}, {"weight": "1", "selector": "standard"}]
+  },
+  {
+   "id": "top",
+   "type": "conditional",
+   "when": {"op": "state_bool_eq", "state": "featured_due", "value": true},
+   "then_selector": "featured",
+   "else_selector": "coin"
+  }
+ ],
+ "banners": [
+  {
+   "id": "star-rail.character",
+   "pity_group": "star-rail.character",
+   "progress_group": "star-rail.character.reference",
+   "actions": [
+    {
+     "id": "single_pull",
+     "distribution": "rarity",
+     "selectors": {"5": "top", "4": "four", "3": "three"},
+     "guarantees": [
+      {
+       "id": "hard_pity",
+       "when": {"op": "state_counter_gte", "state": "pity", "value": 89},
+       "effect": {"type": "force_rarity", "rarity": 5},
+       "priority": 200
+      },
+      {
+       "id": "four_floor",
+       "when": {"op": "state_counter_gte", "state": "four_pity", "value": 9},
+       "effect": {"type": "min_rarity", "rarity": 4, "strategy": "preserve_higher_fill_floor"},
+       "priority": 100
+      }
+     ],
+     "transitions": [
+      {
+       "id": "pity.reset",
+       "when": {"op": "outcome_rarity_eq", "rarity": 5},
+       "updates": [{"type": "reset", "state": "pity"}],
+       "events": []
+      },
+      {
+       "id": "pity.miss",
+       "when": {"op": "not", "condition": {"op": "outcome_rarity_eq", "rarity": 5}},
+       "updates": [{"type": "increment", "state": "pity"}],
+       "events": []
+      },
+      {
+       "id": "four_pity.reset",
+       "when": {"op": "outcome_rarity_gte", "rarity": 4},
+       "updates": [{"type": "reset", "state": "four_pity"}],
+       "events": []
+      },
+      {
+       "id": "four_pity.miss",
+       "when": {"op": "not", "condition": {"op": "outcome_rarity_gte", "rarity": 4}},
+       "updates": [{"type": "increment", "state": "four_pity"}],
+       "events": []
+      },
+      {
+       "id": "lose",
+       "when": {"op": "outcome_item_in_pool", "pool": "standard"},
+       "updates": [{"type": "set_bool", "state": "featured_due", "value": true}],
+       "events": []
+      },
+      {
+       "id": "win",
+       "when": {"op": "outcome_item_in_pool", "pool": "featured"},
+       "updates": [{"type": "set_bool", "state": "featured_due", "value": false}],
+       "events": []
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

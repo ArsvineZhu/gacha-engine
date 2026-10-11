@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "endfield.announced.1.6",
+  "game": "endfield",
+  "version": "0.1.0",
+  "description": "官方前瞻已公开的身份与等级；客户端标识及完整卡池名单待正式公告补充。",
+  "source_documents": ["sources.json"],
+  "items": [
+    {"id": "endfield.character.祀", "rarity": 6, "kind": "character", "display_name": "祀", "names": {"zh-CN": "祀"}, "native_rarity": "6", "upstream_id": "", "source_ids": ["content.endfield.danqingdu.official"], "tags": ["character", "announced", "version.1.6", "cold"], "gacha_eligible": true},
+    {"id": "endfield.character.明河", "rarity": 6, "kind": "character", "display_name": "明河", "names": {"zh-CN": "明河"}, "native_rarity": "6", "upstream_id": "", "source_ids": ["content.endfield.danqingdu.official"], "tags": ["character", "announced", "version.1.6", "electric"], "gacha_eligible": true},
+    {"id": "endfield.weapon.玉中身", "rarity": 6, "kind": "weapon", "display_name": "玉中身", "names": {"zh-CN": "玉中身"}, "native_rarity": "6", "upstream_id": "", "source_ids": ["content.endfield.danqingdu.official"], "tags": ["weapon", "announced", "version.1.6", "claymore"], "gacha_eligible": true},
+    {"id": "endfield.weapon.唤月", "rarity": 6, "kind": "weapon", "display_name": "唤月", "names": {"zh-CN": "唤月"}, "native_rarity": "6", "upstream_id": "", "source_ids": ["content.endfield.danqingdu.official"], "tags": ["weapon", "announced", "version.1.6", "sword"], "gacha_eligible": true}
+  ]
+}

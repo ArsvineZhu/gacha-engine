@@ -1,0 +1,21 @@
+[package]
+name = "gacha-games"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "官方游戏卡池资料库：独立于通用抽卡引擎"
+
+[dependencies]
+gacha-sdk.workspace = true
+gacha-pack.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+gacha-core.workspace = true
+gacha-schema.workspace = true
+gacha-analysis.workspace = true
+serde.workspace = true
+serde_json.workspace = true

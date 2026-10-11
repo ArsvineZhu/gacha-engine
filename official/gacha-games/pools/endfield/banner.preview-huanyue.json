@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "endfield.preview.danqingdu.huanyue",
+  "version": "0.1.0",
+  "game": "endfield",
+  "description": "丹青渡目标概率测试场景：目标身份来自官方前瞻；非目标池沿用九月参考名单，并非新版本完整可抽名单。仅用于当期目标的首次获得分布。",
+  "rules": "rule.weapon-reference.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.weapon-01.json",
+    "catalog.announced-1.6.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "endfield.weapon.唤月"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "endfield.weapon.典范",
+        "endfield.weapon.同类相食",
+        "endfield.weapon.骁勇",
+        "endfield.weapon.遗忘",
+        "endfield.weapon.爆破单元",
+        "endfield.weapon.扶摇"
+      ]
+    },
+    {
+      "id": "five",
+      "items": [
+        "endfield.weapon.嵌合正义",
+        "endfield.weapon.钢铁余音",
+        "endfield.weapon.坚城铸造者",
+        "endfield.weapon.悼亡诗",
+        "endfield.weapon.莫奈何",
+        "endfield.weapon.作品：众生",
+        "endfield.weapon.探骊",
+        "endfield.weapon.O.B.J.尖峰",
+        "endfield.weapon.向心之引",
+        "endfield.weapon.逐鳞3.0",
+        "endfield.weapon.十二问",
+        "endfield.weapon.O.B.J.轻芒",
+        "endfield.weapon.仰止",
+        "endfield.weapon.迷失荒野",
+        "endfield.weapon.布道自由",
+        "endfield.weapon.O.B.J.术识",
+        "endfield.weapon.O.B.J.迅极",
+        "endfield.weapon.理性告别",
+        "endfield.weapon.古渠",
+        "endfield.weapon.终点之声",
+        "endfield.weapon.O.B.J.重荷"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "endfield.weapon.寻路者道标",
+        "endfield.weapon.天使杀手",
+        "endfield.weapon.显锋",
+        "endfield.weapon.浪潮",
+        "endfield.weapon.全自动骇新星",
+        "endfield.weapon.荧光雷羽",
+        "endfield.weapon.呼啸守卫",
+        "endfield.weapon.长路",
+        "endfield.weapon.工业零点一",
+        "endfield.weapon.淬火者"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "endfield.weapon.唤月"
+  },
+  "banner_bindings": {
+    "endfield.weapon": {
+      "id": "endfield.preview.danqingdu.huanyue",
+      "pity_group": "endfield.weapon",
+      "progress_group": "endfield.preview.danqingdu.huanyue"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "arknights.reference.kernel",
+  "game": "arknights",
+  "version": "0.1.0",
+  "description": "历史或参考卡池名单使用真实身份；开放时间以对应公告为准，模型假设见规则包。",
+  "rules": "rule.kernel-reference.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.character-02.json"
+  ],
+  "pools": [
+    {
+      "id": "6",
+      "items": [
+        "arknights.character.char_103_angel",
+        "arknights.character.char_172_svrash",
+        "arknights.character.char_112_siege",
+        "arknights.character.char_180_amgoat",
+        "arknights.character.char_291_aglina",
+        "arknights.character.char_147_shining",
+        "arknights.character.char_179_cgbird",
+        "arknights.character.char_134_ifrit",
+        "arknights.character.char_188_helage",
+        "arknights.character.char_263_skadi",
+        "arknights.character.char_202_demkni",
+        "arknights.character.char_136_hsguma"
+      ]
+    },
+    {
+      "id": "5",
+      "items": [
+        "arknights.character.char_102_texas",
+        "arknights.character.char_128_plosis",
+        "arknights.character.char_115_headbr",
+        "arknights.character.char_140_whitew",
+        "arknights.character.char_143_ghost",
+        "arknights.character.char_129_bluep",
+        "arknights.character.char_204_platnm",
+        "arknights.character.char_219_meteo",
+        "arknights.character.char_108_silent",
+        "arknights.character.char_171_bldsk"
+      ]
+    },
+    {
+      "id": "4",
+      "items": [
+        "arknights.character.char_150_snakek",
+        "arknights.character.char_181_flower",
+        "arknights.character.char_117_myrrh",
+        "arknights.character.char_237_gravel",
+        "arknights.character.char_290_vigna",
+        "arknights.character.char_185_frncat",
+        "arknights.character.char_289_gyuki",
+        "arknights.character.char_126_shotst"
+      ]
+    },
+    {
+      "id": "3",
+      "items": [
+        "arknights.character.char_123_fang",
+        "arknights.character.char_240_wyvern",
+        "arknights.character.char_192_falco",
+        "arknights.character.char_208_melan",
+        "arknights.character.char_212_ansel",
+        "arknights.character.char_120_hibisc",
+        "arknights.character.char_124_kroos",
+        "arknights.character.char_121_lava"
+      ]
+    }
+  ],
+  "item_bindings": {}
+}

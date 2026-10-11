@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "wuthering-waves.reference.character",
+  "game": "wuthering-waves",
+  "version": "0.1.0",
+  "description": "历史或参考卡池名单使用真实身份；开放时间以对应公告为准，模型假设见规则包。",
+  "rules": "rule.character-reference.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.weapon-01.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "wuthering-waves.character.1404"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "wuthering-waves.character.1503",
+        "wuthering-waves.character.1203",
+        "wuthering-waves.character.1301",
+        "wuthering-waves.character.1104",
+        "wuthering-waves.character.1405"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "wuthering-waves.character.1102",
+        "wuthering-waves.character.1103",
+        "wuthering-waves.character.1106",
+        "wuthering-waves.character.1202",
+        "wuthering-waves.character.1204",
+        "wuthering-waves.character.1303",
+        "wuthering-waves.character.1307",
+        "wuthering-waves.character.1402",
+        "wuthering-waves.character.1403",
+        "wuthering-waves.character.1504",
+        "wuthering-waves.character.1601",
+        "wuthering-waves.character.1602"
+      ]
+    },
+    {
+      "id": "three",
+      "items": [
+        "wuthering-waves.weapon.21010013",
+        "wuthering-waves.weapon.21010023",
+        "wuthering-waves.weapon.21010043",
+        "wuthering-waves.weapon.21010053",
+        "wuthering-waves.weapon.21010063",
+        "wuthering-waves.weapon.21020013",
+        "wuthering-waves.weapon.21020023",
+        "wuthering-waves.weapon.21020043",
+        "wuthering-waves.weapon.21020053",
+        "wuthering-waves.weapon.21030013",
+        "wuthering-waves.weapon.21030023",
+        "wuthering-waves.weapon.21030043",
+        "wuthering-waves.weapon.21030053",
+        "wuthering-waves.weapon.21040013",
+        "wuthering-waves.weapon.21040023",
+        "wuthering-waves.weapon.21040043",
+        "wuthering-waves.weapon.21040053",
+        "wuthering-waves.weapon.21050013",
+        "wuthering-waves.weapon.21050023",
+        "wuthering-waves.weapon.21050043",
+        "wuthering-waves.weapon.21050053"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "wuthering-waves.character.1404"
+  }
+}

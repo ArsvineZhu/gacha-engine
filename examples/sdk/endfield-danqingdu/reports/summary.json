@@ -1,0 +1,266 @@
+[
+  {
+    "case": "si-fixed-five",
+    "comparison": {
+      "maximum_cdf_error": 0.01616970612352925,
+      "six_sigma_passed": true
+    },
+    "elapsed_ms": 15736.2278,
+    "expected_actions": 81.3756769261672,
+    "fingerprint": "a2ffae6b01da760af636801547e17bf7fbe6aa7e7497a4903a501065ce487893",
+    "label": "祀",
+    "model": "fixed-five",
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 863801,
+      "cache_misses": 36,
+      "cached_plans": 36,
+      "numeric_tables": 1,
+      "static_selectors": 5
+    },
+    "quantiles": [
+      {
+        "action": 73,
+        "quantile": 0.5
+      },
+      {
+        "action": 120,
+        "quantile": 0.9
+      },
+      {
+        "action": 120,
+        "quantile": 0.95
+      },
+      {
+        "action": 120,
+        "quantile": 0.99
+      },
+      {
+        "action": 120,
+        "quantile": 1.0
+      }
+    ],
+    "session_replay": true,
+    "trials": 10000
+  },
+  {
+    "case": "si-proportional",
+    "comparison": {
+      "maximum_cdf_error": 0.00549034358781364,
+      "six_sigma_passed": true
+    },
+    "elapsed_ms": 9698.2477,
+    "expected_actions": 74.09854809453128,
+    "fingerprint": "473c56db2e43226f572f7e92bf759571d74e8064b22a0054f58a7d9294cc7d73",
+    "label": "祀",
+    "model": "proportional",
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 801005,
+      "cache_misses": 36,
+      "cached_plans": 36,
+      "numeric_tables": 1,
+      "static_selectors": 5
+    },
+    "quantiles": [
+      {
+        "action": 71,
+        "quantile": 0.5
+      },
+      {
+        "action": 120,
+        "quantile": 0.9
+      },
+      {
+        "action": 120,
+        "quantile": 0.95
+      },
+      {
+        "action": 120,
+        "quantile": 0.99
+      },
+      {
+        "action": 120,
+        "quantile": 1.0
+      }
+    ],
+    "session_replay": true,
+    "trials": 10000
+  },
+  {
+    "case": "minghe-fixed-five",
+    "comparison": {
+      "maximum_cdf_error": 0.008910991121796608,
+      "six_sigma_passed": true
+    },
+    "elapsed_ms": 10112.896299999999,
+    "expected_actions": 81.3756769261672,
+    "fingerprint": "9fea082d7ff086847f2fef6c98d347c882267afe2a61d0fc9223080b550ae6d2",
+    "label": "明河",
+    "model": "fixed-five",
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 875670,
+      "cache_misses": 36,
+      "cached_plans": 36,
+      "numeric_tables": 1,
+      "static_selectors": 5
+    },
+    "quantiles": [
+      {
+        "action": 73,
+        "quantile": 0.5
+      },
+      {
+        "action": 120,
+        "quantile": 0.9
+      },
+      {
+        "action": 120,
+        "quantile": 0.95
+      },
+      {
+        "action": 120,
+        "quantile": 0.99
+      },
+      {
+        "action": 120,
+        "quantile": 1.0
+      }
+    ],
+    "session_replay": true,
+    "trials": 10000
+  },
+  {
+    "case": "minghe-proportional",
+    "comparison": {
+      "maximum_cdf_error": 0.008549094890798137,
+      "six_sigma_passed": true
+    },
+    "elapsed_ms": 9307.4405,
+    "expected_actions": 74.09854809453128,
+    "fingerprint": "bfe93d63217b0ad213dcb46d589e0d69969b322b7487c1585a439daa077da44e",
+    "label": "明河",
+    "model": "proportional",
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 804533,
+      "cache_misses": 36,
+      "cached_plans": 36,
+      "numeric_tables": 1,
+      "static_selectors": 5
+    },
+    "quantiles": [
+      {
+        "action": 71,
+        "quantile": 0.5
+      },
+      {
+        "action": 120,
+        "quantile": 0.9
+      },
+      {
+        "action": 120,
+        "quantile": 0.95
+      },
+      {
+        "action": 120,
+        "quantile": 0.99
+      },
+      {
+        "action": 120,
+        "quantile": 1.0
+      }
+    ],
+    "session_replay": true,
+    "trials": 10000
+  },
+  {
+    "case": "yuzhongshen-weapon",
+    "comparison": {
+      "maximum_cdf_error": 0.007911732996408016,
+      "six_sigma_passed": true
+    },
+    "elapsed_ms": 10411.1601,
+    "expected_actions": 5.547302748562219,
+    "fingerprint": "6517482d276f373e48ba2fc796db0b268aba0338468f673aac1c7e2ff401319b",
+    "label": "玉中身",
+    "model": "weapon",
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 552820,
+      "cache_misses": 8,
+      "cached_plans": 8,
+      "numeric_tables": 0,
+      "static_selectors": 5
+    },
+    "quantiles": [
+      {
+        "action": 6,
+        "quantile": 0.5
+      },
+      {
+        "action": 8,
+        "quantile": 0.9
+      },
+      {
+        "action": 8,
+        "quantile": 0.95
+      },
+      {
+        "action": 8,
+        "quantile": 0.99
+      },
+      {
+        "action": 8,
+        "quantile": 1.0
+      }
+    ],
+    "session_replay": true,
+    "trials": 10000
+  },
+  {
+    "case": "huanyue-weapon",
+    "comparison": {
+      "maximum_cdf_error": 0.0077821684189574025,
+      "six_sigma_passed": true
+    },
+    "elapsed_ms": 17087.885700000003,
+    "expected_actions": 5.547302748562219,
+    "fingerprint": "c9940fe5acfa277c1c0c05e7fe96ca83554a632585c9a11ac05514266b252478",
+    "label": "唤月",
+    "model": "weapon",
+    "preparation": {
+      "cache_clears": 0,
+      "cache_hits": 553380,
+      "cache_misses": 8,
+      "cached_plans": 8,
+      "numeric_tables": 0,
+      "static_selectors": 5
+    },
+    "quantiles": [
+      {
+        "action": 6,
+        "quantile": 0.5
+      },
+      {
+        "action": 8,
+        "quantile": 0.9
+      },
+      {
+        "action": 8,
+        "quantile": 0.95
+      },
+      {
+        "action": 8,
+        "quantile": 0.99
+      },
+      {
+        "action": 8,
+        "quantile": 1.0
+      }
+    ],
+    "session_replay": true,
+    "trials": 10000
+  }
+]

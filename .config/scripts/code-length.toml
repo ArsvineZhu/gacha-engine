@@ -1,0 +1,5 @@
+max_lines = 600
+extensions = [".rs", ".py", ".json", ".md", ".toml", ".yml", ".yaml", ".txt", ".lock"]
+names = ["LICENSE", ".gitignore"]
+ignored_directories = [".git", "target", "__pycache__", ".codegraph"]
+reject_tests_in_src = true

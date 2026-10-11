@@ -6,9 +6,12 @@ rust-version.workspace = true
 license.workspace = true
 
 [dependencies]
-gacha-core = { path = "../gacha-core" }
+gacha-core.workspace = true
 serde.workspace = true
 
 [dev-dependencies]
-gacha-pack = { path = "../gacha-pack" }
+gacha-pack.workspace = true
 serde_json.workspace = true
+
+[lints]
+workspace = true

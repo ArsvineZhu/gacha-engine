@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "id": "arknights.reference.kernel",
+  "version": "0.1.0",
+  "description": "机制与符号槽位定义；具体可抽范围和身份由卡池清单组装。",
+  "assumptions": [
+    {
+      "id": "lower.redistribution",
+      "status": "inferred",
+      "description": "低稀有度按基础比例分配剩余质量，初次十抽保留六星概率；中坚实际名单由清单提供，目标权重尚未建模。"
+    }
+  ],
+  "state": [
+    {
+      "id": "pity",
+      "kind": "counter",
+      "scope": "pity_group",
+      "initial": 0,
+      "max": 98
+    },
+    {
+      "id": "banner_pulls",
+      "kind": "counter",
+      "scope": "banner",
+      "initial": 0
+    },
+    {
+      "id": "initial_five_seen",
+      "kind": "boolean",
+      "scope": "banner",
+      "initial": false
+    }
+  ],
+  "distributions": [
+    {
+      "id": "rarity",
+      "entries": [
+        {
+          "rarity": 6,
+          "type": "linear_after",
+          "state": "pity",
+          "base": "0.02",
+          "after": 50,
+          "increment": "0.02",
+          "cap": "1"
+        },
+        {
+          "rarity": 5,
+          "type": "share_of_remainder",
+          "weight": 8
+        },
+        {
+          "rarity": 4,
+          "type": "share_of_remainder",
+          "weight": 50
+        },
+        {
+          "rarity": 3,
+          "type": "share_of_remainder",
+          "weight": 40
+        }
+      ]
+    }
+  ],
+  "selectors": [
+    {
+      "id": "6",
+      "type": "pool",
+      "pool": "6"
+    },
+    {
+      "id": "5",
+      "type": "pool",
+      "pool": "5"
+    },
+    {
+      "id": "4",
+      "type": "pool",
+      "pool": "4"
+    },
+    {
+      "id": "3",
+      "type": "pool",
+      "pool": "3"
+    }
+  ],
+  "banners": [
+    {
+      "id": "arknights.kernel",
+      "pity_group": "arknights.kernel",
+      "progress_group": "arknights.kernel.reference",
+      "actions": [
+        {
+          "id": "single_pull",
+          "distribution": "rarity",
+          "selectors": {
+            "6": "6",
+            "5": "5",
+            "4": "4",
+            "3": "3"
+          },
+          "guarantees": [
+            {
+              "id": "first_ten",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_gte",
+                    "state": "banner_pulls",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "initial_five_seen",
+                    "value": false
+                  }
+                ]
+              },
+              "effect": {
+                "type": "min_rarity",
+                "rarity": 5,
+                "strategy": "preserve_higher_fill_floor"
+              },
+              "priority": 100
+            }
+          ],
+          "transitions": [
+            {
+              "id": "six.reset",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 6
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "pity"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "six.miss",
+              "when": {
+                "op": "not",
+                "condition": {
+                  "op": "outcome_rarity_eq",
+                  "rarity": 6
+                }
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "pity"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "progress",
+              "when": {
+                "op": "always"
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "banner_pulls"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "initial.hit",
+              "when": {
+                "op": "outcome_rarity_gte",
+                "rarity": 5
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "initial_five_seen",
+                  "value": true
+                }
+              ],
+              "events": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "source_documents": [
+    "sources.json"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "star-rail.reference.character",
+  "game": "star-rail",
+  "version": "0.1.0",
+  "description": "历史或参考卡池名单使用真实身份；开放时间以对应公告为准，模型假设见规则包。",
+  "rules": "rule.character-reference.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.light_cone-01.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "star-rail.character.1102"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "star-rail.character.1003",
+        "star-rail.character.1004",
+        "star-rail.character.1101",
+        "star-rail.character.1104",
+        "star-rail.character.1107",
+        "star-rail.character.1211",
+        "star-rail.character.1209"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "star-rail.character.1001",
+        "star-rail.character.1002",
+        "star-rail.character.1008",
+        "star-rail.character.1009",
+        "star-rail.character.1013",
+        "star-rail.character.1103",
+        "star-rail.character.1105",
+        "star-rail.character.1106",
+        "star-rail.character.1108",
+        "star-rail.character.1109",
+        "star-rail.character.1110",
+        "star-rail.character.1111",
+        "star-rail.character.1201",
+        "star-rail.character.1202",
+        "star-rail.character.1206",
+        "star-rail.character.1207",
+        "star-rail.character.1210",
+        "star-rail.character.1214",
+        "star-rail.character.1215",
+        "star-rail.character.1223",
+        "star-rail.character.1224",
+        "star-rail.character.1301",
+        "star-rail.character.1312"
+      ]
+    },
+    {
+      "id": "three",
+      "items": [
+        "star-rail.light_cone.20000",
+        "star-rail.light_cone.20001",
+        "star-rail.light_cone.20002",
+        "star-rail.light_cone.20003",
+        "star-rail.light_cone.20004",
+        "star-rail.light_cone.20005",
+        "star-rail.light_cone.20006",
+        "star-rail.light_cone.20007",
+        "star-rail.light_cone.20008",
+        "star-rail.light_cone.20009",
+        "star-rail.light_cone.20010",
+        "star-rail.light_cone.20011",
+        "star-rail.light_cone.20012",
+        "star-rail.light_cone.20013",
+        "star-rail.light_cone.20014",
+        "star-rail.light_cone.20015",
+        "star-rail.light_cone.20016",
+        "star-rail.light_cone.20017",
+        "star-rail.light_cone.20018",
+        "star-rail.light_cone.20019",
+        "star-rail.light_cone.20020",
+        "star-rail.light_cone.20021",
+        "star-rail.light_cone.20022",
+        "star-rail.light_cone.20023",
+        "star-rail.light_cone.20024"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "star-rail.character.1102"
+  }
+}

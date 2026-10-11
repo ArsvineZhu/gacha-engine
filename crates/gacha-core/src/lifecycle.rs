@@ -3,10 +3,10 @@ use crate::{
     Branch, CompiledGame, EngineError, Result, ScopeContext, SplitMix64, StateScope, StateStore,
 };
 
-/// Removes stale session/batch/pull scoped slots for the supplied context.
+/// 按当前上下文清理过期的会话、批次和单抽状态。
 ///
-/// Persistent scopes (account/game/pity/progress/banner) are intentionally retained so
-/// switching away from and later returning to a banner/group restores their state.
+/// 账户、游戏、保底组、进度组和卡池状态持久保存，
+/// 再次回到同一卡池或组时恢复原进度。
 pub fn prune_ephemeral_state(
     game: &CompiledGame,
     banner_id: &str,
@@ -35,10 +35,10 @@ pub fn prune_ephemeral_state(
     Ok(())
 }
 
-/// Scope-aware transition enumeration.
+/// 结合状态作用域的生命周期枚举转移。
 ///
-/// This is the preferred high-level API for sequential execution. It applies the
-/// lifecycle rules for ephemeral state before delegating to the exact transition engine.
+/// 顺序执行的高层接口，
+/// 先处理临时状态生命周期，再调用精确转移引擎。
 pub fn enumerate_step(
     game: &CompiledGame,
     banner_id: &str,
@@ -51,10 +51,10 @@ pub fn enumerate_step(
     enumerate_transitions(game, banner_id, action_id, &normalized, context)
 }
 
-/// Scope-aware sampled transition.
+/// 结合状态作用域的生命周期抽样转移。
 ///
-/// The selected branch updates `state` in place. Use this instead of the low-level
-/// `sample_transition` for ordinary sequential simulations.
+/// 选中分支就地更新 `state`，
+/// 普通顺序模拟使用此接口。
 pub fn sample_step(
     game: &CompiledGame,
     banner_id: &str,
@@ -63,6 +63,56 @@ pub fn sample_step(
     context: &ScopeContext,
     rng: &mut SplitMix64,
 ) -> Result<Branch> {
-    prune_ephemeral_state(game, banner_id, state, context)?;
-    sample_transition(game, banner_id, action_id, state, context, rng)
+    let mut normalized = state.clone();
+    prune_ephemeral_state(game, banner_id, &mut normalized, context)?;
+    let branch = sample_transition(game, banner_id, action_id, &mut normalized, context, rng)?;
+    *state = normalized;
+    Ok(branch)
+}
+
+/// 原子执行完整动作，每次启动新的批次与单抽状态，
+/// 即使上下文标识相同；失败时保持状态和随机数进度。
+pub fn sample_action(
+    game: &CompiledGame,
+    banner_id: &str,
+    action_id: &str,
+    state: &mut StateStore,
+    context: &ScopeContext,
+    rng: &mut SplitMix64,
+) -> Result<Vec<Branch>> {
+    let (_, banner) = game
+        .banner(banner_id)
+        .ok_or_else(|| EngineError::new(format!("unknown banner: {banner_id}")))?;
+    let action = banner
+        .action(action_id)
+        .ok_or_else(|| EngineError::new(format!("unknown action: {action_id}")))?;
+    let mut next_state = state.clone();
+    let mut next_rng = rng.clone();
+    reset_action_state(game, &mut next_state);
+    let mut results = Vec::with_capacity(action.draws as usize);
+    for draw in 0..action.draws {
+        let mut draw_context = context.clone();
+        draw_context.pull = format!("{}:{draw}", context.pull);
+        results.push(sample_step(
+            game,
+            banner_id,
+            action_id,
+            &mut next_state,
+            &draw_context,
+            &mut next_rng,
+        )?);
+    }
+    *state = next_state;
+    *rng = next_rng;
+    Ok(results)
+}
+
+/// 完整动作开始前清空批次与单抽状态，保留持久进度。
+pub fn reset_action_state(game: &CompiledGame, state: &mut StateStore) {
+    for def in &game.states {
+        if matches!(def.scope, StateScope::Batch | StateScope::Pull) {
+            let prefix = format!("{}::", def.id);
+            state.slots.retain(|key, _| !key.starts_with(&prefix));
+        }
+    }
 }

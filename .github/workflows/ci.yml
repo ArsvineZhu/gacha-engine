@@ -1,0 +1,25 @@
+name: Rust
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+env:
+  PYTHONUTF8: "1"
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: 安装项目工具链
+        run: rustup show
+      - uses: actions/setup-python@v7.0.0
+        with:
+          python-version: "3.x"
+      - run: python tools/install_tools.py
+      - run: python tools/check.py
