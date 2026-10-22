@@ -1,0 +1,50 @@
+{
+  "name": "gacharule",
+  "displayName": "GachaRule",
+  "description": "GachaRule 的高亮、诊断、格式化、补全和悬停",
+  "version": "0.1.0",
+  "publisher": "gacha-engine",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:gacharule"
+  ],
+  "main": "./src/extension.js",
+  "scripts": {
+    "test": "node --test test/*.js"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "gacharule",
+        "aliases": ["GachaRule", "gacharule"],
+        "extensions": [".gmr", ".gml", ".gmb"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "gacharule",
+        "scopeName": "source.gacharule",
+        "path": "./syntaxes/gacharule.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "GachaRule",
+      "properties": {
+        "gacharule.gachaPath": {
+          "type": "string",
+          "default": "",
+          "description": "gacha 可执行文件。留空时从文件所在目录向上查找 target/debug/gacha、target/release/gacha，再使用 PATH 中的 gacha。"
+        }
+      }
+    }
+  }
+}

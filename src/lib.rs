@@ -5,6 +5,7 @@ mod ast;
 mod check;
 mod diagnostic;
 mod exec;
+mod fmt;
 mod image;
 mod lex;
 mod parse;
@@ -21,6 +22,7 @@ pub use diagnostic::Diagnostic;
 pub use exec::{
     ActionInfo, Branch, Draw, Fired, FiredArg, Rng, RuntimeError, Session, SlotState, StateInfo,
 };
+pub use fmt::format_source;
 pub use lex::KEYWORDS;
 pub use rational::Rational;
 

@@ -20,6 +20,7 @@
 | 事实 | 所在文档 |
 |---|---|
 | 构建、测试、退出码、目录归属 | [开发](development.md) |
+| VS Code 插件的运行方式 | [editors/vscode/README.md](../editors/vscode/README.md) |
 | 怎么写规则，以及教程短程序 | [语言教程](language-tutorial.md) 与 `examples/` |
 | 词法、类型、声明、保底、更新、编译错误类别 | [语言参考](language-reference.md)；语义冲突时以规范原文为准 |
 | 拒绝测试的文件、行列 | [rejection-tests/README.md](../spec/gacharule/rejection-tests/README.md) |

@@ -17,7 +17,7 @@ cargo test
 cargo run -- check spec/gacharule/positive/endfield.gmr spec/gacharule/positive/genshin.gmr spec/gacharule/positive/weapon_ten.gmr spec/gacharule/positive/sample.gml spec/gacharule/positive/banners.gmb
 ```
 
-`gacha check` is the only CLI subcommand. Pass sources in dependency order.
+`gacha check` compiles sources in the order given. `gacha check --format=json` prints compiler diagnostics for tools. `gacha fmt` reprints one source with the spec layout and does not change token text. The VS Code extension in `editors/vscode` calls those two commands; do not reimplement type checking in TypeScript.
 
 ## Host contract
 

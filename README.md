@@ -7,7 +7,7 @@ GachaRule 1.0 的编译器和精确执行器。机制、名册和卡池绑定分
 ## 当前能力
 
 - 按显式文件列表编译一个单元，并检查词法、类型、分布和绑定。
-- 命令行只有 `gacha check`，用来确认这组源文件能够编译。
+- 命令行有 `gacha check` 和 `gacha fmt`。`check` 确认这组源文件能够编译，`--format=json` 输出诊断；`fmt` 按规范重排布局。VS Code 插件在 `editors/vscode`，诊断和格式化调用这个二进制。
 - Rust 库提供同一组操作：编译、列出卡池与动作、读写计数和布尔状态、查看单步精确分支、按条目提交、按种子抽样、做首次或第 N 次命中分析。C、Python 和 Node 绑定调用这同一组操作。
 - 单步分支保持有理数。命中分析把多步质量汇总成浮点数，并且不改写当前会话。
 - 规范正例在 `spec/gacharule/positive/`。七款官方游戏的 GachaRule 源在 `official/games/`，由 `tools/migrate_official.py` 从 `official/source/` 的 JSON 生成。运行时只编译 `.gmr`、`.gml`、`.gmb`。
@@ -23,7 +23,7 @@ cargo test
 cargo run -- check spec/gacharule/positive/endfield.gmr spec/gacharule/positive/genshin.gmr spec/gacharule/positive/weapon_ten.gmr spec/gacharule/positive/sample.gml spec/gacharule/positive/banners.gmb
 ```
 
-`check` 成功时没有输出，退出码为 0。文件按依赖顺序给出：被引用的规则和名册在卡池绑定之前。
+`check` 默认成功时没有输出，退出码为 0。文件按依赖顺序给出：被引用的规则和名册在卡池绑定之前。JSON 诊断、`gacha fmt` 和退出码见 [开发](docs/development.md)。编辑器用法见 [editors/vscode/README.md](editors/vscode/README.md)。
 
 写第一条规则见 [语言教程](docs/language-tutorial.md)。构建、测试和目录归属见 [开发](docs/development.md)。
 

@@ -1,0 +1,142 @@
+{
+  "name": "GachaRule",
+  "scopeName": "source.gacharule",
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#string" },
+    { "include": "#rule-file" },
+    { "include": "#roster-file" },
+    { "include": "#banner-file" },
+    { "include": "#tokens" }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.number-sign.gacharule",
+      "match": "#.*$"
+    },
+    "string": {
+      "name": "string.quoted.double.gacharule",
+      "begin": "\"",
+      "end": "\"|$",
+      "patterns": [
+        {
+          "name": "constant.character.escape.gacharule",
+          "match": "\\\\(?:[\\\\\"nt]|u\\{[0-9A-Fa-f]{1,6}\\})"
+        }
+      ]
+    },
+    "rule-file": {
+      "name": "meta.file.rule.gacharule",
+      "begin": "(?m)^[ \\t]*(rule)\\b",
+      "beginCaptures": {
+        "1": { "name": "keyword.control.rule.gacharule" }
+      },
+      "end": "\\z",
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#string" },
+        { "include": "#rule-keywords" },
+        { "include": "#unexpected-in-rule" },
+        { "include": "#literals" }
+      ]
+    },
+    "roster-file": {
+      "name": "meta.file.roster.gacharule",
+      "begin": "(?m)^[ \\t]*(roster)\\b",
+      "beginCaptures": {
+        "1": { "name": "keyword.control.roster.gacharule" }
+      },
+      "end": "\\z",
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#string" },
+        { "include": "#roster-keywords" },
+        { "include": "#unexpected-in-roster" },
+        { "include": "#literals" }
+      ]
+    },
+    "banner-file": {
+      "name": "meta.file.banner.gacharule",
+      "begin": "(?m)^[ \\t]*(banner)\\b",
+      "beginCaptures": {
+        "1": { "name": "keyword.control.banner.gacharule" }
+      },
+      "end": "\\z",
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#string" },
+        { "include": "#banner-keywords" },
+        { "include": "#unexpected-in-banner" },
+        { "include": "#literals" }
+      ]
+    },
+    "rule-keywords": {
+      "name": "keyword.control.gacharule",
+      "match": "\\b(guarantee|update|reset|emit|from|weighted|choose|linear|rest|and|or|not|in|result|grade|item|rarity|floor|rescale|promote)\\b"
+    },
+    "unexpected-in-rule": {
+      "name": "invalid.illegal.keyword.gacharule",
+      "match": "\\b(source_roster|source_rule|progress_key|pity_key|banner|entry|roster|bind|rule)\\b"
+    },
+    "roster-keywords": {
+      "name": "keyword.control.gacharule",
+      "match": "\\b(entry)\\b"
+    },
+    "unexpected-in-roster": {
+      "name": "invalid.illegal.keyword.gacharule",
+      "match": "\\b(source_roster|source_rule|progress_key|pity_key|guarantee|weighted|promote|rescale|choose|result|update|linear|rarity|banner|floor|grade|reset|roster|emit|from|item|rest|rule|and|not|bind|or|in)\\b"
+    },
+    "banner-keywords": {
+      "name": "keyword.control.gacharule",
+      "match": "\\b(source_roster|source_rule|progress_key|pity_key|bind)\\b"
+    },
+    "unexpected-in-banner": {
+      "name": "invalid.illegal.keyword.gacharule",
+      "match": "\\b(guarantee|weighted|promote|rescale|choose|result|update|linear|rarity|banner|entry|floor|grade|reset|roster|emit|from|item|rest|rule|and|not|or|in)\\b"
+    },
+    "tokens": {
+      "patterns": [
+        { "include": "#comment" },
+        { "include": "#string" },
+        { "include": "#all-keywords" },
+        { "include": "#literals" }
+      ]
+    },
+    "all-keywords": {
+      "name": "keyword.control.gacharule",
+      "match": "\\b(source_roster|source_rule|progress_key|pity_key|guarantee|weighted|promote|rescale|choose|result|update|linear|rarity|banner|entry|floor|grade|reset|roster|emit|from|item|rest|rule|and|not|bind|or|in)\\b"
+    },
+    "literals": {
+      "patterns": [
+        {
+          "name": "constant.language.scope.gacharule",
+          "match": "@(pity|progress|banner|action)\\b"
+        },
+        {
+          "name": "constant.numeric.gacharule",
+          "match": "\\b\\d+(?:/\\d+)?[pwctr]\\b"
+        },
+        {
+          "name": "storage.type.gacharule",
+          "match": "\\b(Distribution|Selector|Counter|Action|Chance|Rarity|Event|Count|Bool|Item|Pool)\\b"
+        },
+        {
+          "name": "constant.language.boolean.gacharule",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "keyword.operator.gacharule",
+          "match": "->|==|>=|\\+=|\\.\\.|%|=|\\."
+        },
+        {
+          "name": "punctuation.delimiter.gacharule",
+          "match": "[:,\\[\\]()]"
+        },
+        {
+          "name": "variable.other.gacharule",
+          "match": "\\b[a-z][a-z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

@@ -143,6 +143,21 @@ pub struct Token {
     pub span: Span,
 }
 
+#[derive(Clone, Debug)]
+pub(crate) struct RawToken {
+    pub kind: TokenKind,
+    pub text: String,
+    pub line: u32,
+    pub column: u32,
+    pub trailing: Option<String>,
+}
+
+#[derive(Clone, Debug)]
+pub(crate) enum Flat {
+    Token(RawToken),
+    Comment(String),
+}
+
 pub fn tokenize(file_index: u16, file_name: &str, source: &str) -> Result<Vec<Token>, Diagnostic> {
     let chars = decode(file_name, source)?;
     let lines = split_lines(file_name, &chars)?;
@@ -436,118 +451,20 @@ fn tokenize_line(
     let mut i = indent_width(chars, line) as usize;
     let mut tokens = Vec::new();
     while i < text.len() {
-        let ch = text[i];
-        if ch == ' ' {
+        if text[i] == ' ' {
             i += 1;
             continue;
         }
-        if ch == '#' {
+        if text[i] == '#' {
             break;
         }
         let col = i as u32 + 1;
-        let at = span_at(file_index, line.no, col);
-        if ch == '"' {
-            let (value, next) = scan_string(file_name, line.no, text, i)?;
-            tokens.push(Token {
-                kind: TokenKind::String(value),
-                span: at,
-            });
-            i = next;
-            continue;
-        }
-        if ch.is_ascii_digit() {
-            let (kind, next) = scan_number(file_name, line.no, text, i)?;
-            tokens.push(Token { kind, span: at });
-            i = next;
-            continue;
-        }
-        if ch == '@' {
-            let (scope, next) = scan_scope(file_name, line.no, text, i)?;
-            tokens.push(Token {
-                kind: TokenKind::Scope(scope),
-                span: at,
-            });
-            i = next;
-            continue;
-        }
-        if ch.is_ascii_alphabetic() {
-            let start = i;
-            i += 1;
-            while i < text.len() && (text[i].is_ascii_alphanumeric() || text[i] == '_') {
-                i += 1;
-            }
-            let word: String = text[start..i].iter().collect();
-            let kind = classify_word(file_name, line.no, col, &word)?;
-            tokens.push(Token { kind, span: at });
-            continue;
-        }
-        let kind = match ch {
-            ':' => TokenKind::Colon,
-            ',' => TokenKind::Comma,
-            '[' => TokenKind::LBrack,
-            ']' => TokenKind::RBrack,
-            '(' => TokenKind::LParen,
-            ')' => TokenKind::RParen,
-            '%' => TokenKind::Percent,
-            '+' => {
-                if text.get(i + 1) == Some(&'=') {
-                    i += 2;
-                    tokens.push(Token {
-                        kind: TokenKind::PlusEq,
-                        span: at,
-                    });
-                    continue;
-                }
-                return Err(lex_error(file_name, line.no, col, "+"));
-            }
-            '-' => {
-                if text.get(i + 1) == Some(&'>') {
-                    i += 2;
-                    tokens.push(Token {
-                        kind: TokenKind::Arrow,
-                        span: at,
-                    });
-                    continue;
-                }
-                return Err(lex_error(file_name, line.no, col, "-"));
-            }
-            '=' => {
-                if text.get(i + 1) == Some(&'=') {
-                    i += 2;
-                    tokens.push(Token {
-                        kind: TokenKind::EqEq,
-                        span: at,
-                    });
-                    continue;
-                }
-                TokenKind::Eq
-            }
-            '>' => {
-                if text.get(i + 1) == Some(&'=') {
-                    i += 2;
-                    tokens.push(Token {
-                        kind: TokenKind::GtEq,
-                        span: at,
-                    });
-                    continue;
-                }
-                return Err(lex_error(file_name, line.no, col, ">"));
-            }
-            '.' => {
-                if text.get(i + 1) == Some(&'.') {
-                    i += 2;
-                    tokens.push(Token {
-                        kind: TokenKind::DotDot,
-                        span: at,
-                    });
-                    continue;
-                }
-                TokenKind::Dot
-            }
-            _ => return Err(lex_error(file_name, line.no, col, &ch.to_string())),
-        };
-        tokens.push(Token { kind, span: at });
-        i += 1;
+        let (kind, next) = read_token(file_name, line.no, text, i)?;
+        tokens.push(Token {
+            kind,
+            span: span_at(file_index, line.no, col),
+        });
+        i = next;
     }
     let ended = tokens.last().is_some_and(|t| t.kind == TokenKind::Colon);
     Ok((tokens, ended))
@@ -807,6 +724,142 @@ fn scan_string(
         i += 1;
     }
     Err(lex_error(file, line, start as u32 + 1, "字符串"))
+}
+
+fn read_token(
+    file_name: &str,
+    line_no: u32,
+    text: &[char],
+    start: usize,
+) -> Result<(TokenKind, usize), Diagnostic> {
+    let ch = text[start];
+    let col = start as u32 + 1;
+    if ch == '"' {
+        let (value, next) = scan_string(file_name, line_no, text, start)?;
+        return Ok((TokenKind::String(value), next));
+    }
+    if ch.is_ascii_digit() {
+        return scan_number(file_name, line_no, text, start);
+    }
+    if ch == '@' {
+        let (scope, next) = scan_scope(file_name, line_no, text, start)?;
+        return Ok((TokenKind::Scope(scope), next));
+    }
+    if ch.is_ascii_alphabetic() {
+        let mut i = start + 1;
+        while i < text.len() && (text[i].is_ascii_alphanumeric() || text[i] == '_') {
+            i += 1;
+        }
+        let word: String = text[start..i].iter().collect();
+        let kind = classify_word(file_name, line_no, col, &word)?;
+        return Ok((kind, i));
+    }
+    match ch {
+        ':' => Ok((TokenKind::Colon, start + 1)),
+        ',' => Ok((TokenKind::Comma, start + 1)),
+        '[' => Ok((TokenKind::LBrack, start + 1)),
+        ']' => Ok((TokenKind::RBrack, start + 1)),
+        '(' => Ok((TokenKind::LParen, start + 1)),
+        ')' => Ok((TokenKind::RParen, start + 1)),
+        '%' => Ok((TokenKind::Percent, start + 1)),
+        '+' => {
+            if text.get(start + 1) == Some(&'=') {
+                Ok((TokenKind::PlusEq, start + 2))
+            } else {
+                Err(lex_error(file_name, line_no, col, "+"))
+            }
+        }
+        '-' => {
+            if text.get(start + 1) == Some(&'>') {
+                Ok((TokenKind::Arrow, start + 2))
+            } else {
+                Err(lex_error(file_name, line_no, col, "-"))
+            }
+        }
+        '=' => {
+            if text.get(start + 1) == Some(&'=') {
+                Ok((TokenKind::EqEq, start + 2))
+            } else {
+                Ok((TokenKind::Eq, start + 1))
+            }
+        }
+        '>' => {
+            if text.get(start + 1) == Some(&'=') {
+                Ok((TokenKind::GtEq, start + 2))
+            } else {
+                Err(lex_error(file_name, line_no, col, ">"))
+            }
+        }
+        '.' => {
+            if text.get(start + 1) == Some(&'.') {
+                Ok((TokenKind::DotDot, start + 2))
+            } else {
+                Ok((TokenKind::Dot, start + 1))
+            }
+        }
+        _ => Err(lex_error(file_name, line_no, col, &ch.to_string())),
+    }
+}
+
+pub(crate) fn flatten(file_name: &str, source: &str) -> Result<Vec<Flat>, Diagnostic> {
+    let chars = decode(file_name, source)?;
+    let lines = split_lines(file_name, &chars)?;
+    let mut out = Vec::new();
+    for line in &lines {
+        let text = &chars[line.start..line.start + line.len];
+        let mut i = 0;
+        while i < text.len() && (text[i] == ' ' || text[i] == '\t') {
+            i += 1;
+        }
+        if i >= text.len() {
+            continue;
+        }
+        if text[i] == '#' {
+            out.push(Flat::Comment(comment_text(text, i)));
+            continue;
+        }
+        let mut tokens = Vec::new();
+        let mut trailing = None;
+        while i < text.len() {
+            while i < text.len() && (text[i] == ' ' || text[i] == '\t') {
+                i += 1;
+            }
+            if i >= text.len() {
+                break;
+            }
+            if text[i] == '#' {
+                trailing = Some(comment_text(text, i));
+                break;
+            }
+            let column = i as u32 + 1;
+            let (kind, next) = read_token(file_name, line.no, text, i)?;
+            tokens.push(RawToken {
+                kind,
+                text: text[i..next].iter().collect(),
+                line: line.no,
+                column,
+                trailing: None,
+            });
+            i = next;
+        }
+        if let Some(comment) = trailing {
+            if let Some(last) = tokens.last_mut() {
+                last.trailing = Some(comment);
+            } else {
+                out.push(Flat::Comment(comment));
+            }
+        }
+        out.extend(tokens.into_iter().map(Flat::Token));
+    }
+    Ok(out)
+}
+
+fn comment_text(text: &[char], start: usize) -> String {
+    let mut end = text.len();
+    while end > start && (text[end - 1] == ' ' || text[end - 1] == '\t') {
+        end -= 1;
+    }
+    text[start..end].iter().collect()
 }
 
 #[cfg(test)]
