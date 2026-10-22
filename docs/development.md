@@ -92,7 +92,7 @@ npm test
 | `check --format=json` 编译成功 | 0，标准输出 `{"diagnostics":[]}` |
 | 读文件失败，或编译被拒绝 | 1 |
 | `fmt` 成功 | 0，标准输出是格式化后的全文 |
-| `fmt` 遇到词法或语法错误 | 1，标准错误一行，不改写文件 |
+| `fmt` 遇到词法或语法错误 | 1，标准错误一行 `路径:行:列: 错误码 期望 …，实际 …`，不改写文件 |
 | 缺少子命令、子命令未知，或参数不完整 | 2，并在标准错误打印用法 |
 
 文本格式的编译失败写到标准错误：
@@ -107,7 +107,35 @@ npm test
 
 库类型 `Diagnostic` 同时带有 `expected` 与 `actual`。`format_source` 是同一格式化器的库入口。`load` 把编译失败收成 `RuntimeError`：`code` 仍是编译错误码，`message` 含 `文件:行:列: 期望 …，实际 …`。
 
-VS Code 插件的调用方式见 [editors/vscode/README.md](../editors/vscode/README.md)。
+## 编辑器
+
+插件在 `editors/vscode`。`.gmr`、`.gml`、`.gmb` 注册为同一种语言 `GachaRule`。语法高亮按规范第 1–3 节的词法；文件以 `rule`、`roster` 或 `banner` 开头时，不属于该文件的顶层关键字标成非法关键字。
+
+| 能力 | 触发 | 调用 |
+|---|---|---|
+| 高亮 | 打开这三种文件 | TextMate 语法，不调用 `gacha` |
+| 诊断 | 打开时、保存时，以及修改后约 200 毫秒 | `gacha check --format=json` |
+| 格式化 | 编辑器命令「格式化文档」，默认快捷键 `Shift+Alt+F` | `gacha fmt --stdin`。插件不打开 `editor.formatOnSave` |
+| 补全 | 输入，以及触发字符 `@`、`.` | 只看当前文件已写下的名字，再加上关键字、类型名、`true`/`false` 和作用域 `@pity`、`@progress`、`@banner`、`@action` |
+| 悬停 | 光标放在词上 | 本文件里的名字显示声明类型。关键字、类型名、作用域和布尔字面量显示对应说明 |
+
+同一目录里还有其他 `.gmr`、`.gml`、`.gmb` 时，插件按扩展名（机制、名册、绑定）再按文件名排序，把整组交给编译器。当前文件用编辑器里的文本，同目录的其他文件用磁盘上的内容。只检查当前文件时，词法和语法错误画在这个文件上。
+
+在仓库根执行 `cargo build` 或 `cargo test` 后，二进制在 `target/debug/gacha`。用 VS Code 打开 `editors/vscode`，按 F5，启动扩展开发主机。插件按这个顺序找可执行文件：
+
+1. 设置项 `gacharule.gachaPath`（默认空）
+2. 从当前文件向上，先 `target/debug/gacha`，再 `target/release/gacha`
+3. `PATH` 里的 `gacha`
+
+找不到时，诊断是一条警告：先 `cargo build`，或设置 `gacharule.gachaPath`。
+
+插件测试不需要安装 npm 依赖：
+
+```sh
+node --test editors/vscode/test/*.js
+```
+
+在 `editors/vscode` 里执行 `npm test` 是同一条测试。插件自己的说明在 [editors/vscode/README.md](../editors/vscode/README.md)。
 
 ## 目录归属
 

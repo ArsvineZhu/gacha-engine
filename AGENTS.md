@@ -4,7 +4,7 @@ Human documentation is Simplified Chinese. This file and other `AGENTS.md` files
 
 ## Layout
 
-- `src/` owns the compiler, checker, executor, hit analysis, and the `gacha` binary.
+- `src/` owns the compiler, checker, formatter, executor, hit analysis, and the `gacha` binary. `editors/vscode` is the VS Code extension; it shells out to `gacha check --format=json` and `gacha fmt`.
 - `spec/gacharule/GachaRule-Language-v1.md` is the normative language. Do not invent syntax or describe a host feature as available when the current functions do not provide it.
 - `official/source/` is migration input. The engine compiles only `.gmr`, `.gml`, and `.gmb`.
 - `tools/migrate_official.py` deletes `official/games/<game>/*.{gmr,gml,gmb}` and rewrites them. Do not treat hand edits there as durable unless the generator is updated too.

@@ -5,7 +5,7 @@
 | 路径 | 归属 |
 |---|---|
 | `src/` | 编译器、检查器、执行器、格式化、命中分析和 `gacha` 命令行 |
-| `editors/vscode/` | VS Code 插件：高亮、诊断、格式化、补全和悬停 |
+| `editors/vscode/` | VS Code 插件。打开三种源文件即高亮；诊断、格式化分别调用 `gacha check --format=json` 和 `gacha fmt`。运行方式在 [开发](docs/development.md) |
 | `spec/gacharule/` | 语言规范、正例和 58 个拒绝测试。语义以这里的规范原文为准 |
 | `docs/` | 教程、查阅表、开发说明、SDK 和官方数据说明 |
 | `docs/examples/` | 教程里的短程序，供 `gacha check` 编译 |
@@ -15,6 +15,6 @@
 | `crates/gacha-ffi/` | C ABI。头文件由 cbindgen 生成在 `include/gacha_engine.h` |
 | `sdk/python/` | Python 扩展，模块名 `gacha_engine` |
 | `sdk/typescript/` | Node 绑定，包名 `gacha-engine` |
-| `tests/` | 正例概率、拒绝坐标、命中分析和官方游戏编译 |
+| `tests/` | 正例概率、拒绝坐标、命中分析、格式化与 JSON 诊断、官方游戏编译 |
 
 工作区成员是仓库根、`crates/gacha-ffi`、`sdk/python`、`sdk/typescript`。

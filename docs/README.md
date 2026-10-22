@@ -11,6 +11,7 @@
 | 写规则 | [语言教程](language-tutorial.md) → [语言参考](language-reference.md) → 规范原文 |
 | 调用引擎 | [SDK](sdk.md) |
 | 构建和改代码 | [开发](development.md) |
+| 在编辑器里写规则 | [开发](development.md) 的「编辑器」，以及 [插件说明](../editors/vscode/README.md) |
 | 官方游戏数据 | [官方游戏数据](official-games.md) |
 
 目录见 [INDEX.md](INDEX.md)。仓库区域见 [../INDEX.md](../INDEX.md)。
