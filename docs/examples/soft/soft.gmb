@@ -1,0 +1,7 @@
+banner soft_banner:
+    source_rule soft
+    source_roster roster_soft
+    pity_key "soft_pity"
+    bind featured: Pool[5r] = [featured_char]
+    bind standard: Pool[5r] = [standard_char]
+    bind filler: Pool[3r] = [filler_item]

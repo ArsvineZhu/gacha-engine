@@ -25,3 +25,5 @@ positive/banners.gmb
 断言：编译必须拒绝该程序，固定错误类别和首要错误源码位置必须与 `rejection-tests/README.md` 的对应行一致。
 
 此包中的示例参数用于验证语言表达能力；有关游戏运营时实际公布或未公开的掉率，应另行维护数据来源与注记。
+
+写规则从 [语言教程](../../docs/language-tutorial.md) 进入。查阅表在 [语言参考](../../docs/language-reference.md)。本目录的规范原文仍是语义准绳。

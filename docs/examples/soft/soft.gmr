@@ -1,0 +1,18 @@
+rule soft:
+    pity: Counter[9c] @pity = 0c
+    featured: Pool[5r]
+    standard: Pool[5r]
+    filler: Pool[3r]
+    top: Selector[5r] = weighted:
+        1w: from featured
+        1w: from standard
+    low: Selector[3r] = from filler
+    rates: Distribution:
+        5r: linear(pity, 5c, 1/10p, 1/10p, 1p) -> top
+        3r: rest -> low
+    draw: Action[1t..1t] = rates
+    guarantee hard: pity >= 9c -> rarity 5r
+    update true:
+        pity += 1c
+    update result.grade >= 5r:
+        reset pity

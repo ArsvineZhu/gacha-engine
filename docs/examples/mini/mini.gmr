@@ -1,0 +1,6 @@
+rule mini:
+    faces: Pool[1r]
+    pick: Selector[1r] = from faces
+    rates: Distribution:
+        1r: 1p -> pick
+    flip: Action[1t..1t] = rates
