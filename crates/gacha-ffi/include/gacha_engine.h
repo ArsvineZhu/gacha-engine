@@ -117,7 +117,6 @@ typedef struct GachaDraw {
 } GachaDraw;
 
 typedef struct GachaHitQuery {
-    const char *banner;
     const char *action;
     uint32_t times;
     uint32_t actions;
@@ -204,6 +203,7 @@ int32_t gacha_engine_load(const char *const *paths,
  * `engine` 必须是尚未释放的编译结果。
  */
 int32_t gacha_engine_session(struct GachaEngine *engine,
+                             const char *banner,
                              struct GachaSession **out,
                              struct GachaError **error);
 
@@ -229,7 +229,6 @@ int32_t gacha_engine_states(struct GachaEngine *engine,
  * `session` 必须是尚未释放的会话。成功时 `*out` 由 [`gacha_free`] 释放。
  */
 int32_t gacha_session_get_count(struct GachaSession *session,
-                                const char *banner,
                                 const char *name,
                                 char **out,
                                 struct GachaError **error);
@@ -239,7 +238,6 @@ int32_t gacha_session_get_count(struct GachaSession *session,
  * `value` 必须是十进制整数字符串。
  */
 int32_t gacha_session_set_count(struct GachaSession *session,
-                                const char *banner,
                                 const char *name,
                                 const char *value,
                                 struct GachaError **error);
@@ -249,7 +247,6 @@ int32_t gacha_session_set_count(struct GachaSession *session,
  * `session` 必须是尚未释放的会话。
  */
 int32_t gacha_session_get_bool(struct GachaSession *session,
-                               const char *banner,
                                const char *name,
                                int32_t *out,
                                struct GachaError **error);
@@ -259,7 +256,6 @@ int32_t gacha_session_get_bool(struct GachaSession *session,
  * `session` 必须是尚未释放的会话。
  */
 int32_t gacha_session_set_bool(struct GachaSession *session,
-                               const char *banner,
                                const char *name,
                                int32_t value,
                                struct GachaError **error);
@@ -286,7 +282,6 @@ int32_t gacha_session_restore(struct GachaSession *session,
  * `session` 必须是尚未释放的会话。成功时 `*out` 由 [`gacha_free`] 释放。
  */
 int32_t gacha_session_draw(struct GachaSession *session,
-                           const char *banner,
                            const char *action,
                            struct GachaDraw **out,
                            struct GachaError **error);
@@ -296,7 +291,6 @@ int32_t gacha_session_draw(struct GachaSession *session,
  * `entry` 必须是本次抽取的条目名。
  */
 int32_t gacha_session_apply(struct GachaSession *session,
-                            const char *banner,
                             const char *action,
                             const char *entry,
                             struct GachaBranch **out,
@@ -307,7 +301,6 @@ int32_t gacha_session_apply(struct GachaSession *session,
  * `session` 必须是尚未释放的会话。`seed` 只决定这一次无偏抽样。
  */
 int32_t gacha_session_sample(struct GachaSession *session,
-                             const char *banner,
                              const char *action,
                              uint64_t seed,
                              struct GachaBranch **out,

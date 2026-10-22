@@ -136,7 +136,6 @@ pub const GACHA_TARGET_TAG: i32 = 4;
 
 #[repr(C)]
 pub struct GachaHitQuery {
-    pub banner: *const c_char,
     pub action: *const c_char,
     pub times: u32,
     pub actions: u32,
@@ -394,11 +393,11 @@ unsafe fn open_engine<'a>(
 
 unsafe fn open_session<'a>(
     ptr: *mut GachaSession,
-) -> Result<&'a mut gacha_engine::Session, RuntimeError> {
+) -> Result<&'a mut gacha_engine::Play, RuntimeError> {
     if ptr.is_null() {
         Err(RuntimeError::new("E_RANGE", "会话为空"))
     } else {
-        Ok(unsafe { &mut *(ptr as *mut gacha_engine::Session) })
+        Ok(unsafe { &mut *(ptr as *mut gacha_engine::Play) })
     }
 }
 
@@ -407,13 +406,15 @@ unsafe fn open_session<'a>(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_engine_session(
     engine: *mut GachaEngine,
+    banner: *const c_char,
     out: *mut *mut GachaSession,
     error: *mut *mut GachaError,
 ) -> i32 {
     match (|| {
         let engine = unsafe { open_engine(engine)? };
+        let banner = unsafe { text(banner, "卡池") }?;
         output(out, error)?;
-        Ok(engine.session())
+        engine.play(banner)
     })() {
         Ok(session) => publish(out, leak_box(session) as *mut GachaSession),
         Err(err) => fail(error, err),
@@ -591,15 +592,10 @@ fn seal_states(states: Vec<gacha_engine::StateInfo>) -> StateListOwned {
     owned
 }
 
-fn count_text(
-    session: *mut GachaSession,
-    banner: *const c_char,
-    name: *const c_char,
-) -> Result<String, RuntimeError> {
+fn count_text(session: *mut GachaSession, name: *const c_char) -> Result<String, RuntimeError> {
     let session = unsafe { open_session(session)? };
-    let banner = unsafe { text(banner, "卡池") }?;
     let name = unsafe { text(name, "状态") }?;
-    Ok(session.get_count(banner, name)?.to_string())
+    Ok(session.get_count(name)?.to_string())
 }
 
 /// # Safety
@@ -607,12 +603,11 @@ fn count_text(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_session_get_count(
     session: *mut GachaSession,
-    banner: *const c_char,
     name: *const c_char,
     out: *mut *mut c_char,
     error: *mut *mut GachaError,
 ) -> i32 {
-    match count_text(session, banner, name) {
+    match count_text(session, name) {
         Ok(value) => match output(out, error) {
             Ok(()) => {
                 let owned = cstring(&value);
@@ -635,17 +630,15 @@ pub unsafe extern "C" fn gacha_session_get_count(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_session_set_count(
     session: *mut GachaSession,
-    banner: *const c_char,
     name: *const c_char,
     value: *const c_char,
     error: *mut *mut GachaError,
 ) -> i32 {
     match (|| {
         let session = unsafe { open_session(session)? };
-        let banner = unsafe { text(banner, "卡池") }?;
         let name = unsafe { text(name, "状态") }?;
         let value = parse_u128(unsafe { text(value, "计数") }?)?;
-        session.set_count(banner, name, value)
+        session.set_count(name, value)
     })() {
         Ok(()) => {
             if !error.is_null() {
@@ -662,7 +655,6 @@ pub unsafe extern "C" fn gacha_session_set_count(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_session_get_bool(
     session: *mut GachaSession,
-    banner: *const c_char,
     name: *const c_char,
     out: *mut i32,
     error: *mut *mut GachaError,
@@ -672,9 +664,8 @@ pub unsafe extern "C" fn gacha_session_get_bool(
             return Err(RuntimeError::new("E_RANGE", "输出指针为空"));
         }
         let session = unsafe { open_session(session)? };
-        let banner = unsafe { text(banner, "卡池") }?;
         let name = unsafe { text(name, "状态") }?;
-        let value = session.get_bool(banner, name)?;
+        let value = session.get_bool(name)?;
         unsafe { *out = i32::from(value) };
         if !error.is_null() {
             unsafe { *error = ptr::null_mut() };
@@ -691,16 +682,14 @@ pub unsafe extern "C" fn gacha_session_get_bool(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_session_set_bool(
     session: *mut GachaSession,
-    banner: *const c_char,
     name: *const c_char,
     value: i32,
     error: *mut *mut GachaError,
 ) -> i32 {
     match (|| {
         let session = unsafe { open_session(session)? };
-        let banner = unsafe { text(banner, "卡池") }?;
         let name = unsafe { text(name, "状态") }?;
-        session.set_bool(banner, name, value != 0)
+        session.set_bool(name, value != 0)
     })() {
         Ok(()) => {
             if !error.is_null() {
@@ -859,17 +848,15 @@ pub unsafe extern "C" fn gacha_session_restore(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_session_draw(
     session: *mut GachaSession,
-    banner: *const c_char,
     action: *const c_char,
     out: *mut *mut GachaDraw,
     error: *mut *mut GachaError,
 ) -> i32 {
     match (|| {
         let session = unsafe { open_session(session)? };
-        let banner = unsafe { text(banner, "卡池") }?;
         let action = unsafe { text(action, "动作") }?;
         output(out, error)?;
-        Ok(seal_draw(session.draw(banner, action)?))
+        Ok(seal_draw(session.draw(action)?))
     })() {
         Ok(draw) => publish(out, leak_box(draw) as *mut GachaDraw),
         Err(err) => fail(error, err),
@@ -881,7 +868,6 @@ pub unsafe extern "C" fn gacha_session_draw(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_session_apply(
     session: *mut GachaSession,
-    banner: *const c_char,
     action: *const c_char,
     entry: *const c_char,
     out: *mut *mut GachaBranch,
@@ -889,11 +875,10 @@ pub unsafe extern "C" fn gacha_session_apply(
 ) -> i32 {
     match (|| {
         let session = unsafe { open_session(session)? };
-        let banner = unsafe { text(banner, "卡池") }?;
         let action = unsafe { text(action, "动作") }?;
         let entry = unsafe { text(entry, "条目") }?;
         output(out, error)?;
-        Ok(seal_branch(session.apply(banner, action, entry)?))
+        Ok(seal_branch(session.apply(action, entry)?))
     })() {
         Ok(branch) => publish(out, leak_box(branch) as *mut GachaBranch),
         Err(err) => fail(error, err),
@@ -905,7 +890,6 @@ pub unsafe extern "C" fn gacha_session_apply(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn gacha_session_sample(
     session: *mut GachaSession,
-    banner: *const c_char,
     action: *const c_char,
     seed: u64,
     out: *mut *mut GachaBranch,
@@ -913,10 +897,9 @@ pub unsafe extern "C" fn gacha_session_sample(
 ) -> i32 {
     match (|| {
         let session = unsafe { open_session(session)? };
-        let banner = unsafe { text(banner, "卡池") }?;
         let action = unsafe { text(action, "动作") }?;
         output(out, error)?;
-        Ok(seal_branch(session.sample_with_seed(banner, action, seed)?))
+        Ok(seal_branch(session.sample_with_seed(action, seed)?))
     })() {
         Ok(branch) => publish(out, leak_box(branch) as *mut GachaBranch),
         Err(err) => fail(error, err),
@@ -939,15 +922,23 @@ pub unsafe extern "C" fn gacha_session_analyze(
         }
         let query = unsafe { &*query };
         output(out, error)?;
-        let parsed = unsafe { parse_query(query)? };
-        Ok(seal_report(session.analyze(&parsed)?))
+        let banner = session.banner().to_string();
+        let parsed = unsafe { parse_query(query, &banner)? };
+        Ok(seal_report(session.analyze(
+            &parsed.action,
+            parsed.times,
+            parsed.actions,
+            parsed.copies,
+            parsed.target,
+            parsed.quantiles,
+        )?))
     })() {
         Ok(report) => publish(out, leak_box(report) as *mut GachaHitReport),
         Err(err) => fail(error, err),
     }
 }
 
-unsafe fn parse_query(query: &GachaHitQuery) -> Result<HitQuery, RuntimeError> {
+unsafe fn parse_query(query: &GachaHitQuery, banner: &str) -> Result<HitQuery, RuntimeError> {
     let quantiles = if query.quantile_count == 0 {
         Vec::new()
     } else if query.quantiles.is_null() {
@@ -979,7 +970,7 @@ unsafe fn parse_query(query: &GachaHitQuery) -> Result<HitQuery, RuntimeError> {
         _ => return Err(RuntimeError::new("E_TARGET", "未知目标类型")),
     };
     Ok(HitQuery {
-        banner: text(query.banner, "卡池")?.to_string(),
+        banner: banner.to_string(),
         action: text(query.action, "动作")?.to_string(),
         times: query.times,
         actions: query.actions,
@@ -1304,37 +1295,21 @@ mod abi_test {
         let engine = positive();
         let mut session = ptr::null_mut();
         let mut error = ptr::null_mut();
+        let banner = c("endfield_event_a");
         assert_eq!(
-            unsafe { gacha_engine_session(engine, &mut session, &mut error) },
+            unsafe { gacha_engine_session(engine, banner.as_ptr(), &mut session, &mut error) },
             0
         );
-        let banner = c("endfield_event_a");
         let action = c("draw");
         let pity = c("pity6");
         let value = c("65");
         assert_eq!(
-            unsafe {
-                gacha_session_set_count(
-                    session,
-                    banner.as_ptr(),
-                    pity.as_ptr(),
-                    value.as_ptr(),
-                    &mut error,
-                )
-            },
+            unsafe { gacha_session_set_count(session, pity.as_ptr(), value.as_ptr(), &mut error) },
             0
         );
         let mut draw = ptr::null_mut();
         assert_eq!(
-            unsafe {
-                gacha_session_draw(
-                    session,
-                    banner.as_ptr(),
-                    action.as_ptr(),
-                    &mut draw,
-                    &mut error,
-                )
-            },
+            unsafe { gacha_session_draw(session, action.as_ptr(), &mut draw, &mut error) },
             0
         );
         assert_eq!(rarity_sum(draw, "6"), (29, 500));
@@ -1342,7 +1317,6 @@ mod abi_test {
         let mut report = ptr::null_mut();
         let kind_rarity = c("6");
         let query = GachaHitQuery {
-            banner: banner.as_ptr(),
             action: action.as_ptr(),
             times: 1,
             actions: 1,
@@ -1363,13 +1337,19 @@ mod abi_test {
         let probability = unsafe { (*report).probability_within };
         assert!((probability - 29.0 / 500.0).abs() < 1e-9);
 
+        let mut genshin_session = ptr::null_mut();
         let genshin = c("genshin_event_a");
+        assert_eq!(
+            unsafe {
+                gacha_engine_session(engine, genshin.as_ptr(), &mut genshin_session, &mut error)
+            },
+            0
+        );
         let mut genshin_draw = ptr::null_mut();
         assert_eq!(
             unsafe {
                 gacha_session_draw(
-                    session,
-                    genshin.as_ptr(),
+                    genshin_session,
                     action.as_ptr(),
                     &mut genshin_draw,
                     &mut error,
@@ -1384,6 +1364,7 @@ mod abi_test {
             gacha_free(draw as *mut c_void);
             gacha_free(report as *mut c_void);
             gacha_free(genshin_draw as *mut c_void);
+            gacha_free(genshin_session as *mut c_void);
             gacha_free(session as *mut c_void);
             gacha_free(engine as *mut c_void);
         }

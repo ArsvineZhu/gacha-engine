@@ -1,7 +1,7 @@
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
-use gacha_engine::{Branch, Draw, FiredArg, HitQuery, RuntimeError, Source, Target};
+use gacha_engine::{Branch, Draw, FiredArg, RuntimeError, SlotState, Source, Target};
 
 fn failure(error: RuntimeError) -> Error {
     Error::new(
@@ -130,31 +130,6 @@ pub struct GachaHitReport {
     pub action_quantiles: Vec<GachaQuantile>,
 }
 
-#[napi(object)]
-pub struct GachaHitQuery {
-    pub banner: String,
-    pub action: String,
-    pub times: u32,
-    pub actions: u32,
-    pub copies: u32,
-    pub target_kind: String,
-    pub target_item: Option<String>,
-    pub target_items: Option<Vec<String>>,
-    pub target_rarity: Option<String>,
-    pub target_tag: Option<String>,
-    pub quantiles: Option<Vec<f64>>,
-}
-
-#[napi]
-pub struct GachaEngine {
-    inner: gacha_engine::Compiled,
-}
-
-#[napi]
-pub struct GachaSession {
-    inner: gacha_engine::Session,
-}
-
 fn arg_of(arg: &FiredArg) -> GachaArg {
     match arg {
         FiredArg::Count(value) => GachaArg {
@@ -222,240 +197,7 @@ fn quantile_of(quantile: &gacha_engine::Quantile) -> GachaQuantile {
     }
 }
 
-#[napi(js_name = "gacha_engine_compile")]
-pub fn gacha_engine_compile(sources: Vec<GachaSource>) -> Result<GachaEngine> {
-    let names: Vec<String> = sources.iter().map(|source| source.name.clone()).collect();
-    let texts: Vec<String> = sources.iter().map(|source| source.text.clone()).collect();
-    let views: Vec<Source<'_>> = names
-        .iter()
-        .zip(texts.iter())
-        .map(|(name, text)| Source { name, text })
-        .collect();
-    let inner = gacha_engine::compile(&views).map_err(|error| failure(error.into()))?;
-    Ok(GachaEngine { inner })
-}
-
-#[napi(js_name = "gacha_engine_load")]
-pub fn gacha_engine_load(paths: Vec<String>) -> Result<GachaEngine> {
-    let files: Vec<std::path::PathBuf> = paths.into_iter().map(std::path::PathBuf::from).collect();
-    let inner = gacha_engine::load(&files).map_err(failure)?;
-    Ok(GachaEngine { inner })
-}
-
-#[napi(js_name = "gacha_engine_session")]
-pub fn gacha_engine_session(engine: &GachaEngine) -> GachaSession {
-    GachaSession {
-        inner: engine.inner.session(),
-    }
-}
-
-#[napi(js_name = "gacha_engine_banners")]
-pub fn gacha_engine_banners(engine: &GachaEngine) -> Result<Vec<GachaBannerInfo>> {
-    let mut banners = Vec::new();
-    for name in engine.inner.banners() {
-        let actions = engine
-            .inner
-            .actions(name)
-            .map_err(failure)?
-            .into_iter()
-            .map(|action| {
-                Ok(GachaActionInfo {
-                    name: action.name,
-                    min_times: times(action.min_times)?,
-                    max_times: times(action.max_times)?,
-                })
-            })
-            .collect::<Result<Vec<_>>>()?;
-        banners.push(GachaBannerInfo {
-            name: name.to_string(),
-            actions,
-        });
-    }
-    Ok(banners)
-}
-
-#[napi(js_name = "gacha_engine_states")]
-pub fn gacha_engine_states(engine: &GachaEngine, banner: String) -> Result<Vec<GachaStateInfo>> {
-    engine.inner.states(&banner).map_err(failure).map(|states| {
-        states
-            .into_iter()
-            .map(|state| GachaStateInfo {
-                name: state.name,
-                scope: state.scope,
-                kind: state.kind,
-            })
-            .collect()
-    })
-}
-
-#[napi(js_name = "gacha_session_get_count")]
-pub fn gacha_session_get_count(
-    session: &GachaSession,
-    banner: String,
-    name: String,
-) -> Result<String> {
-    session
-        .inner
-        .get_count(&banner, &name)
-        .map(decimal)
-        .map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_set_count")]
-pub fn gacha_session_set_count(
-    session: &mut GachaSession,
-    banner: String,
-    name: String,
-    value: String,
-) -> Result<()> {
-    session
-        .inner
-        .set_count(&banner, &name, parse_u128(&value)?)
-        .map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_get_bool")]
-pub fn gacha_session_get_bool(
-    session: &GachaSession,
-    banner: String,
-    name: String,
-) -> Result<bool> {
-    session.inner.get_bool(&banner, &name).map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_set_bool")]
-pub fn gacha_session_set_bool(
-    session: &mut GachaSession,
-    banner: String,
-    name: String,
-    value: bool,
-) -> Result<()> {
-    session
-        .inner
-        .set_bool(&banner, &name, value)
-        .map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_snapshot")]
-pub fn gacha_session_snapshot(session: &GachaSession) -> Vec<GachaSlot> {
-    session
-        .inner
-        .snapshot()
-        .into_iter()
-        .map(|slot| {
-            let kind = if slot.count.is_some() {
-                "count"
-            } else {
-                "bool"
-            };
-            GachaSlot {
-                scope: slot.scope,
-                group: slot.group,
-                name: slot.name,
-                kind: kind.to_string(),
-                count_decimal: slot.count.map(decimal),
-                bool_value: i32::from(slot.flag.unwrap_or(false)),
-            }
-        })
-        .collect()
-}
-
-#[napi(js_name = "gacha_session_restore")]
-pub fn gacha_session_restore(session: &mut GachaSession, slots: Vec<GachaSlot>) -> Result<()> {
-    let mut parsed = Vec::new();
-    for slot in slots {
-        let (count, flag) = if slot.kind == "count" {
-            (
-                Some(parse_u128(slot.count_decimal.as_deref().unwrap_or(""))?),
-                None,
-            )
-        } else if slot.kind == "bool" {
-            (None, Some(slot.bool_value != 0))
-        } else {
-            return Err(failure(RuntimeError::new(
-                "E_STATE_TYPE",
-                format!("未知状态类型 {}", slot.kind),
-            )));
-        };
-        parsed.push(gacha_engine::SlotState {
-            scope: slot.scope,
-            group: slot.group,
-            name: slot.name,
-            count,
-            flag,
-        });
-    }
-    session.inner.restore(&parsed).map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_draw")]
-pub fn gacha_session_draw(
-    session: &GachaSession,
-    banner: String,
-    action: String,
-) -> Result<GachaDraw> {
-    session
-        .inner
-        .draw(&banner, &action)
-        .map(|draw| draw_of(&draw))
-        .map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_apply")]
-pub fn gacha_session_apply(
-    session: &mut GachaSession,
-    banner: String,
-    action: String,
-    entry: String,
-) -> Result<GachaBranch> {
-    session
-        .inner
-        .apply(&banner, &action, &entry)
-        .map(|branch| branch_of(&branch))
-        .map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_sample")]
-pub fn gacha_session_sample(
-    session: &mut GachaSession,
-    banner: String,
-    action: String,
-    seed: String,
-) -> Result<GachaBranch> {
-    let seed = parse_u128(&seed)?;
-    let seed =
-        u64::try_from(seed).map_err(|_| failure(RuntimeError::new("E_RANGE", "种子超出 64 位")))?;
-    session
-        .inner
-        .sample_with_seed(&banner, &action, seed)
-        .map(|branch| branch_of(&branch))
-        .map_err(failure)
-}
-
-#[napi(js_name = "gacha_session_analyze")]
-pub fn gacha_session_analyze(
-    session: &GachaSession,
-    query: GachaHitQuery,
-) -> Result<GachaHitReport> {
-    let target = match query.target_kind.as_str() {
-        "item" => Target::Item(query.target_item.unwrap_or_default()),
-        "any_item" => Target::Any(query.target_items.unwrap_or_default()),
-        "rarity_at_least" => {
-            Target::RarityAtLeast(parse_u128(query.target_rarity.as_deref().unwrap_or(""))?)
-        }
-        "tag" => Target::Tag(query.target_tag.unwrap_or_default()),
-        _ => return Err(failure(RuntimeError::new("E_TARGET", "未知目标类型"))),
-    };
-    let parsed = HitQuery {
-        banner: query.banner,
-        action: query.action,
-        times: query.times,
-        actions: query.actions,
-        copies: query.copies,
-        target,
-        quantiles: query.quantiles.unwrap_or_default(),
-    };
-    let report = session.inner.analyze(&parsed).map_err(failure)?;
+fn report_of(report: gacha_engine::HitReport) -> GachaHitReport {
     let (expected_draw_if_hit, has_expected_draw) = match report.expected_draw_if_hit {
         Some(value) => (value, 1),
         None => (0.0, 0),
@@ -464,7 +206,7 @@ pub fn gacha_session_analyze(
         Some(value) => (value, 1),
         None => (0.0, 0),
     };
-    Ok(GachaHitReport {
+    GachaHitReport {
         draws: report.draws,
         actions: report.actions,
         times: report.times,
@@ -482,5 +224,304 @@ pub fn gacha_session_analyze(
         actions_distribution: report.actions_distribution.iter().map(point_of).collect(),
         draw_quantiles: report.draw_quantiles.iter().map(quantile_of).collect(),
         action_quantiles: report.action_quantiles.iter().map(quantile_of).collect(),
-    })
+    }
+}
+
+/// 指定一个条目。分析时只把抽到这个条目算作命中。
+#[napi]
+pub struct Item {
+    name: String,
+}
+
+#[napi]
+impl Item {
+    #[napi(constructor)]
+    pub fn new(name: String) -> Self {
+        Self { name }
+    }
+}
+
+/// 指定一组条目。抽到其中任何一个都算命中。
+#[napi]
+pub struct AnyOf {
+    names: Vec<String>,
+}
+
+#[napi]
+impl AnyOf {
+    #[napi(constructor)]
+    pub fn new(names: Vec<String>) -> Result<Self> {
+        if names.is_empty() {
+            return Err(failure(RuntimeError::new("E_TARGET", "条目列表不能为空")));
+        }
+        Ok(Self { names })
+    }
+}
+
+/// 指定最低稀有度。可以传数字或十进制文本。
+#[napi]
+pub struct AtLeastRarity {
+    rarity: String,
+}
+
+#[napi]
+impl AtLeastRarity {
+    #[napi(constructor)]
+    pub fn new(rarity: Either<String, u32>) -> Result<Self> {
+        let text = match rarity {
+            Either::A(text) => text,
+            Either::B(number) => number.to_string(),
+        };
+        parse_u128(&text)?;
+        Ok(Self { rarity: text })
+    }
+}
+
+/// 指定名册标签。抽到带这个标签的条目算命中。
+#[napi]
+pub struct Tag {
+    tag: String,
+}
+
+#[napi]
+impl Tag {
+    #[napi(constructor)]
+    pub fn new(tag: String) -> Self {
+        Self { tag }
+    }
+}
+
+/// 一份编译好的规则。`new Engine(paths)` 从文件加载，`Engine.compile(sources)` 从内存中的源文本加载。
+#[napi]
+pub struct Engine {
+    inner: gacha_engine::Engine,
+}
+
+#[napi]
+impl Engine {
+    /// 从文件加载并编译。顺序就是编译顺序。
+    #[napi(constructor)]
+    pub fn new(paths: Vec<String>) -> Result<Self> {
+        let files: Vec<std::path::PathBuf> =
+            paths.into_iter().map(std::path::PathBuf::from).collect();
+        Ok(Self {
+            inner: gacha_engine::Engine::load(&files).map_err(failure)?,
+        })
+    }
+
+    /// 从内存中的源文本编译。每一项含 `name` 和 `text`，扩展名决定文法。
+    #[napi(factory)]
+    pub fn compile(sources: Vec<GachaSource>) -> Result<Self> {
+        let names: Vec<String> = sources.iter().map(|source| source.name.clone()).collect();
+        let texts: Vec<String> = sources.iter().map(|source| source.text.clone()).collect();
+        let views: Vec<Source<'_>> = names
+            .iter()
+            .zip(texts.iter())
+            .map(|(name, text)| Source { name, text })
+            .collect();
+        Ok(Self {
+            inner: gacha_engine::Engine::compile(&views).map_err(|error| failure(error.into()))?,
+        })
+    }
+
+    /// 打开一个卡池上的会话。之后的方法不再重复卡池名。
+    #[napi]
+    pub fn session(&self, banner: String) -> Result<Session> {
+        Ok(Session {
+            inner: self.inner.play(&banner).map_err(failure)?,
+        })
+    }
+
+    /// 列出一个卡池声明的状态槽。
+    #[napi]
+    pub fn states(&self, banner: String) -> Result<Vec<GachaStateInfo>> {
+        Ok(self
+            .inner
+            .states(&banner)
+            .map_err(failure)?
+            .into_iter()
+            .map(|state| GachaStateInfo {
+                name: state.name,
+                scope: state.scope,
+                kind: state.kind,
+            })
+            .collect())
+    }
+
+    /// 列出卡池和每个卡池的动作。
+    #[napi]
+    pub fn banners(&self) -> Result<Vec<GachaBannerInfo>> {
+        let mut banners = Vec::new();
+        for name in self.inner.banners() {
+            let actions = self
+                .inner
+                .actions(name)
+                .map_err(failure)?
+                .into_iter()
+                .map(|action| {
+                    Ok(GachaActionInfo {
+                        name: action.name,
+                        min_times: times(action.min_times)?,
+                        max_times: times(action.max_times)?,
+                    })
+                })
+                .collect::<Result<Vec<_>>>()?;
+            banners.push(GachaBannerInfo {
+                name: name.to_string(),
+                actions,
+            });
+        }
+        Ok(banners)
+    }
+}
+
+/// 某个卡池上的会话。计数、保底和动作状态都留在这里。
+#[napi]
+pub struct Session {
+    inner: gacha_engine::Play,
+}
+
+#[napi(object)]
+pub struct AnalyzeOptions {
+    pub times: u32,
+    pub actions: u32,
+    pub copies: Option<u32>,
+    pub quantiles: Option<Vec<f64>>,
+}
+
+#[napi]
+impl Session {
+    /// 读取计数器，返回十进制字符串。
+    #[napi]
+    pub fn get_count(&self, name: String) -> Result<String> {
+        self.inner.get_count(&name).map(decimal).map_err(failure)
+    }
+
+    /// 把计数器设为十进制文本。超过上界时错误码是 `E_COUNTER_RANGE`。
+    #[napi]
+    pub fn set_count(&mut self, name: String, value: String) -> Result<()> {
+        self.inner
+            .set_count(&name, parse_u128(&value)?)
+            .map_err(failure)
+    }
+
+    #[napi]
+    pub fn get_bool(&self, name: String) -> Result<bool> {
+        self.inner.get_bool(&name).map_err(failure)
+    }
+
+    #[napi]
+    pub fn set_bool(&mut self, name: String, value: bool) -> Result<()> {
+        self.inner.set_bool(&name, value).map_err(failure)
+    }
+
+    /// 导出全部槽，供以后 `restore`。
+    #[napi]
+    pub fn snapshot(&self) -> Vec<GachaSlot> {
+        self.inner
+            .snapshot()
+            .into_iter()
+            .map(|slot| {
+                let kind = if slot.count.is_some() {
+                    "count"
+                } else {
+                    "bool"
+                };
+                GachaSlot {
+                    scope: slot.scope,
+                    group: slot.group,
+                    name: slot.name,
+                    kind: kind.to_string(),
+                    count_decimal: slot.count.map(decimal),
+                    bool_value: i32::from(slot.flag.unwrap_or(false)),
+                }
+            })
+            .collect()
+    }
+
+    /// 按快照写回。字段与 `GachaSlot` 相同。
+    #[napi]
+    pub fn restore(&mut self, slots: Vec<GachaSlot>) -> Result<()> {
+        let mut parsed = Vec::new();
+        for slot in slots {
+            let (count, flag) = if slot.kind == "count" {
+                (
+                    Some(parse_u128(slot.count_decimal.as_deref().unwrap_or(""))?),
+                    None,
+                )
+            } else if slot.kind == "bool" {
+                (None, Some(slot.bool_value != 0))
+            } else {
+                return Err(failure(RuntimeError::new(
+                    "E_STATE_TYPE",
+                    format!("未知状态类型 {}", slot.kind),
+                )));
+            };
+            parsed.push(SlotState {
+                scope: slot.scope,
+                group: slot.group,
+                name: slot.name,
+                count,
+                flag,
+            });
+        }
+        self.inner.restore(&parsed).map_err(failure)
+    }
+
+    /// 查看当前状态下这个动作的一次抽取。不写会话。
+    #[napi]
+    pub fn draw(&self, action: String) -> Result<GachaDraw> {
+        self.inner
+            .draw(&action)
+            .map(|draw| draw_of(&draw))
+            .map_err(failure)
+    }
+
+    /// 若条目在本次正概率分支中，提交这一抽。
+    #[napi]
+    pub fn apply(&mut self, action: String, entry: String) -> Result<GachaBranch> {
+        self.inner
+            .apply(&action, &entry)
+            .map(|branch| branch_of(&branch))
+            .map_err(failure)
+    }
+
+    /// 按精确权重无偏抽取并提交一抽。种子是十进制文本，必须落在 64 位内。
+    #[napi]
+    pub fn sample(&mut self, action: String, seed: String) -> Result<GachaBranch> {
+        let seed = parse_u128(&seed)?;
+        let seed = u64::try_from(seed)
+            .map_err(|_| failure(RuntimeError::new("E_RANGE", "种子超出 64 位")))?;
+        self.inner
+            .sample_with_seed(&action, seed)
+            .map(|branch| branch_of(&branch))
+            .map_err(failure)
+    }
+
+    /// 在副本上计算命中。`target` 是 `Item`、`AnyOf`、`AtLeastRarity` 或 `Tag`。
+    #[napi]
+    pub fn analyze(
+        &self,
+        action: String,
+        target: Either4<&Item, &AnyOf, &AtLeastRarity, &Tag>,
+        options: AnalyzeOptions,
+    ) -> Result<GachaHitReport> {
+        let parsed = match target {
+            Either4::A(item) => Target::Item(item.name.clone()),
+            Either4::B(any) => Target::Any(any.names.clone()),
+            Either4::C(rarity) => Target::RarityAtLeast(parse_u128(&rarity.rarity)?),
+            Either4::D(tag) => Target::Tag(tag.tag.clone()),
+        };
+        self.inner
+            .analyze(
+                &action,
+                options.times,
+                options.actions,
+                options.copies.unwrap_or(1),
+                parsed,
+                options.quantiles.unwrap_or_default(),
+            )
+            .map(report_of)
+            .map_err(failure)
+    }
 }

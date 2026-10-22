@@ -29,7 +29,14 @@ cargo build
 
 `cargo build` 和 `cargo test` 都会生成 `target/debug/gacha`。用 VS Code 打开本目录 `editors/vscode`，按 F5，在弹出的扩展开发主机里打开一份 `.gmr`、`.gml` 或 `.gmb`。
 
-要把插件装进当前窗口，打开命令面板，执行 “Extensions: Install Extension from Location...”，选择 `editors/vscode`。
+Cursor 的 `cursor --install-extension` 只接受扩展 ID 或 VSIX，不接受目录。在本目录打包再安装：
+
+```sh
+python3 package_vsix.py
+cursor --install-extension gacharule-0.1.0.vsix
+```
+
+装完后重新加载窗口。命令面板里的「从位置安装扩展...」只在带本地扩展服务的编辑器窗口出现，聊天窗口里没有这条命令。
 
 ## 插件测试
 

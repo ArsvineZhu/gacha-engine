@@ -12,3 +12,11 @@ license = { text = "MIT" }
 [tool.maturin]
 module-name = "gacha_engine"
 features = ["pyo3/extension-module"]
+
+[tool.pyright]
+extraPaths = ["."]
+reportMissingModuleSource = "none"
+
+[tool.basedpyright]
+extraPaths = ["."]
+reportMissingModuleSource = "none"

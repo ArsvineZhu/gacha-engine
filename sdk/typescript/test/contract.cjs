@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
-const g = require("..");
+const { AtLeastRarity, Engine } = require("..");
 
 const root = path.resolve(__dirname, "../../..");
 const positive = path.join(root, "spec/gacharule/positive");
@@ -41,26 +41,22 @@ test("positive rates and analysis", () => {
     name,
     text: fs.readFileSync(path.join(positive, name), "utf8"),
   }));
-  const engine = g.gacha_engine_compile(sources);
-  const session = g.gacha_engine_session(engine);
-  g.gacha_session_set_count(session, "endfield_event_a", "pity6", "65");
-  const draw = g.gacha_session_draw(session, "endfield_event_a", "draw");
+  const engine = Engine.compile(sources);
+  const session = engine.session("endfield_event_a");
+  session.setCount("pity6", "65");
+  const draw = session.draw("draw");
   const six = rarity(draw, 6);
   const sixGcd = gcd(six[0], six[1]);
   assert.deepEqual([six[0] / sixGcd, six[1] / sixGcd], [29n, 500n]);
-  const report = g.gacha_session_analyze(session, {
-    banner: "endfield_event_a",
-    action: "draw",
+  const report = session.analyze("draw", new AtLeastRarity("6"), {
     times: 1,
     actions: 1,
     copies: 1,
-    targetKind: "rarity_at_least",
-    targetRarity: "6",
     quantiles: [29 / 500],
   });
   assert.ok(Math.abs(report.probabilityWithin - 29 / 500) < 1e-9);
 
-  const genshin = g.gacha_session_draw(session, "genshin_event_a", "draw");
+  const genshin = engine.session("genshin_event_a").draw("draw");
   const five = rarity(genshin, 5);
   const fiveGcd = gcd(five[0], five[1]);
   assert.deepEqual([five[0] / fiveGcd, five[1] / fiveGcd], [3n, 500n]);

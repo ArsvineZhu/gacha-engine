@@ -1,6 +1,6 @@
 # Node binding
 
-Expose the same operations as the Rust library. NAPI object fields are camelCase; function names stay snake_case. `gacha_session_sample` takes the seed as a decimal string that must fit in `u64`.
+Expose `Engine` and `Session` as classes. Method names are camelCase. `session.sample` takes the seed as a decimal string that must fit in `u64`. Targets are `Item`, `AnyOf`, `AtLeastRarity`, and `Tag`.
 
 Hit-report state counts are `u32` in this binding and saturate at `u32::MAX`. Rust, C, and Python keep `u64`.
 
