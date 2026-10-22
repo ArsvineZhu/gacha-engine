@@ -4,7 +4,7 @@
     "kind": "community",
     "title": "内容来源：Dimbreath/WutheringData: ConfigDB/RoleInfo.json",
     "url": "https://raw.githubusercontent.com/Dimbreath/WutheringData/e9234ffe094b2d944d16b222d31102e8ab32d954/ConfigDB/RoleInfo.json",
-    "verified_at": "2026-10-11",
+    "verified_at": "2026-10-22",
     "revision": "e9234ffe094b2d944d16b222d31102e8ab32d954",
     "sha256": "dd1a28f0aa963ad44710940fff2ef01c0f3985a69af25ee6bb9c099f26661b43"
   },
@@ -13,7 +13,7 @@
     "kind": "community",
     "title": "内容来源：Dimbreath/WutheringData: ConfigDB/WeaponConf.json",
     "url": "https://raw.githubusercontent.com/Dimbreath/WutheringData/e9234ffe094b2d944d16b222d31102e8ab32d954/ConfigDB/WeaponConf.json",
-    "verified_at": "2026-10-11",
+    "verified_at": "2026-10-22",
     "revision": "e9234ffe094b2d944d16b222d31102e8ab32d954",
     "sha256": "837393390fc2e36a7f0e9eabdac7b151c4cb72a9bb74169dc420b57b0a712e2f"
   },
@@ -22,7 +22,7 @@
     "kind": "community",
     "title": "内容来源：Dimbreath/WutheringData: TextMap/zh-Hans/MultiText.json",
     "url": "https://raw.githubusercontent.com/Dimbreath/WutheringData/e9234ffe094b2d944d16b222d31102e8ab32d954/TextMap/zh-Hans/MultiText.json",
-    "verified_at": "2026-10-11",
+    "verified_at": "2026-10-22",
     "revision": "e9234ffe094b2d944d16b222d31102e8ab32d954",
     "sha256": "526f80ea28c440509dd293497697a2c92f909f5c6e4b5a157e3d888593d93b7a"
   },
@@ -31,7 +31,7 @@
     "kind": "community",
     "title": "内容来源：Dimbreath/WutheringData: TextMap/en/MultiText.json",
     "url": "https://raw.githubusercontent.com/Dimbreath/WutheringData/e9234ffe094b2d944d16b222d31102e8ab32d954/TextMap/en/MultiText.json",
-    "verified_at": "2026-10-11",
+    "verified_at": "2026-10-22",
     "revision": "e9234ffe094b2d944d16b222d31102e8ab32d954",
     "sha256": "e1e398e892382443fbd968419ad2a7b10d1173c6251134736c0f95d9f8a7e3c6"
   }

@@ -21,8 +21,9 @@ roster roster_endfield:
     entry endfield_character_u6d01_u5c14_u4f69_u5854: 6r, "洁尔佩塔", ["character", "operator", "施术单元"], true
     entry endfield_character_u6d1b_u831c: 6r, "洛茜", ["character", "operator", "单手剑"], true
     entry endfield_character_u72fc_u536b: 5r, "狼卫", ["character", "operator", "手铳"], true
-    entry endfield_character_u7940: 6r, "祀", ["character", "announced", "version.1.6", "cold"], true
+    entry endfield_character_u7940: 6r, "祀", ["character", "operator", "双手剑"], true
     entry endfield_character_u79cb_u6817: 4r, "秋栗", ["character", "operator", "单手剑"], true
+    entry endfield_character_u7ba1_u7406_u5458: 6r, "管理员", ["character", "operator", "单手剑"], true
     entry endfield_character_u7ba1_u7406_u5458_uff08_u5973_uff09: 6r, "管理员（女）", ["character", "operator", "单手剑"], true
     entry endfield_character_u7ba1_u7406_u5458_uff08_u7537_uff09: 6r, "管理员（男）", ["character", "operator", "单手剑"], true
     entry endfield_character_u827e_u5c14_u9edb_u62c9: 6r, "艾尔黛拉", ["character", "operator", "施术单元"], true
@@ -71,6 +72,7 @@ roster roster_endfield:
     entry endfield_weapon_u5de5_u4e1a_u96f6_u70b9_u4e00: 4r, "工业零点一", ["weapon", "双手剑", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u5e03_u9053_u81ea_u7531: 5r, "布道自由", ["weapon", "施术单元", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u5e7b_u60f3_u82e6_u75db: 6r, "幻想苦痛", ["weapon", "双手剑", "item_obtain_bp"], true
+    entry endfield_weapon_u60a0_u4e45_u4f20_u627f: 6r, "悠久传承", ["weapon", "双手剑", "item_obtain_bp"], true
     entry endfield_weapon_u60bc_u4ea1_u8bd7: 5r, "悼亡诗", ["weapon", "施术单元", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u6276_u6447: 6r, "扶摇", ["weapon", "单手剑", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u63a2_u9a8a: 5r, "探骊", ["weapon", "双手剑", "item_obtain_payshop_weapon"], true
@@ -89,12 +91,13 @@ roster roster_endfield:
     entry endfield_weapon_u7194_u94f8_u706b_u7130: 6r, "熔铸火焰", ["weapon", "单手剑", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u7206_u7834_u5355_u5143: 6r, "爆破单元", ["weapon", "施术单元", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u72fc_u4e4b_u7eef: 6r, "狼之绯", ["weapon", "单手剑", "item_obtain_payshop_weapon"], true
-    entry endfield_weapon_u7389_u4e2d_u8eab: 6r, "玉中身", ["weapon", "announced", "version.1.6", "claymore"], true
+    entry endfield_weapon_u7389_u4e2d_u8eab: 6r, "玉中身", ["weapon", "双手剑", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u7406_u6027_u544a_u522b: 5r, "理性告别", ["weapon", "手铳", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u767d_u591c_u65b0_u661f: 6r, "白夜新星", ["weapon", "单手剑", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u7834_u788e_u541b_u738b: 6r, "破碎君王", ["weapon", "双手剑", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u7ec8_u70b9_u4e4b_u58f0: 5r, "终点之声", ["weapon", "双手剑", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u8054_u7ed3_u70b9: 6r, "联结点", ["weapon", "施术单元", "item_obtain_bp"], true
+    entry endfield_weapon_u805a_u5408_u5de5_u4e1a: 6r, "聚合工业", ["weapon", "单手剑", "item_obtain_bp"], true
     entry endfield_weapon_u827a_u672f_u66b4_u541b: 6r, "艺术暴君", ["weapon", "手铳", "item_obtain_payshop_weapon"], true
     entry endfield_weapon_u82e6_u96be_u7684_u5c3d_u5934: 6r, "苦难的尽头", ["weapon", "施术单元", "item_obtain_bp"], true
     entry endfield_weapon_u8367_u5149_u96f7_u7fbd: 4r, "荧光雷羽", ["weapon", "施术单元", "item_obtain_payshop_weapon"], true

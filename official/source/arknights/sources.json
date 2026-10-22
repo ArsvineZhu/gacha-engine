@@ -3,10 +3,10 @@
     "id": "content.arknights.characters",
     "kind": "community",
     "title": "内容来源：Kengxxiao/ArknightsGameData: zh_CN/gamedata/excel/character_table.json",
-    "url": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/17759cc8cdf37388414145d16262a3a06f3ab25e/zh_CN/gamedata/excel/character_table.json",
-    "verified_at": "2026-10-11",
-    "revision": "17759cc8cdf37388414145d16262a3a06f3ab25e",
-    "sha256": "e523c7c83c36e2d76697121079e17d0282da1a94d59a55e1cc55616edf0b41c4"
+    "url": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/bee3f83c5d60590b5e1cd42b8d09d00ce32ab10d/zh_CN/gamedata/excel/character_table.json",
+    "verified_at": "2026-10-22",
+    "revision": "bee3f83c5d60590b5e1cd42b8d09d00ce32ab10d",
+    "sha256": "4e5ff36c4ef7fee3e2bbf6cca077400bcbbace81034700c7c277d3a5efd5ee00"
   },
   {
     "id": "kernel.official",
