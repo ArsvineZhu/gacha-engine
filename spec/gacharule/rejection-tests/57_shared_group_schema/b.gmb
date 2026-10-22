@@ -1,0 +1,10 @@
+banner ba:
+    source_rule ra
+    source_roster t
+    pity_key "same"
+    bind p: Pool[3r] = [x]
+banner bb:
+    source_rule rb
+    source_roster t
+    pity_key "same"
+    bind p: Pool[3r] = [x]

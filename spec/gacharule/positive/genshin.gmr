@@ -1,0 +1,43 @@
+rule genshin_character:
+    pity5: Counter[89c] @pity = 0c
+    pity4: Counter[9c] @pity = 0c
+    missed_featured5: Bool @pity = false
+    missed_featured4: Bool @pity = false
+    featured5: Pool[5r]
+    standard5: Pool[5r]
+    featured4: Pool[4r]
+    standard4: Pool[4r]
+    standard3: Pool[3r]
+    regular5: Selector[5r] = weighted:
+        1w: from featured5
+        1w: from standard5
+    guaranteed5: Selector[5r] = from featured5
+    select5: Selector[5r] = choose(missed_featured5 == true, guaranteed5, regular5)
+    regular4: Selector[4r] = weighted:
+        1w: from featured4
+        1w: from standard4
+    guaranteed4: Selector[4r] = from featured4
+    select4: Selector[4r] = choose(missed_featured4 == true, guaranteed4, regular4)
+    select3: Selector[3r] = from standard3
+    rates: Distribution:
+        5r: linear(pity5, 73c, 3/500p, 3/50p, 1p) -> select5
+        4r: 51w -> select4
+        3r: 943w -> select3
+    draw: Action[1t..1000t] = rates
+    guarantee five_hard: pity5 >= 89c -> rarity 5r
+    guarantee four_hard: pity4 >= 9c -> floor 4r promote
+    update true:
+        pity5 += 1c
+        pity4 += 1c
+    update result.grade >= 5r:
+        reset pity5
+    update result.grade >= 4r:
+        reset pity4
+    update result in standard5:
+        missed_featured5 = true
+    update result in featured5:
+        missed_featured5 = false
+    update result in standard4:
+        missed_featured4 = true
+    update result in featured4:
+        missed_featured4 = false

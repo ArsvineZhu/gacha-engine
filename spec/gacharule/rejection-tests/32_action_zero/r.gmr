@@ -1,0 +1,6 @@
+rule r:
+    p: Pool[3r]
+    s: Selector[3r] = from p
+    d: Distribution:
+        3r: 1p -> s
+    a: Action[0t..1t] = d

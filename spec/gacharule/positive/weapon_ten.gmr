@@ -1,0 +1,20 @@
+rule weapon_ten:
+    misses_in_action: Counter[9c] @action = 0c
+    six_weapons: Pool[6r]
+    five_weapons: Pool[5r]
+    four_weapons: Pool[4r]
+    rare_drop: Event[Item]
+    select6: Selector[6r] = from six_weapons
+    select5: Selector[5r] = from five_weapons
+    select4: Selector[4r] = from four_weapons
+    rates: Distribution:
+        6r: 1/100p -> select6
+        5r: 9/100p -> select5
+        4r: rest -> select4
+    ten: Action[10t..10t] = rates
+    guarantee at_least_five: misses_in_action >= 9c -> floor 5r rescale
+    update true:
+        misses_in_action += 1c
+    update result.grade >= 5r:
+        reset misses_in_action
+        emit rare_drop(result)

@@ -1,0 +1,9 @@
+rule r:
+    p: Pool[3r]
+    s: Selector[3r] = from p
+    d: Distribution:
+        3r: 1p -> s
+    reward: Event[Count]
+    a: Action[1t..1t] = d
+    update true:
+        emit reward(true)
