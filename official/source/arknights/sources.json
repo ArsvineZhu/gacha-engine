@@ -1,0 +1,18 @@
+[
+  {
+    "id": "content.arknights.characters",
+    "kind": "community",
+    "title": "内容来源：Kengxxiao/ArknightsGameData: zh_CN/gamedata/excel/character_table.json",
+    "url": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/17759cc8cdf37388414145d16262a3a06f3ab25e/zh_CN/gamedata/excel/character_table.json",
+    "verified_at": "2026-10-11",
+    "revision": "17759cc8cdf37388414145d16262a3a06f3ab25e",
+    "sha256": "e523c7c83c36e2d76697121079e17d0282da1a94d59a55e1cc55616edf0b41c4"
+  },
+  {
+    "id": "kernel.official",
+    "kind": "official",
+    "title": "官方中坚寻访机制公告",
+    "url": "https://www.arknights.global/news/346",
+    "verified_at": "2026-10-11"
+  }
+]

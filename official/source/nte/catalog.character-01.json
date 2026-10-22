@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "nte.character.1",
+  "game": "nte",
+  "version": "0.1.0",
+  "description": "已核对来源的内容快照；完整目录与具体卡池的可抽范围分别维护。",
+  "source_documents": ["sources.json"],
+  "items": [
+    {"id": "nte.character.1003", "upstream_id": "1003", "kind": "character", "display_name": "Sakiri", "names": {"en": "Sakiri"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1004", "upstream_id": "1004", "kind": "character", "display_name": "Lacrimosa", "names": {"en": "Lacrimosa"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1008", "upstream_id": "1008", "kind": "character", "display_name": "Skia", "names": {"en": "Skia"}, "rarity": 4, "native_rarity": "A", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1010", "upstream_id": "1010", "kind": "character", "display_name": "Nanally", "names": {"en": "Nanally"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1019", "upstream_id": "1019", "kind": "character", "display_name": "Mint", "names": {"en": "Mint"}, "rarity": 4, "native_rarity": "A", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1020", "upstream_id": "1020", "kind": "character", "display_name": "Haniel", "names": {"en": "Haniel"}, "rarity": 4, "native_rarity": "A", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1021", "upstream_id": "1021", "kind": "character", "display_name": "Edgar", "names": {"en": "Edgar"}, "rarity": 4, "native_rarity": "A", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1023", "upstream_id": "1023", "kind": "character", "display_name": "Baicang", "names": {"en": "Baicang"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1025", "upstream_id": "1025", "kind": "character", "display_name": "Hathor", "names": {"en": "Hathor"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1033", "upstream_id": "1033", "kind": "character", "display_name": "Adler", "names": {"en": "Adler"}, "rarity": 4, "native_rarity": "A", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1036", "upstream_id": "1036", "kind": "character", "display_name": "Zankou", "names": {"en": "Zankou"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1039", "upstream_id": "1039", "kind": "character", "display_name": "Fadia", "names": {"en": "Fadia"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1046", "upstream_id": "1046", "kind": "character", "display_name": "Zero", "names": {"en": "Zero"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1052", "upstream_id": "1052", "kind": "character", "display_name": "Hotori", "names": {"en": "Hotori"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1054", "upstream_id": "1054", "kind": "character", "display_name": "Daffodill", "names": {"en": "Daffodill"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1055", "upstream_id": "1055", "kind": "character", "display_name": "Jiuyuan", "names": {"en": "Jiuyuan"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1070", "upstream_id": "1070", "kind": "character", "display_name": "Aurelia", "names": {"en": "Aurelia"}, "rarity": 4, "native_rarity": "A", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1071", "upstream_id": "1071", "kind": "character", "display_name": "Chaos", "names": {"en": "Chaos"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1072", "upstream_id": "1072", "kind": "character", "display_name": "Linko", "names": {"en": "Linko"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1073", "upstream_id": "1073", "kind": "character", "display_name": "Chiz", "names": {"en": "Chiz"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1075", "upstream_id": "1075", "kind": "character", "display_name": "Iroi", "names": {"en": "Iroi"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]},
+    {"id": "nte.character.1076", "upstream_id": "1076", "kind": "character", "display_name": "Shinku", "names": {"en": "Shinku"}, "rarity": 5, "native_rarity": "S", "tags": ["character"], "source_ids": ["content.nte.characters"]}
+  ]
+}

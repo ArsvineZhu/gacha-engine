@@ -1,0 +1,17 @@
+[package]
+name = "gacha-engine-ffi"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "GachaRule 引擎的 C ABI。这是唯一的二进制合同。"
+
+[lib]
+name = "gacha_engine_ffi"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[dependencies]
+gacha-engine = { path = "../.." }
+
+[build-dependencies]
+cbindgen = "0.28"

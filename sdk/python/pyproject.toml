@@ -1,0 +1,14 @@
+[build-system]
+requires = ["maturin>=1.7,<2"]
+build-backend = "maturin"
+
+[project]
+name = "gacha-engine"
+version = "0.1.0"
+description = "GachaRule 1.0 的 Python 绑定。概率用分子和分母的十进制字符串传递。"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+[tool.maturin]
+module-name = "gacha_engine"
+features = ["pyo3/extension-module"]

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "id": "endfield.reference.chartered.fixed-five",
+  "game": "endfield",
+  "version": "0.1.0",
+  "description": "历史或参考卡池名单使用真实身份；开放时间以对应公告为准，模型假设见规则包。",
+  "rules": "rule.chartered-fixed-five.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.weapon-01.json"
+  ],
+  "pools": [
+    {
+      "id": "pool.current_featured",
+      "items": [
+        "endfield.character.莱万汀"
+      ]
+    },
+    {
+      "id": "pool.six_off_banner",
+      "items": [
+        "endfield.character.余烬",
+        "endfield.character.黎风",
+        "endfield.character.艾尔黛拉",
+        "endfield.character.别礼",
+        "endfield.character.骏卫",
+        "endfield.character.洁尔佩塔",
+        "endfield.character.伊冯"
+      ]
+    },
+    {
+      "id": "pool.five",
+      "items": [
+        "endfield.character.佩丽卡",
+        "endfield.character.大潘",
+        "endfield.character.弧光",
+        "endfield.character.昼雪",
+        "endfield.character.狼卫",
+        "endfield.character.艾维文娜",
+        "endfield.character.赛希",
+        "endfield.character.阿列什",
+        "endfield.character.陈千语"
+      ]
+    },
+    {
+      "id": "pool.four",
+      "items": [
+        "endfield.character.卡契尔",
+        "endfield.character.埃特拉",
+        "endfield.character.安塔尔",
+        "endfield.character.秋栗",
+        "endfield.character.萤石"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "endfield.character.莱万汀"
+  }
+}

@@ -79,6 +79,7 @@ enum RowAmount {
 struct EntryInfo {
     rarity: u128,
     drawable: bool,
+    tags: Vec<String>,
 }
 
 struct RosterBuild {
@@ -167,6 +168,7 @@ fn build_roster(file: &str, roster: &Roster, issues: &mut Vec<Issue>) -> RosterB
                 EntryInfo {
                     rarity: entry.rarity,
                     drawable: entry.drawable,
+                    tags: entry.tags.clone(),
                 },
             )
             .is_some()
@@ -1491,8 +1493,10 @@ fn bind_banner(
     let mut pools = Vec::new();
     let mut items = Vec::new();
     let mut entry_rarity = BTreeMap::new();
+    let mut entry_tags = BTreeMap::new();
     for (name, info) in &roster.entries {
         entry_rarity.insert(name.clone(), info.rarity);
+        entry_tags.insert(name.clone(), info.tags.clone());
     }
     for bind in &banner.binds {
         if !bound.insert(bind.name.name.clone()) {
@@ -1698,6 +1702,7 @@ fn bind_banner(
         pools,
         items,
         entry_rarity: entry_rarity.into_iter().collect(),
+        entry_tags,
         selectors: rule.selectors.clone(),
         distributions: rule.distributions.clone(),
         actions: rule.actions.clone(),

@@ -54,6 +54,10 @@ impl Rational {
         self.num == 0
     }
 
+    pub(crate) fn to_f64(self) -> f64 {
+        self.num as f64 / self.den as f64
+    }
+
     pub fn checked_add(self, other: Self) -> Option<Self> {
         let num = self
             .num

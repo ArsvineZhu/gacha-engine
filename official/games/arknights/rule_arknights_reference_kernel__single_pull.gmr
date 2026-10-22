@@ -1,0 +1,28 @@
+# 源规则 arknights.reference.kernel 动作 single_pull
+rule rule_arknights_reference_kernel__single_pull:
+    banner_pulls: Counter[] @banner = 0c
+    initial_five_seen: Bool @banner = false
+    pity: Counter[98c] @pity = 0c
+    pool_id_3: Pool[3r]
+    pool_id_4: Pool[4r]
+    pool_id_5: Pool[5r]
+    pool_id_6: Pool[6r]
+    sel_id_3: Selector[3r] = from pool_id_3
+    sel_id_4: Selector[4r] = from pool_id_4
+    sel_id_5: Selector[5r] = from pool_id_5
+    sel_id_6: Selector[6r] = from pool_id_6
+    dist_rarity_name: Distribution:
+        6r: linear(pity, 50c, 1/50p, 1/50p, 1p) -> sel_id_6
+        5r: 8w -> sel_id_5
+        4r: 50w -> sel_id_4
+        3r: 40w -> sel_id_3
+    single_pull: Action[1t..1000t] = dist_rarity_name
+    guarantee first_ten: (banner_pulls >= 9c) and (initial_five_seen == false) -> floor 5r promote
+    update result.grade == 6r:
+        reset pity
+    update not (result.grade == 6r):
+        pity += 1c
+    update true:
+        banner_pulls += 1c
+    update result.grade >= 5r:
+        initial_five_seen = true

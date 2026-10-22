@@ -1,0 +1,9 @@
+# 源卡池 nte.reference.arc
+banner banner_nte_reference_arc:
+    source_rule rule_nte_rules_arc_research__research
+    source_roster roster_nte
+    bind pool_a: Pool[4r] = [nte_arc_fork_bittercake, nte_arc_fork_castle, nte_arc_fork_crowbar, nte_arc_fork_kite, nte_arc_fork_paperplane, nte_arc_fork_bopu, nte_arc_fork_jiaojuan, nte_arc_fork_koinobori, nte_arc_fork_lingganzhongjiezhe, nte_arc_fork_oulaquantao, nte_arc_fork_snowman, nte_arc_fork_spider, nte_arc_fork_tuansanlang, nte_arc_fork_wuhuakuang, nte_arc_fork_yaodao, nte_arc_fork_yuren]
+    bind pool_b: Pool[3r] = [nte_arc_fork_prokaryon, nte_arc_fork_appliance, nte_arc_fork_dustbin, nte_arc_fork_nonos, nte_arc_fork_vine]
+    bind pool_featured: Pool[5r] = [nte_arc_announced_crime_and_punishment]
+    bind pool_standard: Pool[5r] = [nte_arc_fork_arachne, nte_arc_fork_bitgame, nte_arc_fork_blackbook, nte_arc_fork_blastcandy, nte_arc_fork_boxingcandy, nte_arc_fork_butterfly, nte_arc_fork_demonblade, nte_arc_fork_door, nte_arc_fork_goldrecord, nte_arc_fork_goldwool, nte_arc_fork_knightcandy, nte_arc_fork_lunarphase, nte_arc_fork_motorcandy, nte_arc_fork_nakupeda, nte_arc_fork_nestbird, nte_arc_fork_policerat, nte_arc_fork_rose, nte_arc_fork_thiefcandy, nte_arc_fork_tigertally, nte_arc_fork_time, nte_arc_fork_whale, nte_arc_fork_jingmotingyuan, nte_arc_fork_mamen, nte_arc_fork_mofeikesi, nte_arc_fork_moon, nte_arc_fork_rishi, nte_arc_fork_worldrain, nte_arc_fork_wushoutieyu]
+    bind slot_featured: Item[5r] = nte_arc_announced_crime_and_punishment

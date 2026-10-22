@@ -1,0 +1,9 @@
+# 源卡池 star-rail.reference.character
+banner banner_star_rail_reference_character:
+    source_rule rule_star_rail_reference_character__single_pull
+    source_roster roster_star_rail
+    pity_key "star-rail.reference.character"
+    bind pool_featured: Pool[5r] = [star_rail_character_1102]
+    bind pool_four: Pool[4r] = [star_rail_character_1001, star_rail_character_1002, star_rail_character_1008, star_rail_character_1009, star_rail_character_1013, star_rail_character_1103, star_rail_character_1105, star_rail_character_1106, star_rail_character_1108, star_rail_character_1109, star_rail_character_1110, star_rail_character_1111, star_rail_character_1201, star_rail_character_1202, star_rail_character_1206, star_rail_character_1207, star_rail_character_1210, star_rail_character_1214, star_rail_character_1215, star_rail_character_1223, star_rail_character_1224, star_rail_character_1301, star_rail_character_1312]
+    bind pool_standard: Pool[5r] = [star_rail_character_1003, star_rail_character_1004, star_rail_character_1101, star_rail_character_1104, star_rail_character_1107, star_rail_character_1211, star_rail_character_1209]
+    bind pool_three: Pool[3r] = [star_rail_light_cone_20000, star_rail_light_cone_20001, star_rail_light_cone_20002, star_rail_light_cone_20003, star_rail_light_cone_20004, star_rail_light_cone_20005, star_rail_light_cone_20006, star_rail_light_cone_20007, star_rail_light_cone_20008, star_rail_light_cone_20009, star_rail_light_cone_20010, star_rail_light_cone_20011, star_rail_light_cone_20012, star_rail_light_cone_20013, star_rail_light_cone_20014, star_rail_light_cone_20015, star_rail_light_cone_20016, star_rail_light_cone_20017, star_rail_light_cone_20018, star_rail_light_cone_20019, star_rail_light_cone_20020, star_rail_light_cone_20021, star_rail_light_cone_20022, star_rail_light_cone_20023, star_rail_light_cone_20024]

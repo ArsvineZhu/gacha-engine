@@ -1,0 +1,17 @@
+[package]
+name = "gacha-engine-py"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "GachaRule 引擎的 Python 绑定。语义来自同一组 Rust 函数。"
+
+[lib]
+name = "gacha_engine"
+crate-type = ["cdylib"]
+test = false
+doctest = false
+
+[dependencies]
+gacha_engine_core = { package = "gacha-engine", path = "../.." }
+pyo3 = { version = "0.24", features = ["abi3-py39", "extension-module"] }

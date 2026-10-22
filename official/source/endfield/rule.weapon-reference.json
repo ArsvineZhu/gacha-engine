@@ -1,0 +1,528 @@
+{
+  "schema_version": 1,
+  "id": "endfield.reference.weapon",
+  "version": "0.1.0",
+  "description": "机制与符号槽位定义；具体可抽范围和身份由卡池清单组装。",
+  "assumptions": [
+    {
+      "id": "batch.replacement",
+      "status": "inferred",
+      "description": "本次申领此前未命中时，最后一抽施加保底，并将低稀有度质量移至五星；第八次目标保底会被此前目标命中消耗，奖励事件不直接修改保底或库存。"
+    }
+  ],
+  "state": [
+    {
+      "id": "batch_draws",
+      "kind": "counter",
+      "scope": "batch",
+      "initial": 0,
+      "max": 10
+    },
+    {
+      "id": "batch_six_seen",
+      "kind": "boolean",
+      "scope": "batch",
+      "initial": false
+    },
+    {
+      "id": "batch_five_seen",
+      "kind": "boolean",
+      "scope": "batch",
+      "initial": false
+    },
+    {
+      "id": "batch_featured_seen",
+      "kind": "boolean",
+      "scope": "batch",
+      "initial": false
+    },
+    {
+      "id": "six_miss_batches",
+      "kind": "counter",
+      "scope": "banner",
+      "initial": 0,
+      "max": 3
+    },
+    {
+      "id": "featured_miss_batches",
+      "kind": "counter",
+      "scope": "banner",
+      "initial": 0,
+      "max": 7
+    },
+    {
+      "id": "featured_available",
+      "kind": "boolean",
+      "scope": "banner",
+      "initial": true
+    },
+    {
+      "id": "requisitions",
+      "kind": "counter",
+      "scope": "banner",
+      "initial": 0
+    }
+  ],
+  "selectors": [
+    {
+      "id": "featured",
+      "type": "pool",
+      "pool": "featured"
+    },
+    {
+      "id": "standard",
+      "type": "pool",
+      "pool": "standard"
+    },
+    {
+      "id": "five",
+      "type": "pool",
+      "pool": "five"
+    },
+    {
+      "id": "four",
+      "type": "pool",
+      "pool": "four"
+    },
+    {
+      "id": "six",
+      "type": "weighted",
+      "branches": [
+        {
+          "weight": "1",
+          "selector": "featured"
+        },
+        {
+          "weight": "3",
+          "selector": "standard"
+        }
+      ]
+    }
+  ],
+  "distributions": [
+    {
+      "id": "rarity",
+      "entries": [
+        {
+          "rarity": 6,
+          "type": "constant",
+          "value": "0.04"
+        },
+        {
+          "rarity": 5,
+          "type": "constant",
+          "value": "0.15"
+        },
+        {
+          "rarity": 4,
+          "type": "remainder"
+        }
+      ]
+    }
+  ],
+  "banners": [
+    {
+      "id": "endfield.weapon",
+      "pity_group": "endfield.weapon.reference",
+      "progress_group": "endfield.weapon.reference",
+      "actions": [
+        {
+          "id": "requisition",
+          "draws": 10,
+          "distribution": "rarity",
+          "selectors": {
+            "6": "six",
+            "5": "five",
+            "4": "four"
+          },
+          "guarantees": [
+            {
+              "id": "featured_eighth",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_counter_gte",
+                    "state": "featured_miss_batches",
+                    "value": 7
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "featured_available",
+                    "value": true
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "batch_featured_seen",
+                    "value": false
+                  }
+                ]
+              },
+              "effect": {
+                "type": "force_item",
+                "item": "featured"
+              },
+              "priority": 300
+            },
+            {
+              "id": "six_fourth",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_counter_gte",
+                    "state": "six_miss_batches",
+                    "value": 3
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "batch_six_seen",
+                    "value": false
+                  }
+                ]
+              },
+              "effect": {
+                "type": "force_rarity",
+                "rarity": 6
+              },
+              "priority": 200
+            },
+            {
+              "id": "five_per_batch",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "batch_five_seen",
+                    "value": false
+                  }
+                ]
+              },
+              "effect": {
+                "type": "min_rarity",
+                "rarity": 5,
+                "strategy": "preserve_higher_fill_floor"
+              },
+              "priority": 100
+            }
+          ],
+          "transitions": [
+            {
+              "id": "batch.progress",
+              "when": {
+                "op": "always"
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "batch_draws"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "batch.six",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 6
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "batch_six_seen",
+                  "value": true
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "batch.five",
+              "when": {
+                "op": "outcome_rarity_gte",
+                "rarity": 5
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "batch_five_seen",
+                  "value": true
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "batch.featured",
+              "when": {
+                "op": "outcome_item_in_pool",
+                "pool": "featured"
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "batch_featured_seen",
+                  "value": true
+                },
+                {
+                  "type": "set_bool",
+                  "state": "featured_available",
+                  "value": false
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "requisition.progress",
+              "when": {
+                "op": "state_counter_eq",
+                "state": "batch_draws",
+                "value": 9
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "requisitions"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "six_miss_batches.reset",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "any",
+                    "conditions": [
+                      {
+                        "op": "state_bool_eq",
+                        "state": "batch_six_seen",
+                        "value": true
+                      },
+                      {
+                        "op": "outcome_rarity_eq",
+                        "rarity": 6
+                      }
+                    ]
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "six_miss_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "six_miss_batches.miss",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "not",
+                    "condition": {
+                      "op": "any",
+                      "conditions": [
+                        {
+                          "op": "state_bool_eq",
+                          "state": "batch_six_seen",
+                          "value": true
+                        },
+                        {
+                          "op": "outcome_rarity_eq",
+                          "rarity": 6
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "six_miss_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "featured_miss_batches.reset",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "any",
+                    "conditions": [
+                      {
+                        "op": "state_bool_eq",
+                        "state": "batch_featured_seen",
+                        "value": true
+                      },
+                      {
+                        "op": "outcome_item_in_pool",
+                        "pool": "featured"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "featured_miss_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "featured_miss_batches.miss",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "all",
+                    "conditions": [
+                      {
+                        "op": "state_counter_eq",
+                        "state": "batch_draws",
+                        "value": 9
+                      },
+                      {
+                        "op": "not",
+                        "condition": {
+                          "op": "any",
+                          "conditions": [
+                            {
+                              "op": "state_bool_eq",
+                              "state": "batch_featured_seen",
+                              "value": true
+                            },
+                            {
+                              "op": "outcome_item_in_pool",
+                              "pool": "featured"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "featured_available",
+                    "value": true
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "featured_miss_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "reward.box",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_counter_gte",
+                    "state": "requisitions",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_modulo_eq",
+                    "state": "requisitions",
+                    "modulus": 16,
+                    "value": 9
+                  }
+                ]
+              },
+              "updates": [],
+              "events": [
+                {
+                  "kind": "grant_item",
+                  "key": "arsenal_box",
+                  "amount": 1
+                }
+              ]
+            },
+            {
+              "id": "reward.featured_reward",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_counter_gte",
+                    "state": "requisitions",
+                    "value": 17
+                  },
+                  {
+                    "op": "state_modulo_eq",
+                    "state": "requisitions",
+                    "modulus": 16,
+                    "value": 1
+                  }
+                ]
+              },
+              "updates": [],
+              "events": [
+                {
+                  "kind": "grant_item",
+                  "key": "featured",
+                  "amount": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "source_documents": [
+    "sources.json"
+  ]
+}

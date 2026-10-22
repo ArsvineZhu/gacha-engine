@@ -1,0 +1,144 @@
+[
+  {
+    "id": "content.endfield.danqingdu.official",
+    "kind": "official",
+    "title": "「丹青渡」官方版本导览：祀、明河、玉中身与唤月",
+    "url": "https://endfield.hypergryph.com/version_briefing/latest",
+    "verified_at": "2026-10-11",
+    "revision": "丹青渡前瞻（2026-10-06）"
+  },
+  {
+    "id": "content.endfield.characters",
+    "kind": "community",
+    "title": "终末地当前客户端干员表",
+    "url": "https://endfield-assets.fffdan.com/table/CharacterTable/all",
+    "verified_at": "2026-10-11",
+    "revision": "客户端表摘要/2026-10-11",
+    "sha256": "2234d40b1d75b9c5b21da1c887083c024711a84ef3da1cc8903a682367e9fbfc"
+  },
+  {
+    "id": "content.endfield.character_names",
+    "kind": "community",
+    "title": "终末地当前客户端干员中文本地化",
+    "url": "https://endfield-assets.fffdan.com/i18n/dict/CN/table/CharacterTable/all",
+    "verified_at": "2026-10-11",
+    "revision": "客户端表摘要/2026-10-11",
+    "sha256": "d078c4f4db9d69c7c72c58c2c457926e9716438cee656b56b555122f4082424b"
+  },
+  {
+    "id": "content.endfield.weapons",
+    "kind": "community",
+    "title": "终末地当前客户端武器基础表",
+    "url": "https://endfield-assets.fffdan.com/table/WeaponBasicTable/all",
+    "verified_at": "2026-10-11",
+    "revision": "客户端表摘要/2026-10-11",
+    "sha256": "68887b12a4fa79590430a715655f0742452acb650151e8ee57b092d4c69834e6"
+  },
+  {
+    "id": "content.endfield.weapon_names",
+    "kind": "community",
+    "title": "终末地当前客户端物品中文本地化",
+    "url": "https://endfield-assets.fffdan.com/i18n/dict/CN/table/ItemTable/all",
+    "verified_at": "2026-10-11",
+    "revision": "客户端表摘要/2026-10-11",
+    "sha256": "c0726bf6ec9f7249acd59f6141d4cb5f3cb8fd519195798904abf1b6a4873e44"
+  },
+  {
+    "id": "content.endfield.items",
+    "kind": "community",
+    "title": "终末地当前客户端物品表",
+    "url": "https://endfield-assets.fffdan.com/table/ItemTable/all",
+    "verified_at": "2026-10-11",
+    "revision": "客户端表摘要/2026-10-11",
+    "sha256": "5d2f4ded97d2a1b30648d159790320d5c77eab8969b4b3378f3b9727a022955e"
+  },
+  {
+    "id": "content.endfield.weapon_english",
+    "kind": "community",
+    "title": "终末地当前客户端武器英文名字段",
+    "url": "https://endfield-assets.fffdan.com/i18n/dict/CN/table/WeaponBasicTable/all",
+    "verified_at": "2026-10-11",
+    "revision": "客户端表摘要/2026-10-11",
+    "sha256": "8605d95bb54bb06fd40a93c6119f099295c6d193b680a96c7ba1053c016441b9"
+  },
+  {
+    "id": "content.endfield.official_roster",
+    "kind": "official",
+    "title": "终末地官方干员名录：33个形态条目",
+    "url": "https://endfield.hypergryph.com/operator",
+    "verified_at": "2026-10-11",
+    "revision": "",
+    "sha256": ""
+  },
+  {
+    "id": "content.endfield.enka_characters",
+    "kind": "community",
+    "title": "Enka Network终末地干员交叉核对表",
+    "url": "https://raw.githubusercontent.com/EnkaNetwork/API-docs/b8ac71c2fba62519c905551d741474e8cd6a267b/store/ef/avatars.json",
+    "verified_at": "2026-10-11",
+    "revision": "b8ac71c2fba62519c905551d741474e8cd6a267b",
+    "sha256": "63fd16f7c9847df77552692f4bbae8ae6c2f89a8f161b3dba7b4aa2e22373e8d"
+  },
+  {
+    "id": "content.endfield.enka_weapons",
+    "kind": "community",
+    "title": "Enka Network终末地武器交叉核对表",
+    "url": "https://raw.githubusercontent.com/EnkaNetwork/API-docs/b8ac71c2fba62519c905551d741474e8cd6a267b/store/ef/weapons.json",
+    "verified_at": "2026-10-11",
+    "revision": "b8ac71c2fba62519c905551d741474e8cd6a267b",
+    "sha256": "cb252b2611002ce1dea259e3024984ee8b236443ad298f96ce44f690af38053f"
+  },
+  {
+    "id": "content.endfield.enka_names",
+    "kind": "community",
+    "title": "Enka Network终末地中文名交叉核对表",
+    "url": "https://raw.githubusercontent.com/EnkaNetwork/API-docs/b8ac71c2fba62519c905551d741474e8cd6a267b/store/ef/locs.json",
+    "verified_at": "2026-10-11",
+    "revision": "b8ac71c2fba62519c905551d741474e8cd6a267b",
+    "sha256": "f9dab6efb5f4d0b1dab791cd9b38033ae28eb39bc7d85e824cd3b57326fb0b77"
+  },
+  {
+    "id": "content.endfield.official_new",
+    "kind": "official",
+    "title": "「雪凇幽梦」官方新增干员和武器公告",
+    "url": "https://endfield.hypergryph.com/news/2653",
+    "verified_at": "2026-10-11",
+    "revision": "2026-09-02",
+    "sha256": ""
+  },
+  {
+    "id": "endfield.official.base_rates",
+    "kind": "community",
+    "title": "EndfieldGacha 游戏内基础概率转录：endfield.official.base_rates",
+    "url": "https://github.com/ArsvineZhu/EndfieldGacha/blob/main/doc/卡池机制说明.md",
+    "verified_at": "2026-10-11"
+  },
+  {
+    "id": "endfield.official.rewards",
+    "kind": "community",
+    "title": "EndfieldGacha 游戏内奖励规则转录：endfield.official.rewards",
+    "url": "https://github.com/ArsvineZhu/EndfieldGacha/blob/main/doc/卡池机制说明.md",
+    "verified_at": "2026-10-11"
+  },
+  {
+    "id": "reconstruction.official",
+    "kind": "official",
+    "title": "官方重构寻访公告（2026-09-24）",
+    "url": "https://endfield.hypergryph.com/news/4776",
+    "verified_at": "2026-10-11"
+  },
+  {
+    "id": "previous.implementation",
+    "kind": "community",
+    "title": "EndfieldGacha 机制实现与游戏内规则转录",
+    "url": "https://github.com/ArsvineZhu/EndfieldGacha/blob/main/doc/卡池机制说明.md",
+    "verified_at": "2026-10-11"
+  },
+  {
+    "id": "endfield.official.reconstruction.weapon",
+    "kind": "official",
+    "title": "官方重构申领继承与奖励规则",
+    "url": "https://endfield.hypergryph.com/news/2651",
+    "verified_at": "2026-10-11"
+  }
+]

@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::lex::Scope;
 use crate::rational::Rational;
 
@@ -15,6 +17,7 @@ pub struct BannerRt {
     pub pools: Vec<(String, Vec<String>)>,
     pub items: Vec<(String, String)>,
     pub entry_rarity: Vec<(String, u128)>,
+    pub entry_tags: BTreeMap<String, Vec<String>>,
     pub selectors: Vec<Sel>,
     pub distributions: Vec<Dist>,
     pub actions: Vec<ActionRt>,

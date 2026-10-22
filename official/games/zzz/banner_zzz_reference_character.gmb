@@ -1,0 +1,9 @@
+# 源卡池 zzz.reference.character
+banner banner_zzz_reference_character:
+    source_rule rule_zzz_reference_character__single_pull
+    source_roster roster_zzz
+    pity_key "zzz.reference.character"
+    bind pool_featured: Pool[5r] = [zzz_character_1191]
+    bind pool_four: Pool[4r] = [zzz_character_1011, zzz_character_1031, zzz_character_1061, zzz_character_1081, zzz_character_1111, zzz_character_1121, zzz_character_1131, zzz_character_1151, zzz_character_1271, zzz_character_1281, zzz_character_1351, zzz_character_1421, zzz_character_1441]
+    bind pool_standard: Pool[5r] = [zzz_character_1021, zzz_character_1041, zzz_character_1101, zzz_character_1141, zzz_character_1181, zzz_character_1211]
+    bind pool_three: Pool[3r] = [zzz_w_engine_12001, zzz_w_engine_12002, zzz_w_engine_12003, zzz_w_engine_12004, zzz_w_engine_12005, zzz_w_engine_12006, zzz_w_engine_12007, zzz_w_engine_12008, zzz_w_engine_12009, zzz_w_engine_12010, zzz_w_engine_12011, zzz_w_engine_12012, zzz_w_engine_12013, zzz_w_engine_12014, zzz_w_engine_12015, zzz_w_engine_12016]

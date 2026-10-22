@@ -1,0 +1,18 @@
+# 源卡池 endfield.reference.chartered.fixed-five
+banner banner_endfield_reference_chartered_fixed_five__single_pull:
+    source_rule rule_endfield_reference_chartered_fixed_five__single_pull
+    source_roster roster_endfield
+    pity_key "endfield.reference.chartered.fixed-five"
+    progress_key "endfield.reference.chartered.fixed-five#progress"
+    bind pool_pool_current_featured: Pool[6r] = [endfield_character_u83b1_u4e07_u6c40]
+    bind pool_pool_five: Pool[5r] = [endfield_character_u4f69_u4e3d_u5361, endfield_character_u5927_u6f58, endfield_character_u5f27_u5149, endfield_character_u663c_u96ea, endfield_character_u72fc_u536b, endfield_character_u827e_u7ef4_u6587_u5a1c, endfield_character_u8d5b_u5e0c, endfield_character_u963f_u5217_u4ec0, endfield_character_u9648_u5343_u8bed]
+    bind pool_pool_four: Pool[4r] = [endfield_character_u5361_u5951_u5c14, endfield_character_u57c3_u7279_u62c9, endfield_character_u5b89_u5854_u5c14, endfield_character_u79cb_u6817, endfield_character_u8424_u77f3]
+    bind pool_pool_six_off_banner: Pool[6r] = [endfield_character_u4f59_u70ec, endfield_character_u9ece_u98ce, endfield_character_u827e_u5c14_u9edb_u62c9, endfield_character_u522b_u793c, endfield_character_u9a8f_u536b, endfield_character_u6d01_u5c14_u4f69_u5854, endfield_character_u4f0a_u51af]
+    bind slot_featured: Item[6r] = endfield_character_u83b1_u4e07_u6c40
+banner banner_endfield_reference_chartered_fixed_five__free_ten_pull:
+    source_rule rule_endfield_reference_chartered_fixed_five__free_ten_pull
+    source_roster roster_endfield
+    bind pool_pool_current_featured: Pool[6r] = [endfield_character_u83b1_u4e07_u6c40]
+    bind pool_pool_five: Pool[5r] = [endfield_character_u4f69_u4e3d_u5361, endfield_character_u5927_u6f58, endfield_character_u5f27_u5149, endfield_character_u663c_u96ea, endfield_character_u72fc_u536b, endfield_character_u827e_u7ef4_u6587_u5a1c, endfield_character_u8d5b_u5e0c, endfield_character_u963f_u5217_u4ec0, endfield_character_u9648_u5343_u8bed]
+    bind pool_pool_four: Pool[4r] = [endfield_character_u5361_u5951_u5c14, endfield_character_u57c3_u7279_u62c9, endfield_character_u5b89_u5854_u5c14, endfield_character_u79cb_u6817, endfield_character_u8424_u77f3]
+    bind pool_pool_six_off_banner: Pool[6r] = [endfield_character_u4f59_u70ec, endfield_character_u9ece_u98ce, endfield_character_u827e_u5c14_u9edb_u62c9, endfield_character_u522b_u793c, endfield_character_u9a8f_u536b, endfield_character_u6d01_u5c14_u4f69_u5854, endfield_character_u4f0a_u51af]

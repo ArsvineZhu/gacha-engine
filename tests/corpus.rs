@@ -55,27 +55,35 @@ fn positive_examples_match_exact_probabilities() {
     });
     let mut session = compiled.session();
 
-    session.set_count("endfield_event_a", "pity6", 64);
+    session.set_count("endfield_event_a", "pity6", 64).unwrap();
     let draw = session.draw("endfield_event_a", "draw").unwrap();
     assert_eq!(rarity(&draw, 6), Rational::new(1, 125));
 
-    session.set_count("endfield_event_a", "pity6", 65);
+    session.set_count("endfield_event_a", "pity6", 65).unwrap();
     let draw = session.draw("endfield_event_a", "draw").unwrap();
     assert_eq!(rarity(&draw, 6), Rational::new(29, 500));
 
-    session.set_count("endfield_event_a", "pity6", 79);
-    session.set_count("endfield_event_a", "pulls_this_banner", 0);
+    session.set_count("endfield_event_a", "pity6", 79).unwrap();
+    session
+        .set_count("endfield_event_a", "pulls_this_banner", 0)
+        .unwrap();
     let draw = session.draw("endfield_event_a", "draw").unwrap();
     assert_eq!(draw.guarantee.as_deref(), Some("six_80"));
     assert_eq!(rarity(&draw, 6), Rational::one());
 
-    session.set_count("endfield_event_a", "pulls_this_banner", 119);
-    session.set_bool("endfield_event_a", "obtained_featured", false);
+    session
+        .set_count("endfield_event_a", "pulls_this_banner", 119)
+        .unwrap();
+    session
+        .set_bool("endfield_event_a", "obtained_featured", false)
+        .unwrap();
     let draw = session.draw("endfield_event_a", "draw").unwrap();
     assert_eq!(draw.guarantee.as_deref(), Some("limited_120"));
     assert_eq!(entry(&draw, "ef_featured"), Rational::one());
 
-    session.set_count("endfield_event_a", "progress_pulls", 239);
+    session
+        .set_count("endfield_event_a", "progress_pulls", 239)
+        .unwrap();
     let draw = session.draw("endfield_event_a", "draw").unwrap();
     assert!(draw.branches.iter().all(|branch| {
         branch
@@ -90,20 +98,20 @@ fn positive_examples_match_exact_probabilities() {
     assert_eq!(rarity(&draw, 4), Rational::new(51, 1000));
     assert_eq!(rarity(&draw, 3), Rational::new(943, 1000));
 
-    genshin.set_count("genshin_event_a", "pity5", 73);
+    genshin.set_count("genshin_event_a", "pity5", 73).unwrap();
     let draw = genshin.draw("genshin_event_a", "draw").unwrap();
     assert_eq!(rarity(&draw, 5), Rational::new(33, 500));
 
-    genshin.set_count("genshin_event_a", "pity5", 0);
-    genshin.set_count("genshin_event_a", "pity4", 9);
+    genshin.set_count("genshin_event_a", "pity5", 0).unwrap();
+    genshin.set_count("genshin_event_a", "pity4", 9).unwrap();
     let draw = genshin.draw("genshin_event_a", "draw").unwrap();
     assert_eq!(draw.guarantee.as_deref(), Some("four_hard"));
     assert_eq!(rarity(&draw, 5), Rational::new(3, 500));
     assert_eq!(rarity(&draw, 4), Rational::new(497, 500));
     assert_eq!(rarity(&draw, 3), Rational::zero());
 
-    genshin.set_count("genshin_event_a", "pity5", 89);
-    genshin.set_count("genshin_event_a", "pity4", 9);
+    genshin.set_count("genshin_event_a", "pity5", 89).unwrap();
+    genshin.set_count("genshin_event_a", "pity4", 9).unwrap();
     let draw = genshin.draw("genshin_event_a", "draw").unwrap();
     assert_eq!(draw.guarantee.as_deref(), Some("five_hard"));
     assert_eq!(rarity(&draw, 5), Rational::one());

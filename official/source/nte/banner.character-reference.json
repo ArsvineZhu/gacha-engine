@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "nte.reference.character",
+  "game": "nte",
+  "version": "0.1.0",
+  "description": "NTE 1.4 黑羽 board identity with experimental probability projection.",
+  "rules": "rule.character-reference.json",
+  "catalogs": [
+    "catalog.announced-1.4.json",
+    "catalog.arc-01.json",
+    "catalog.character-01.json",
+    "catalog.resources.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "nte.character.announced-heiyu"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "nte.character.1019",
+        "nte.character.1021",
+        "nte.character.1033"
+      ]
+    },
+    {
+      "id": "currency",
+      "items": [
+        "nte.resource.fons"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "nte.character.announced-heiyu"
+  }
+}

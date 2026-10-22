@@ -33,7 +33,6 @@ pub struct Entry {
     pub rarity_span: Span,
     #[allow(dead_code)]
     pub display: String,
-    #[allow(dead_code)]
     pub tags: Vec<String>,
     pub drawable: bool,
 }

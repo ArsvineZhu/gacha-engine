@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "endfield.reconstruction.weapon.artistic.1",
+  "version": "0.1.0",
+  "game": "endfield",
+  "description": "名单依据 2026 年 9 月官方公告及客户端卡池表；开放时间以公告为准。",
+  "rules": "rule.reconstruction-weapon.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.weapon-01.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "endfield.weapon.艺术暴君"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "endfield.weapon.楔子",
+        "endfield.weapon.扶摇",
+        "endfield.weapon.白夜新星",
+        "endfield.weapon.J.E.T.",
+        "endfield.weapon.骑士精神",
+        "endfield.weapon.破碎君王"
+      ]
+    },
+    {
+      "id": "five",
+      "items": [
+        "endfield.weapon.嵌合正义",
+        "endfield.weapon.钢铁余音",
+        "endfield.weapon.坚城铸造者",
+        "endfield.weapon.悼亡诗",
+        "endfield.weapon.莫奈何",
+        "endfield.weapon.作品：众生",
+        "endfield.weapon.探骊",
+        "endfield.weapon.O.B.J.尖峰",
+        "endfield.weapon.向心之引",
+        "endfield.weapon.逐鳞3.0",
+        "endfield.weapon.十二问",
+        "endfield.weapon.O.B.J.轻芒",
+        "endfield.weapon.仰止",
+        "endfield.weapon.迷失荒野",
+        "endfield.weapon.布道自由",
+        "endfield.weapon.O.B.J.术识",
+        "endfield.weapon.O.B.J.迅极",
+        "endfield.weapon.理性告别",
+        "endfield.weapon.古渠",
+        "endfield.weapon.终点之声",
+        "endfield.weapon.O.B.J.重荷"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "endfield.weapon.寻路者道标",
+        "endfield.weapon.天使杀手",
+        "endfield.weapon.显锋",
+        "endfield.weapon.浪潮",
+        "endfield.weapon.全自动骇新星",
+        "endfield.weapon.荧光雷羽",
+        "endfield.weapon.呼啸守卫",
+        "endfield.weapon.长路",
+        "endfield.weapon.工业零点一",
+        "endfield.weapon.淬火者"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "endfield.weapon.艺术暴君"
+  },
+  "banner_bindings": {
+    "endfield.weapon": {
+      "id": "endfield.reconstruction.weapon.artistic.1",
+      "pity_group": "endfield.reconstruction.weapon",
+      "progress_group": "endfield.reconstruction.weapon.artistic"
+    }
+  }
+}

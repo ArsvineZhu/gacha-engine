@@ -1,0 +1,54 @@
+# 源规则 endfield.reference.chartered.fixed-five 动作 single_pull
+rule rule_endfield_reference_chartered_fixed_five__single_pull:
+    banner_pulls: Counter[] @progress = 0c
+    featured_guarantee_available: Bool @progress = true
+    five_plus_pity: Counter[9c] @pity = 0c
+    six_star_pity: Counter[79c] @pity = 0c
+    pool_pool_current_featured: Pool[6r]
+    pool_pool_five: Pool[5r]
+    pool_pool_four: Pool[4r]
+    pool_pool_six_off_banner: Pool[6r]
+    slot_featured: Item[6r]
+    ev_arsenal_quota: Event[Count]
+    ev_urgent_recruitment_10: Event[Count]
+    ev_next_banner_ticket_10: Event[Count]
+    ev_current_featured_token: Event[Count]
+    sel_selector_current_featured: Selector[6r] = from pool_pool_current_featured
+    sel_selector_five: Selector[5r] = from pool_pool_five
+    sel_selector_four: Selector[4r] = from pool_pool_four
+    sel_selector_six_off_banner: Selector[6r] = from pool_pool_six_off_banner
+    sel_selector_six: Selector[6r] = weighted:
+        1w: sel_selector_current_featured
+        1w: sel_selector_six_off_banner
+    dist_chartered_rarity: Distribution:
+        6r: linear(six_star_pity, 65c, 1/125p, 1/20p, 1p) -> sel_selector_six
+        5r: 2/25p -> sel_selector_five
+        4r: rest -> sel_selector_four
+    single_pull: Action[1t..1000t] = dist_chartered_rarity
+    guarantee featured_120: (banner_pulls >= 119c) and (featured_guarantee_available == true) -> item slot_featured
+    guarantee six_star_80: six_star_pity >= 79c -> rarity 6r
+    guarantee five_plus_10: five_plus_pity >= 9c -> floor 5r promote
+    update result.grade == 6r:
+        reset six_star_pity
+    update not (result.grade == 6r):
+        six_star_pity += 1c
+    update result.grade >= 5r:
+        reset five_plus_pity
+    update not (result.grade >= 5r):
+        five_plus_pity += 1c
+    update true:
+        banner_pulls += 1c
+    update result in pool_pool_current_featured:
+        featured_guarantee_available = false
+    update result.grade == 6r:
+        emit ev_arsenal_quota(2000c)
+    update result.grade == 5r:
+        emit ev_arsenal_quota(200c)
+    update result.grade == 4r:
+        emit ev_arsenal_quota(20c)
+    update banner_pulls == 29c:
+        emit ev_urgent_recruitment_10(1c)
+    update banner_pulls == 59c:
+        emit ev_next_banner_ticket_10(1c)
+    update banner_pulls % 240c == 239c:
+        emit ev_current_featured_token(1c)

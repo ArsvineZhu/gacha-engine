@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "id": "nte.rules.arc-research",
+  "version": "0.1.0",
+  "description": "机制与符号槽位定义；具体可抽范围和身份由卡池清单组装。",
+  "assumptions": [
+    {
+      "id": "arc.projection",
+      "status": "experimental",
+      "description": "弧盘十抽投影模型：S 级基础 3%、A 级 17%、S 中目标占 25%，第六批 S 保底及循环第八批目标保底。末抽替换为实验模型，完整规则仍待核对。"
+    }
+  ],
+  "state": [
+    {
+      "id": "batch_draws",
+      "kind": "counter",
+      "scope": "batch",
+      "initial": 0,
+      "max": 10
+    },
+    {
+      "id": "batch_s_seen",
+      "kind": "boolean",
+      "scope": "batch",
+      "initial": false
+    },
+    {
+      "id": "batch_a_seen",
+      "kind": "boolean",
+      "scope": "batch",
+      "initial": false
+    },
+    {
+      "id": "batch_featured_seen",
+      "kind": "boolean",
+      "scope": "batch",
+      "initial": false
+    },
+    {
+      "id": "s_miss_batches",
+      "kind": "counter",
+      "scope": "banner",
+      "initial": 0,
+      "max": 5
+    },
+    {
+      "id": "featured_miss_batches",
+      "kind": "counter",
+      "scope": "banner",
+      "initial": 0,
+      "max": 7
+    },
+    {
+      "id": "research_batches",
+      "kind": "counter",
+      "scope": "banner",
+      "initial": 0
+    }
+  ],
+  "selectors": [
+    {
+      "id": "featured",
+      "type": "pool",
+      "pool": "featured"
+    },
+    {
+      "id": "standard",
+      "type": "pool",
+      "pool": "standard"
+    },
+    {
+      "id": "a",
+      "type": "pool",
+      "pool": "a"
+    },
+    {
+      "id": "b",
+      "type": "pool",
+      "pool": "b"
+    },
+    {
+      "id": "s",
+      "type": "weighted",
+      "branches": [
+        {
+          "weight": "1",
+          "selector": "featured"
+        },
+        {
+          "weight": "3",
+          "selector": "standard"
+        }
+      ]
+    }
+  ],
+  "distributions": [
+    {
+      "id": "rarity",
+      "entries": [
+        {
+          "rarity": 5,
+          "type": "constant",
+          "value": "0.03"
+        },
+        {
+          "rarity": 4,
+          "type": "constant",
+          "value": "0.17"
+        },
+        {
+          "rarity": 3,
+          "type": "remainder"
+        }
+      ]
+    }
+  ],
+  "banners": [
+    {
+      "id": "nte.arc",
+      "pity_group": "nte.arc",
+      "progress_group": "nte.arc.reference",
+      "actions": [
+        {
+          "id": "research",
+          "draws": 10,
+          "distribution": "rarity",
+          "selectors": {
+            "5": "s",
+            "4": "a",
+            "3": "b"
+          },
+          "guarantees": [
+            {
+              "id": "featured_eighth",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_counter_gte",
+                    "state": "featured_miss_batches",
+                    "value": 7
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "batch_featured_seen",
+                    "value": false
+                  }
+                ]
+              },
+              "effect": {
+                "type": "force_item",
+                "item": "featured"
+              },
+              "priority": 300
+            },
+            {
+              "id": "s_sixth",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_counter_gte",
+                    "state": "s_miss_batches",
+                    "value": 5
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "batch_s_seen",
+                    "value": false
+                  }
+                ]
+              },
+              "effect": {
+                "type": "force_rarity",
+                "rarity": 5
+              },
+              "priority": 200
+            },
+            {
+              "id": "five_per_batch",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "state_bool_eq",
+                    "state": "batch_a_seen",
+                    "value": false
+                  }
+                ]
+              },
+              "effect": {
+                "type": "min_rarity",
+                "rarity": 4,
+                "strategy": "preserve_higher_fill_floor"
+              },
+              "priority": 100
+            }
+          ],
+          "transitions": [
+            {
+              "id": "batch.progress",
+              "when": {
+                "op": "always"
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "batch_draws"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "batch.s",
+              "when": {
+                "op": "outcome_rarity_eq",
+                "rarity": 5
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "batch_s_seen",
+                  "value": true
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "batch.a",
+              "when": {
+                "op": "outcome_rarity_gte",
+                "rarity": 4
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "batch_a_seen",
+                  "value": true
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "batch.featured",
+              "when": {
+                "op": "outcome_item_in_pool",
+                "pool": "featured"
+              },
+              "updates": [
+                {
+                  "type": "set_bool",
+                  "state": "batch_featured_seen",
+                  "value": true
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "research.progress",
+              "when": {
+                "op": "state_counter_eq",
+                "state": "batch_draws",
+                "value": 9
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "research_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "six_miss_batches.reset",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "any",
+                    "conditions": [
+                      {
+                        "op": "state_bool_eq",
+                        "state": "batch_s_seen",
+                        "value": true
+                      },
+                      {
+                        "op": "outcome_rarity_eq",
+                        "rarity": 5
+                      }
+                    ]
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "s_miss_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "six_miss_batches.miss",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "not",
+                    "condition": {
+                      "op": "any",
+                      "conditions": [
+                        {
+                          "op": "state_bool_eq",
+                          "state": "batch_s_seen",
+                          "value": true
+                        },
+                        {
+                          "op": "outcome_rarity_eq",
+                          "rarity": 5
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "s_miss_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "featured_miss_batches.reset",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "state_counter_eq",
+                    "state": "batch_draws",
+                    "value": 9
+                  },
+                  {
+                    "op": "any",
+                    "conditions": [
+                      {
+                        "op": "state_bool_eq",
+                        "state": "batch_featured_seen",
+                        "value": true
+                      },
+                      {
+                        "op": "outcome_item_in_pool",
+                        "pool": "featured"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "reset",
+                  "state": "featured_miss_batches"
+                }
+              ],
+              "events": []
+            },
+            {
+              "id": "featured_miss_batches.miss",
+              "when": {
+                "op": "all",
+                "conditions": [
+                  {
+                    "op": "all",
+                    "conditions": [
+                      {
+                        "op": "state_counter_eq",
+                        "state": "batch_draws",
+                        "value": 9
+                      },
+                      {
+                        "op": "not",
+                        "condition": {
+                          "op": "any",
+                          "conditions": [
+                            {
+                              "op": "state_bool_eq",
+                              "state": "batch_featured_seen",
+                              "value": true
+                            },
+                            {
+                              "op": "outcome_item_in_pool",
+                              "pool": "featured"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "updates": [
+                {
+                  "type": "increment",
+                  "state": "featured_miss_batches"
+                }
+              ],
+              "events": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "source_documents": [
+    "sources.json"
+  ]
+}

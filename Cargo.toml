@@ -1,3 +1,7 @@
+[workspace]
+resolver = "2"
+members = [".", "crates/gacha-ffi", "sdk/python", "sdk/typescript"]
+
 [package]
 name = "gacha-engine"
 version = "0.1.0"
