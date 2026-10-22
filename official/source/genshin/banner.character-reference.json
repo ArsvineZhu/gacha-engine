@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "id": "genshin.reference.character",
+  "game": "genshin",
+  "version": "0.1.0",
+  "description": "历史或参考卡池名单使用真实身份；开放时间以对应公告为准，模型假设见规则包。",
+  "rules": "rule.character-reference.json",
+  "catalogs": [
+    "catalog.character-01.json",
+    "catalog.weapon-01.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "genshin.character.10000052"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "genshin.character.10000003",
+        "genshin.character.10000016",
+        "genshin.character.10000041",
+        "genshin.character.10000035",
+        "genshin.character.10000042",
+        "genshin.character.10000069",
+        "genshin.character.10000079"
+      ]
+    },
+    {
+      "id": "four",
+      "items": [
+        "genshin.character.10000014",
+        "genshin.character.10000020",
+        "genshin.character.10000023",
+        "genshin.character.10000024",
+        "genshin.character.10000025",
+        "genshin.character.10000027",
+        "genshin.character.10000031",
+        "genshin.character.10000032",
+        "genshin.character.10000034",
+        "genshin.character.10000036",
+        "genshin.character.10000039",
+        "genshin.character.10000043",
+        "genshin.character.10000044",
+        "genshin.character.10000045",
+        "genshin.character.10000048",
+        "genshin.character.10000050",
+        "genshin.character.10000053",
+        "genshin.character.10000055",
+        "genshin.character.10000056",
+        "genshin.character.10000059",
+        "genshin.character.10000061",
+        "genshin.character.10000064",
+        "genshin.character.10000065",
+        "genshin.character.10000067",
+        "genshin.character.10000068",
+        "genshin.character.10000072",
+        "genshin.character.10000074",
+        "genshin.character.10000076",
+        "genshin.character.10000077",
+        "genshin.character.10000080",
+        "genshin.character.10000081",
+        "genshin.character.10000083",
+        "genshin.character.10000085",
+        "genshin.character.10000088",
+        "genshin.character.10000090",
+        "genshin.character.10000092",
+        "genshin.character.10000097",
+        "genshin.character.10000100",
+        "genshin.character.10000105",
+        "genshin.character.10000108",
+        "genshin.character.10000110",
+        "genshin.character.10000113",
+        "genshin.character.10000115",
+        "genshin.character.10000121",
+        "genshin.character.10000124",
+        "genshin.character.10000127",
+        "genshin.character.10000132",
+        "genshin.character.10000148"
+      ]
+    },
+    {
+      "id": "three",
+      "items": [
+        "genshin.weapon.11301",
+        "genshin.weapon.11302",
+        "genshin.weapon.11303",
+        "genshin.weapon.11304",
+        "genshin.weapon.11305",
+        "genshin.weapon.11306",
+        "genshin.weapon.12301",
+        "genshin.weapon.12302",
+        "genshin.weapon.12303",
+        "genshin.weapon.12305",
+        "genshin.weapon.12306",
+        "genshin.weapon.13301",
+        "genshin.weapon.13302",
+        "genshin.weapon.13303",
+        "genshin.weapon.14301",
+        "genshin.weapon.14302",
+        "genshin.weapon.14303",
+        "genshin.weapon.14304",
+        "genshin.weapon.14305",
+        "genshin.weapon.15301",
+        "genshin.weapon.15302",
+        "genshin.weapon.15303",
+        "genshin.weapon.15304",
+        "genshin.weapon.15305"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "genshin.character.10000052"
+  }
+}

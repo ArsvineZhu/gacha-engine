@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "nte.announced.1.4",
+  "game": "nte",
+  "version": "0.1.0",
+  "description": "名称与等级依据官方 1.4 公告，标识暂采用本地身份。",
+  "source_documents": ["sources.json"],
+  "items": [
+    {"id": "nte.character.announced-heiyu", "kind": "character", "display_name": "黑羽", "names": {"zh-CN": "黑羽"}, "rarity": 5, "native_rarity": "S", "upstream_id": "", "tags": ["character"], "source_ids": ["content.nte.official.1_4"]},
+    {"id": "nte.arc.announced-crime-and-punishment", "kind": "arc", "display_name": "罪与罚", "names": {"zh-CN": "罪与罚"}, "rarity": 5, "native_rarity": "S", "upstream_id": "", "tags": ["arc"], "source_ids": ["content.nte.official.1_4"]}
+  ]
+}

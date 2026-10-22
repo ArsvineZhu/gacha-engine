@@ -1,0 +1,2 @@
+rule r:
+    p: Chance = 0.8%

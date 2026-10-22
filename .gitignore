@@ -1,3 +1,13 @@
 /target
 *.log
 .DS_Store
+sdk/typescript/node_modules
+sdk/typescript/*.node
+sdk/typescript/index.js
+sdk/typescript/index.d.ts
+sdk/python/.venv
+sdk/python/.pydeps
+sdk/python/*.egg-info
+sdk/python/dist
+sdk/python/build
+**/__pycache__

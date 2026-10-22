@@ -1,0 +1,9 @@
+rule r:
+    p3: Pool[3r]
+    p4: Pool[4r]
+    s3: Selector[3r] = from p3
+    s4: Selector[4r] = from p4
+    d: Distribution:
+        3r: 3/4p -> s3
+        4r: 3/4p -> s4
+    a: Action[1t..1t] = d

@@ -1,0 +1,4 @@
+banner b:
+    source_rule r
+    source_roster t
+    bind lost: Pool[3r] = [x]

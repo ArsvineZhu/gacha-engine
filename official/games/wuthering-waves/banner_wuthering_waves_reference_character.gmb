@@ -1,0 +1,9 @@
+# 源卡池 wuthering-waves.reference.character
+banner banner_wuthering_waves_reference_character:
+    source_rule rule_wuthering_waves_reference_character__single_pull
+    source_roster roster_wuthering_waves
+    pity_key "wuthering-waves.reference.character"
+    bind pool_featured: Pool[5r] = [wuthering_waves_character_1404]
+    bind pool_four: Pool[4r] = [wuthering_waves_character_1102, wuthering_waves_character_1103, wuthering_waves_character_1106, wuthering_waves_character_1202, wuthering_waves_character_1204, wuthering_waves_character_1303, wuthering_waves_character_1307, wuthering_waves_character_1402, wuthering_waves_character_1403, wuthering_waves_character_1504, wuthering_waves_character_1601, wuthering_waves_character_1602]
+    bind pool_standard: Pool[5r] = [wuthering_waves_character_1503, wuthering_waves_character_1203, wuthering_waves_character_1301, wuthering_waves_character_1104, wuthering_waves_character_1405]
+    bind pool_three: Pool[3r] = [wuthering_waves_weapon_21010013, wuthering_waves_weapon_21010023, wuthering_waves_weapon_21010043, wuthering_waves_weapon_21010053, wuthering_waves_weapon_21010063, wuthering_waves_weapon_21020013, wuthering_waves_weapon_21020023, wuthering_waves_weapon_21020043, wuthering_waves_weapon_21020053, wuthering_waves_weapon_21030013, wuthering_waves_weapon_21030023, wuthering_waves_weapon_21030043, wuthering_waves_weapon_21030053, wuthering_waves_weapon_21040013, wuthering_waves_weapon_21040023, wuthering_waves_weapon_21040043, wuthering_waves_weapon_21040053, wuthering_waves_weapon_21050013, wuthering_waves_weapon_21050023, wuthering_waves_weapon_21050043, wuthering_waves_weapon_21050053]

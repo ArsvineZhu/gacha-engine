@@ -1,0 +1,39 @@
+rule endfield:
+    pity6: Counter[79c] @pity = 0c
+    pulls_this_banner: Counter[119c] @banner = 0c
+    obtained_featured: Bool @banner = false
+    progress_pulls: Counter[] @progress = 0c
+    featured6: Pool[6r]
+    standard6: Pool[6r]
+    featured_target: Item[6r]
+    five_items: Pool[5r]
+    four_items: Pool[4r]
+    reward_current: Event[Count]
+    reward_next: Event[Count]
+    reward_token: Event[Count]
+    six_pick: Selector[6r] = weighted:
+        1w: from featured6
+        1w: from standard6
+    five_pick: Selector[5r] = from five_items
+    four_pick: Selector[4r] = from four_items
+    rates: Distribution:
+        6r: linear(pity6, 65c, 1/125p, 1/20p, 1p) -> six_pick
+        5r: 2/25p -> five_pick
+        4r: rest -> four_pick
+    draw: Action[1t..1000t] = rates
+    guarantee limited_120: pulls_this_banner >= 119c and obtained_featured == false -> item featured_target
+    guarantee six_80: pity6 >= 79c -> rarity 6r
+    update true:
+        pity6 += 1c
+        pulls_this_banner += 1c
+        progress_pulls += 1c
+    update result.grade >= 6r:
+        reset pity6
+    update result in featured6:
+        obtained_featured = true
+    update progress_pulls == 29c:
+        emit reward_current(10c)
+    update progress_pulls == 59c:
+        emit reward_next(10c)
+    update progress_pulls % 240c == 239c:
+        emit reward_token(1c)

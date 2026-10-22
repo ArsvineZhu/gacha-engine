@@ -1,0 +1,46 @@
+# 源规则 genshin.reference.character 动作 single_pull
+rule rule_genshin_reference_character__single_pull:
+    featured_due: Bool @pity = false
+    four_pity: Counter[9c] @pity = 0c
+    pity: Counter[89c] @pity = 0c
+    radiance_losses: Counter[3c] @pity = 0c
+    pool_featured: Pool[5r]
+    pool_four: Pool[4r]
+    pool_standard: Pool[5r]
+    pool_three: Pool[3r]
+    sel_featured: Selector[5r] = from pool_featured
+    sel_four: Selector[4r] = from pool_four
+    sel_standard: Selector[5r] = from pool_standard
+    sel_coin: Selector[5r] = weighted:
+        1w: sel_featured
+        1w: sel_standard
+    sel_radiance_coin: Selector[5r] = weighted:
+        3w: sel_featured
+        1w: sel_standard
+    sel_radiance_two: Selector[5r] = choose(radiance_losses >= 2c, sel_radiance_coin, sel_coin)
+    sel_radiance: Selector[5r] = choose(radiance_losses >= 3c, sel_featured, sel_radiance_two)
+    sel_three: Selector[3r] = from pool_three
+    sel_top: Selector[5r] = choose(featured_due == true, sel_featured, sel_radiance)
+    dist_rarity_name: Distribution:
+        5r: linear(pity, 73c, 3/500p, 3/50p, 1p) -> sel_top
+        4r: 51w -> sel_four
+        3r: 943w -> sel_three
+    single_pull: Action[1t..1000t] = dist_rarity_name
+    guarantee hard_pity: pity >= 89c -> rarity 5r
+    guarantee four_floor: four_pity >= 9c -> floor 4r promote
+    update result.grade == 5r:
+        reset pity
+    update not (result.grade == 5r):
+        pity += 1c
+    update result.grade >= 4r:
+        reset four_pity
+    update not (result.grade >= 4r):
+        four_pity += 1c
+    update result in pool_standard:
+        featured_due = true
+    update result in pool_featured:
+        featured_due = false
+    update result in pool_standard:
+        radiance_losses += 1c
+    update (result in pool_featured) and (featured_due == false):
+        reset radiance_losses

@@ -1,0 +1,32 @@
+# 源规则 nte.rules.limited-board 动作 single_pull
+rule rule_nte_rules_limited_board__single_pull:
+    board_pulls: Counter[] @progress = 0c
+    pity: Counter[89c] @pity = 0c
+    pool_currency: Pool[1r]
+    pool_featured: Pool[5r]
+    pool_four: Pool[4r]
+    slot_featured: Item[5r]
+    ev_glider_u9884_u5146_u9e1f: Event[Count]
+    ev_livery_u591c_u8272_u98de_u7fbd: Event[Count]
+    ev_costume_u7ea2_u4e0e_u9ed1: Event[Count]
+    sel_currency: Selector[1r] = from pool_currency
+    sel_featured: Selector[5r] = from pool_featured
+    sel_four: Selector[4r] = from pool_four
+    dist_rarity_name: Distribution:
+        5r: 99/10000p -> sel_featured
+        4r: 1/10p -> sel_four
+        1r: rest -> sel_currency
+    single_pull: Action[1t..1000t] = dist_rarity_name
+    guarantee featured_90: pity >= 89c -> item slot_featured
+    update result.grade == 5r:
+        reset pity
+    update not (result.grade == 5r):
+        pity += 1c
+    update true:
+        board_pulls += 1c
+    update board_pulls == 49c:
+        emit ev_glider_u9884_u5146_u9e1f(1c)
+    update board_pulls == 119c:
+        emit ev_livery_u591c_u8272_u98de_u7fbd(1c)
+    update board_pulls == 199c:
+        emit ev_costume_u7ea2_u4e0e_u9ed1(1c)

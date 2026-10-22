@@ -1,0 +1,5 @@
+banner b:
+    source_rule r
+    source_roster t
+    bind p: Pool[3r] = [x]
+    bind p: Pool[3r] = [x]

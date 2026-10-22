@@ -1,0 +1,25 @@
+# 源规则 endfield.reference.chartered.fixed-five 动作 free_ten_pull
+rule rule_endfield_reference_chartered_fixed_five__free_ten_pull:
+    free_batch_draws: Counter[10c] @action = 0c
+    free_batch_five_seen: Bool @action = false
+    pool_pool_current_featured: Pool[6r]
+    pool_pool_five: Pool[5r]
+    pool_pool_four: Pool[4r]
+    pool_pool_six_off_banner: Pool[6r]
+    sel_selector_current_featured: Selector[6r] = from pool_pool_current_featured
+    sel_selector_five: Selector[5r] = from pool_pool_five
+    sel_selector_four: Selector[4r] = from pool_pool_four
+    sel_selector_six_off_banner: Selector[6r] = from pool_pool_six_off_banner
+    sel_selector_six: Selector[6r] = weighted:
+        1w: sel_selector_current_featured
+        1w: sel_selector_six_off_banner
+    dist_free_rarity: Distribution:
+        6r: 1/125p -> sel_selector_six
+        5r: 2/25p -> sel_selector_five
+        4r: rest -> sel_selector_four
+    free_ten_pull: Action[10t..10t] = dist_free_rarity
+    guarantee free_five_floor: (free_batch_draws == 9c) and (free_batch_five_seen == false) -> floor 5r promote
+    update true:
+        free_batch_draws += 1c
+    update result.grade >= 5r:
+        free_batch_five_seen = true

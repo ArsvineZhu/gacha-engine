@@ -1,0 +1,38 @@
+[
+  {
+    "id": "content.zzz.characters",
+    "kind": "community",
+    "title": "内容来源：malu-no996/ZenlessData: FileCfg/AvatarBaseTemplateTb.json",
+    "url": "https://raw.githubusercontent.com/malu-no996/ZenlessData/1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23/FileCfg/AvatarBaseTemplateTb.json",
+    "verified_at": "2026-10-22",
+    "revision": "1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23",
+    "sha256": "0d74baee5a85cb6dad07472ee4ff8fbd218d09fc67b25fd2e5cfe886bbf76346"
+  },
+  {
+    "id": "content.zzz.weapons",
+    "kind": "community",
+    "title": "内容来源：malu-no996/ZenlessData: FileCfg/WeaponTemplateTb.json",
+    "url": "https://raw.githubusercontent.com/malu-no996/ZenlessData/1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23/FileCfg/WeaponTemplateTb.json",
+    "verified_at": "2026-10-22",
+    "revision": "1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23",
+    "sha256": "85120367277c05d36544a6d1b9e84057b6dd0914d3a87b373b87c626e326076e"
+  },
+  {
+    "id": "content.zzz.items",
+    "kind": "community",
+    "title": "内容来源：malu-no996/ZenlessData: FileCfg/ItemTemplateTb.json",
+    "url": "https://raw.githubusercontent.com/malu-no996/ZenlessData/1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23/FileCfg/ItemTemplateTb.json",
+    "verified_at": "2026-10-22",
+    "revision": "1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23",
+    "sha256": "9f73c6f36f4ae0ce71f5dca61d188b8dcfb18ebb891946d84c1bffb3250f7e33"
+  },
+  {
+    "id": "content.zzz.text",
+    "kind": "community",
+    "title": "内容来源：malu-no996/ZenlessData: TextMap/TextMapTemplateTb.json",
+    "url": "https://raw.githubusercontent.com/malu-no996/ZenlessData/1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23/TextMap/TextMapTemplateTb.json",
+    "verified_at": "2026-10-22",
+    "revision": "1277ebca4b8a7a6c3bcbaac6d5708dc9f4a55f23",
+    "sha256": "4e74df776abd65ece3160ea1cd06fb8df85dcfa5d72baa57f82b7fe1eebffd37"
+  }
+]

@@ -1,0 +1,47 @@
+# 源规则 nte.rules.arc-research 动作 research
+rule rule_nte_rules_arc_research__research:
+    batch_a_seen: Bool @action = false
+    batch_draws: Counter[10c] @action = 0c
+    batch_featured_seen: Bool @action = false
+    batch_s_seen: Bool @action = false
+    featured_miss_batches: Counter[7c] @banner = 0c
+    research_batches: Counter[] @banner = 0c
+    s_miss_batches: Counter[5c] @banner = 0c
+    pool_a: Pool[4r]
+    pool_b: Pool[3r]
+    pool_featured: Pool[5r]
+    pool_standard: Pool[5r]
+    slot_featured: Item[5r]
+    sel_a: Selector[4r] = from pool_a
+    sel_b: Selector[3r] = from pool_b
+    sel_featured: Selector[5r] = from pool_featured
+    sel_standard: Selector[5r] = from pool_standard
+    sel_s: Selector[5r] = weighted:
+        1w: sel_featured
+        3w: sel_standard
+    dist_rarity_name: Distribution:
+        5r: 3/100p -> sel_s
+        4r: 17/100p -> sel_a
+        3r: rest -> sel_b
+    research: Action[10t..10t] = dist_rarity_name
+    guarantee featured_eighth: (batch_draws == 9c) and (featured_miss_batches >= 7c) and (batch_featured_seen == false) -> item slot_featured
+    guarantee s_sixth: (batch_draws == 9c) and (s_miss_batches >= 5c) and (batch_s_seen == false) -> rarity 5r
+    guarantee five_per_batch: (batch_draws == 9c) and (batch_a_seen == false) -> floor 4r promote
+    update true:
+        batch_draws += 1c
+    update result.grade == 5r:
+        batch_s_seen = true
+    update result.grade >= 4r:
+        batch_a_seen = true
+    update result in pool_featured:
+        batch_featured_seen = true
+    update batch_draws == 9c:
+        research_batches += 1c
+    update (batch_draws == 9c) and ((batch_s_seen == true) or (result.grade == 5r)):
+        reset s_miss_batches
+    update (batch_draws == 9c) and (not ((batch_s_seen == true) or (result.grade == 5r))):
+        s_miss_batches += 1c
+    update (batch_draws == 9c) and ((batch_featured_seen == true) or (result in pool_featured)):
+        reset featured_miss_batches
+    update ((batch_draws == 9c) and (not ((batch_featured_seen == true) or (result in pool_featured)))):
+        featured_miss_batches += 1c

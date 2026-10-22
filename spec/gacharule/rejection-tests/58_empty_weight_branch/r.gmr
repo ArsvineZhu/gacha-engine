@@ -1,0 +1,4 @@
+rule r:
+    p: Pool[3r]
+    s: Selector[3r] = weighted:
+        1w:

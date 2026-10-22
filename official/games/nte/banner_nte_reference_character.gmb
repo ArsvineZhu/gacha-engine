@@ -1,0 +1,10 @@
+# 源卡池 nte.reference.character
+banner banner_nte_reference_character:
+    source_rule rule_nte_rules_limited_board__single_pull
+    source_roster roster_nte
+    pity_key "nte.reference.character"
+    progress_key "nte.reference.character#progress"
+    bind pool_currency: Pool[1r] = [nte_resource_fons]
+    bind pool_featured: Pool[5r] = [nte_character_announced_heiyu]
+    bind pool_four: Pool[4r] = [nte_character_1019, nte_character_1021, nte_character_1033]
+    bind slot_featured: Item[5r] = nte_character_announced_heiyu

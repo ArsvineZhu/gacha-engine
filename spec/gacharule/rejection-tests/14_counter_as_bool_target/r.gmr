@@ -1,0 +1,4 @@
+rule r:
+    c: Counter[9c] @action = 0c
+    update true:
+        c = false

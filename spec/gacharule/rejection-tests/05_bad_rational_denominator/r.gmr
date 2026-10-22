@@ -1,0 +1,2 @@
+rule r:
+    p: Chance = 1/0p

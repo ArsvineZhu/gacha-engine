@@ -1,0 +1,30 @@
+language = "C"
+include_guard = "GACHA_ENGINE_H"
+usize_is_size_t = true
+cpp_compat = true
+documentation = true
+tab_width = 4
+style = "both"
+
+[export]
+include = [
+    "GachaSource",
+    "GachaEngine",
+    "GachaSession",
+    "GachaError",
+    "GachaArg",
+    "GachaEvent",
+    "GachaBranch",
+    "GachaDraw",
+    "GachaActionInfo",
+    "GachaBannerInfo",
+    "GachaBannerList",
+    "GachaStateInfo",
+    "GachaStateList",
+    "GachaSlot",
+    "GachaSlotList",
+    "GachaHitQuery",
+    "GachaHitPoint",
+    "GachaQuantile",
+    "GachaHitReport",
+]

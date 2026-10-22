@@ -1,0 +1,18 @@
+[package]
+name = "gacha-engine-node"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "GachaRule 引擎的 Node 绑定。语义来自同一组 Rust 函数。"
+
+[lib]
+name = "gacha_engine_node"
+crate-type = ["cdylib"]
+test = false
+doctest = false
+
+[dependencies]
+gacha-engine = { path = "../.." }
+napi = { version = "2.16", features = ["napi8"] }
+napi-derive = "2.16"

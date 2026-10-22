@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "nte.reference.arc",
+  "game": "nte",
+  "version": "0.1.0",
+  "description": "NTE 1.4 罪与罚 Arc identity with experimental research probability projection.",
+  "rules": "rule.arc-reference.json",
+  "catalogs": [
+    "catalog.announced-1.4.json",
+    "catalog.arc-01.json",
+    "catalog.character-01.json",
+    "catalog.resources.json"
+  ],
+  "pools": [
+    {
+      "id": "featured",
+      "items": [
+        "nte.arc.announced-crime-and-punishment"
+      ]
+    },
+    {
+      "id": "standard",
+      "items": [
+        "nte.arc.fork_Arachne",
+        "nte.arc.fork_BitGame",
+        "nte.arc.fork_BlackBook",
+        "nte.arc.fork_BlastCandy",
+        "nte.arc.fork_BoxingCandy",
+        "nte.arc.fork_Butterfly",
+        "nte.arc.fork_DemonBlade",
+        "nte.arc.fork_Door",
+        "nte.arc.fork_GoldRecord",
+        "nte.arc.fork_GoldWool",
+        "nte.arc.fork_KnightCandy",
+        "nte.arc.fork_LunarPhase",
+        "nte.arc.fork_MotorCandy",
+        "nte.arc.fork_Nakupeda",
+        "nte.arc.fork_NestBird",
+        "nte.arc.fork_PoliceRat",
+        "nte.arc.fork_Rose",
+        "nte.arc.fork_ThiefCandy",
+        "nte.arc.fork_TigerTally",
+        "nte.arc.fork_Time",
+        "nte.arc.fork_Whale",
+        "nte.arc.fork_jingmotingyuan",
+        "nte.arc.fork_mamen",
+        "nte.arc.fork_mofeikesi",
+        "nte.arc.fork_moon",
+        "nte.arc.fork_rishi",
+        "nte.arc.fork_worldrain",
+        "nte.arc.fork_wushoutieyu"
+      ]
+    },
+    {
+      "id": "a",
+      "items": [
+        "nte.arc.fork_BitterCake",
+        "nte.arc.fork_Castle",
+        "nte.arc.fork_Crowbar",
+        "nte.arc.fork_Kite",
+        "nte.arc.fork_PaperPlane",
+        "nte.arc.fork_bopu",
+        "nte.arc.fork_jiaojuan",
+        "nte.arc.fork_koinobori",
+        "nte.arc.fork_lingganzhongjiezhe",
+        "nte.arc.fork_oulaquantao",
+        "nte.arc.fork_snowman",
+        "nte.arc.fork_spider",
+        "nte.arc.fork_tuansanlang",
+        "nte.arc.fork_wuhuakuang",
+        "nte.arc.fork_yaodao",
+        "nte.arc.fork_yuren"
+      ]
+    },
+    {
+      "id": "b",
+      "items": [
+        "nte.arc.fork_Prokaryon",
+        "nte.arc.fork_appliance",
+        "nte.arc.fork_dustbin",
+        "nte.arc.fork_nonos",
+        "nte.arc.fork_vine"
+      ]
+    }
+  ],
+  "item_bindings": {
+    "featured": "nte.arc.announced-crime-and-punishment"
+  }
+}

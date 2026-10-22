@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "endfield.announced.1.6",
+  "game": "endfield",
+  "version": "0.1.0",
+  "description": "官方前瞻已公开、客户端名册尚未收录的身份。祀与玉中身已进入客户端名册。",
+  "source_documents": ["sources.json"],
+  "items": [
+    {"id": "endfield.character.明河", "rarity": 6, "kind": "character", "display_name": "明河", "names": {"zh-CN": "明河"}, "native_rarity": "6", "upstream_id": "", "source_ids": ["content.endfield.danqingdu.official"], "tags": ["character", "announced", "version.1.6", "electric"], "gacha_eligible": true},
+    {"id": "endfield.weapon.唤月", "rarity": 6, "kind": "weapon", "display_name": "唤月", "names": {"zh-CN": "唤月"}, "native_rarity": "6", "upstream_id": "", "source_ids": ["content.endfield.danqingdu.official"], "tags": ["weapon", "announced", "version.1.6", "sword"], "gacha_eligible": true}
+  ]
+}

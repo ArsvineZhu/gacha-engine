@@ -1,0 +1,6 @@
+banner hard_banner:
+    source_rule hard
+    source_roster roster_hard
+    pity_key "hard_pity"
+    bind rare: Pool[5r] = [star]
+    bind common: Pool[3r] = [stone]

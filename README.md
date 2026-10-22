@@ -1,118 +1,53 @@
 # gacha-engine
 
-A clean-room, rule-driven gacha engine prototype written in Rust.
+GachaRule 1.0 的编译器和精确执行器。机制、名册和卡池绑定分别写在 `.gmr`、`.gml`、`.gmb` 里。单步抽取的概率是有理数，用分子和分母表示。
 
-The engine does **not** contain game-specific branches. Games are described by untrusted JSON Rule Packs that are parsed, semantically validated, compiled into indexed IR, and then executed by the same transition graph for both probability enumeration and random sampling.
+版本 0.1.0，许可证见 [LICENSE](LICENSE)（MIT）。
 
-## Status
+## 当前能力
 
-This is a V0.1 core prototype created without a Rust toolchain in the build sandbox. JSON/TOML/data invariants were checked locally with Python, but the Rust source could **not** be compiled in the sandbox. Run `cargo test --workspace` first on a machine with stable Rust and report any compiler diagnostics before treating the package as production-ready.
+- 按显式文件列表编译一个单元，并检查词法、类型、分布和绑定。
+- 命令行有 `gacha check` 和 `gacha fmt`。`check` 确认这组源文件能够编译，`--format=json` 输出诊断；`fmt` 按规范重排布局，结果写到标准输出。VS Code 插件在 `editors/vscode`，诊断和格式化调用这个二进制。
+- Rust 库提供同一组操作：编译、列出卡池与动作、读写计数和布尔状态、查看单步精确分支、按条目提交、按种子抽样、做首次或第 N 次命中分析。C、Python 和 Node 绑定调用这同一组操作。
+- 单步分支保持有理数。命中分析把多步质量汇总成浮点数，并且不改写当前会话。
+- 规范正例在 `spec/gacharule/positive/`。七款官方游戏的 GachaRule 源在 `official/games/`，由 `tools/migrate_official.py` 从 `official/source/` 的 JSON 生成。运行时只编译 `.gmr`、`.gml`、`.gmb`。
 
-Implemented:
+语言语义以 [GachaRule 1.0 规范](spec/gacharule/GachaRule-Language-v1.md) 为准。
 
-- typed state (`counter`, `boolean`)
-- state scopes: account, game, pity group, progress group, banner, session, batch, pull
-- exact rational one-step probabilities (`u128` numerator/denominator)
-- constant, table and linear-after probability curves
-- `remainder` and proportional `share_of_remainder`
-- selector graph: uniform pools and weighted nested selectors
-- guarantee rules: force item, force rarity, minimum rarity
-- two minimum-rarity strategies for unknown guarantee behavior
-- declarative post-draw state transitions
-- generic emitted events
-- Rule Pack reference validation and selector-cycle rejection
-- reproducible SplitMix64 RNG
-- `enumerate_transitions()` as the canonical semantic path
-- sampling implemented on top of transition enumeration to prevent semantic drift
-- approximate multi-draw target probability DP (f64 mass, exact one-step rules)
-- developer CLI
-- two Endfield reference packs using different assumptions for unpublished probability details
+## 最快上手
 
-Not implemented yet:
+工具链见 `rust-toolchain.toml`：stable，并包含 clippy 与 rustfmt。`Cargo.toml` 要求 Rust 1.85。
 
-- optimized direct-sampling hot path
-- arbitrary-precision rational multi-draw DP
-- batch actions such as an isolated free ten-pull with its own batch guarantee
-- dynamic roster queries / automatic previous-banner rotation
-- WASM/Python/HTTP bindings
-- signatures / remote Rule Pack distribution
-- UI
-
-## Requirements
-
-Rust stable with Edition 2024 support. `rust-toolchain.toml` requests the stable channel.
-
-```bash
-cargo test --workspace
+```sh
+cargo test
+cargo run -- check spec/gacharule/positive/endfield.gmr spec/gacharule/positive/genshin.gmr spec/gacharule/positive/weapon_ten.gmr spec/gacharule/positive/sample.gml spec/gacharule/positive/banners.gmb
 ```
 
-## CLI
+`check` 默认成功时没有输出，退出码为 0。文件按依赖顺序给出：被引用的规则和名册在卡池绑定之前。JSON 诊断、`gacha fmt` 和退出码见 [开发](docs/development.md)。
 
-Validate a pack:
+写第一条规则见 [语言教程](docs/language-tutorial.md)。构建、测试和目录归属见 [开发](docs/development.md)。
 
-```bash
-cargo run -p gacha-cli -- validate packs/endfield/chartered-proportional.json
-```
+## 编辑
 
-Inspect it:
+插件在 `editors/vscode`。`.gmr`、`.gml`、`.gmb` 都是语言 `GachaRule`。
 
-```bash
-cargo run -p gacha-cli -- inspect packs/endfield/chartered-proportional.json
-```
+| 能力 | 触发 |
+|---|---|
+| 高亮 | 打开这三种文件 |
+| 诊断 | 打开、修改或保存时运行 `gacha check --format=json` |
+| 格式化 | 「格式化文档」（默认 `Shift+Alt+F`），调用 `gacha fmt`。保存时格式化要自己打开 `editor.formatOnSave` |
+| 补全和悬停 | 输入时补全当前文件里已写下的名字，以及关键字、类型、`true`/`false` 和作用域。悬停显示本文件中的声明类型；关键字、类型名和作用域也有说明 |
 
-Perform reproducible pulls:
+先在仓库根执行 `cargo build`，得到 `target/debug/gacha`。用 VS Code 打开 `editors/vscode`，按 F5，在扩展开发主机里打开一份源文件。插件会从当前文件向上找到这个二进制。也可以把设置 `gacharule.gachaPath` 指到它。查找顺序、跨文件诊断和插件测试见 [开发](docs/development.md) 与 [editors/vscode/README.md](editors/vscode/README.md)。
 
-```bash
-cargo run -p gacha-cli -- pull \
-  packs/endfield/chartered-proportional.json \
-  endfield.banner.reference single_pull \
-  --count 10 --seed 42
-```
+## 文档地图
 
-Enumerate every branch of one pull:
-
-```bash
-cargo run -p gacha-cli -- transitions \
-  packs/endfield/chartered-proportional.json \
-  endfield.banner.reference single_pull
-```
-
-Inspect the first soft-pity step:
-
-```bash
-cargo run -p gacha-cli -- transitions \
-  packs/endfield/chartered-proportional.json \
-  endfield.banner.reference single_pull \
-  --state examples/state-soft-pity.json
-```
-
-Inspect the 120th counted pull:
-
-```bash
-cargo run -p gacha-cli -- transitions \
-  packs/endfield/chartered-proportional.json \
-  endfield.banner.reference single_pull \
-  --state examples/state-120.json
-```
-
-Approximate probability of the example featured item within 120 pulls:
-
-```bash
-cargo run -p gacha-cli -- probability \
-  packs/endfield/chartered-proportional.json \
-  endfield.banner.reference single_pull \
-  endfield.operator.current_featured 120
-```
-
-## Core invariant
-
-The engine follows this conceptual contract:
-
-```text
-(State, Action, CompiledRules)
-    -> [(Probability, Outcome, NextState, Events)]
-```
-
-`sample_transition()` first calls `enumerate_transitions()` and samples from the returned branches. This is intentionally slower than a specialized simulator, but it guarantees that the simulator and analyzer do not implement different gacha semantics.
-
-See `docs/DESIGN.md` and `docs/PACK_FORMAT.md`.
+| 目的 | 文档 |
+|---|---|
+| 仓库有哪些区域 | [INDEX.md](INDEX.md) |
+| 文档怎么读 | [docs/README.md](docs/README.md) |
+| 写规则 | [语言教程](docs/language-tutorial.md) |
+| 查词法、类型、保底和错误类别 | [语言参考](docs/language-reference.md) |
+| 调用 Rust、C、Python、Node | [SDK](docs/sdk.md) |
+| 官方游戏数据和名册生成 | [官方游戏数据](docs/official-games.md) |
+| 在编辑器里写规则 | [开发](docs/development.md) 的「编辑器」，以及 [editors/vscode/README.md](editors/vscode/README.md) |

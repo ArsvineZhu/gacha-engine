@@ -1,0 +1,2 @@
+rule rule:
+    p: Pool[3r]

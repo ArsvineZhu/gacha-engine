@@ -1,0 +1,55 @@
+# 源规则 endfield.reference.weapon 动作 requisition
+rule rule_endfield_reference_weapon__requisition:
+    batch_draws: Counter[10c] @action = 0c
+    batch_featured_seen: Bool @action = false
+    batch_five_seen: Bool @action = false
+    batch_six_seen: Bool @action = false
+    featured_available: Bool @banner = true
+    featured_miss_batches: Counter[7c] @banner = 0c
+    requisitions: Counter[] @banner = 0c
+    six_miss_batches: Counter[3c] @banner = 0c
+    pool_featured: Pool[6r]
+    pool_five: Pool[5r]
+    pool_four: Pool[4r]
+    pool_standard: Pool[6r]
+    slot_featured: Item[6r]
+    ev_arsenal_box: Event[Count]
+    ev_featured: Event[Count]
+    sel_featured: Selector[6r] = from pool_featured
+    sel_five: Selector[5r] = from pool_five
+    sel_four: Selector[4r] = from pool_four
+    sel_standard: Selector[6r] = from pool_standard
+    sel_six: Selector[6r] = weighted:
+        1w: sel_featured
+        3w: sel_standard
+    dist_rarity_name: Distribution:
+        6r: 1/25p -> sel_six
+        5r: 3/20p -> sel_five
+        4r: rest -> sel_four
+    requisition: Action[10t..10t] = dist_rarity_name
+    guarantee featured_eighth: (batch_draws == 9c) and (featured_miss_batches >= 7c) and (featured_available == true) and (batch_featured_seen == false) -> item slot_featured
+    guarantee six_fourth: (batch_draws == 9c) and (six_miss_batches >= 3c) and (batch_six_seen == false) -> rarity 6r
+    guarantee five_per_batch: (batch_draws == 9c) and (batch_five_seen == false) -> floor 5r promote
+    update true:
+        batch_draws += 1c
+    update result.grade == 6r:
+        batch_six_seen = true
+    update result.grade >= 5r:
+        batch_five_seen = true
+    update result in pool_featured:
+        batch_featured_seen = true
+        featured_available = false
+    update batch_draws == 9c:
+        requisitions += 1c
+    update (batch_draws == 9c) and ((batch_six_seen == true) or (result.grade == 6r)):
+        reset six_miss_batches
+    update (batch_draws == 9c) and (not ((batch_six_seen == true) or (result.grade == 6r))):
+        six_miss_batches += 1c
+    update (batch_draws == 9c) and ((batch_featured_seen == true) or (result in pool_featured)):
+        reset featured_miss_batches
+    update ((batch_draws == 9c) and (not ((batch_featured_seen == true) or (result in pool_featured)))) and (featured_available == true):
+        featured_miss_batches += 1c
+    update (batch_draws == 9c) and (requisitions >= 9c) and (requisitions % 16c == 9c):
+        emit ev_arsenal_box(1c)
+    update (batch_draws == 9c) and (requisitions >= 17c) and (requisitions % 16c == 1c):
+        emit ev_featured(1c)

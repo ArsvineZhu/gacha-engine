@@ -1,0 +1,15 @@
+rule hard:
+    since: Counter[9c] @pity = 0c
+    rare: Pool[5r]
+    common: Pool[3r]
+    pick5: Selector[5r] = from rare
+    pick3: Selector[3r] = from common
+    rates: Distribution:
+        5r: 1/10p -> pick5
+        3r: rest -> pick3
+    draw: Action[1t..1t] = rates
+    guarantee tenth: since >= 9c -> rarity 5r
+    update true:
+        since += 1c
+    update result.grade >= 5r:
+        reset since

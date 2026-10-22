@@ -1,0 +1,4 @@
+banner fair:
+    source_rule mini
+    source_roster coins
+    bind faces: Pool[1r] = [heads, tails]

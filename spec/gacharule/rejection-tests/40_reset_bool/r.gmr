@@ -1,0 +1,4 @@
+rule r:
+    f: Bool @action = false
+    update true:
+        reset f

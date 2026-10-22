@@ -1,0 +1,27 @@
+banner endfield_event_a:
+    source_rule endfield
+    source_roster samples
+    pity_key "endfield_limited_character"
+    progress_key "endfield_phase_one"
+    bind featured6: Pool[6r] = [ef_featured]
+    bind standard6: Pool[6r] = [ef_standard]
+    bind featured_target: Item[6r] = ef_featured
+    bind five_items: Pool[5r] = [ef_five]
+    bind four_items: Pool[4r] = [ef_four]
+
+banner genshin_event_a:
+    source_rule genshin_character
+    source_roster samples
+    pity_key "genshin_character_event"
+    bind featured5: Pool[5r] = [gi_featured5]
+    bind standard5: Pool[5r] = [gi_standard5]
+    bind featured4: Pool[4r] = [gi_featured4a, gi_featured4b]
+    bind standard4: Pool[4r] = [gi_standard4]
+    bind standard3: Pool[3r] = [gi_standard3]
+
+banner weapon_sample_a:
+    source_rule weapon_ten
+    source_roster samples
+    bind six_weapons: Pool[6r] = [wp_six]
+    bind five_weapons: Pool[5r] = [wp_five]
+    bind four_weapons: Pool[4r] = [wp_four]
